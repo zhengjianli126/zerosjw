@@ -1,0 +1,1521 @@
+{
+  "msg": "成功",
+  "data": {
+    "pageNum": 1,
+    "pageSize": 61,
+    "total": 61,
+    "totalPage": 1,
+    "rows": [
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB1083998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520113819000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB1073998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520113789000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB1063998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520113760000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB1053998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520113730000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB1043998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520113700000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB1033998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520113671000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB1023998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520113646000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB1013998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520113613000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB1003998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520113582000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0FF3998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520113558000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0FE3998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520113493000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0FD3998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520113463000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0F63998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520113370000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0F53998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520113340000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0FC3998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520113310000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0FB3998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520113282000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0F43998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520113251000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0FA3998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520113131000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0F33998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520113096000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0F23998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520113039000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0F13998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520113007000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0F93998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520112946000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0F03998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520112918000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0EF3998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520112768000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0F83998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520112706000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0EE3998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520112080000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0F73998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520111902000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0ED3998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520111749000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0EC3998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520110847000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0D13998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520110368000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0EB3998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520110189000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0D03998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520110098000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0DE3998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520110074000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0CF3998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520110044000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0DD3998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520110009000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0EA3998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520109800000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0DC3998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520109771000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0E93998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520109683000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0E83998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520109680000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0DB3998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520109646000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0DA3998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520109615000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0D93998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520109586000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0D83998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520109557000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0D73998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520109466000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0D63998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520109372000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0CE3998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520109310000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0E73998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520109307000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0D53998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520109223000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0CD3998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520109091000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0D43998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030407",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520109057000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0CC3998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030405",
+        "productTime": "3",
+        "orderMoney": "109",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520108756000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0E63998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030405",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520108699000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0E53998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030405",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520108666000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0D33998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030405",
+        "productTime": "3",
+        "orderMoney": "200",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520108578000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0E43998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030404",
+        "productTime": "3",
+        "orderMoney": "100",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520108220000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0E33998E05303141FAC7D33",
+        "productName": "A汇金保001A汇金保001先息后本按日SJ59600317031005",
+        "productTime": "90",
+        "orderMoney": "1500",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520106702000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0E23998E05303141FAC7D33",
+        "productName": "A汇金保001A汇金保001先息后本按日SJ59600317031005",
+        "productTime": "90",
+        "orderMoney": "1500",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520106469000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0D23998E05303141FAC7D33",
+        "productName": "A汇金保001A汇金保001先息后本按日SJ59600317031005",
+        "productTime": "90",
+        "orderMoney": "1500",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520106436000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0E13998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030304",
+        "productTime": "3",
+        "orderMoney": "1500",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520106286000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB0E03998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030304",
+        "productTime": "3",
+        "orderMoney": "1500",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520106225000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      },
+      {
+        "customerName": "潘睿渊",
+        "orderId": "710C87FFB1093998E05303141FAC7D33",
+        "productName": "月月盈2号等额本息SY6号1SJ73400336030303",
+        "productTime": "3",
+        "orderMoney": "1500",
+        "annualinterestrate_money": "0",
+        "orderDealTime": 1520102834000,
+        "userName": "大飞",
+        "sonOrganize": null,
+        "organize": null,
+        "totalData": {
+          "totalOrder": 61,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗"
+      }
+    ]
+  },
+  "code": 20000
+}
+
+
+
+
+交易额统计：
+	{
+  "msg": "成功",
+  "data": {
+    "todayTurnovalCount": 0,
+    "yestodayTurnovalCount": 0,
+    "thisMonthTurnovalCount": 0,
+    "lastMonthTurnovalCount": 0,
+    "totalTurnovalCount": 75500,
+    "totalYearTuranovalCount": 0,
+    "totalData": {
+      "totalOrder": 270,
+      "totalTurnover": 0,
+      "totalTurnover_year": 0,
+      "totalCommition": 0
+    }
+  },
+  "code": 20000
+}
+
+
+
+每月对账：
+	{
+  "msg": "成功",
+  "data": {
+    "pageNum": 1,
+    "pageSize": 10,
+    "total": 1,
+    "totalPage": 1,
+    "rows": [
+      {
+        "commitionMonth": null,
+        "totalTurnover": 19809,
+        "totalTurnover_year": 0,
+        "commition": 0,
+        "userName": "大飞",
+        "thisMonthCommition": 0,
+        "lastMonthCommition": 0,
+        "totalCommition": 0,
+        "totalData": {
+          "totalOrder": null,
+          "totalTurnover": 19809,
+          "totalTurnover_year": 0,
+          "totalCommition": 0
+        },
+        "path": "-西二旗",
+        "sonOrganize": null,
+        "organize": null
+      }
+    ]
+  },
+  "code": 20000
+}
+
+
+
+机构管理：
+	{
+  "msg": "成功",
+  "data": {
+    "pageNum": 1,
+    "pageSize": 10,
+    "total": 1,
+    "totalPage": 1,
+    "rows": [
+      {
+        "sonOrganize": "河北",
+        "authoriCount": 2,
+        "customerCount": 2
+      }
+    ]
+  },
+  "code": 20000
+}
+
+
+分部管理：
+	{
+  "msg": "成功",
+  "data": {
+    "pageNum": 1,
+    "pageSize": 10,
+    "total": 1,
+    "totalPage": 1,
+    "rows": [
+      {
+        "sonOrganize": "河北",
+        "authoriCount": 2,
+        "customerCount": 2
+      }
+    ]
+  },
+  "code": 20000
+}
+
+
+理财师信息：
+{
+  "msg": "成功",
+  "data": {
+    "pageNum": 1,
+    "pageSize": 10,
+    "total": 3,
+    "totalPage": 1,
+    "rows": [
+      {
+        "authoriId": "8",
+        "authoriName": "徐微微",
+        "customerCount": 0,
+        "sonOrganize": "河北"
+      },
+      {
+        "authoriId": "9",
+        "authoriName": "江乐",
+        "customerCount": 0,
+        "sonOrganize": "河北"
+      },
+      {
+        "customerCount": 0,
+        "sonOrganize": "河北"
+      }
+    ]
+  },
+  "code": 20000
+}
+
+
+
+系统管理————>权限表
+{
+  "msg": "成功",
+  "data": [
+    {
+      "id": "1                               ",
+      "roleName": "管理员",
+      "roleDescribe": "全部权限",
+      "remarks": "管理员",
+      "createTime": 1512489600000,
+      "updateTime": 1517886061000,
+      "create_time": "2017-12-06 12:00:00",
+      "update_time": "2018-02-06 11:01:01"
+    },
+    {
+      "id": "2                               ",
+      "roleName": "机构",
+      "roleDescribe": "订单详情、交易额统计、每月对账、机构管理（进入汇总信息为机构的页面）、理财师信息",
+      "remarks": "机构",
+      "createTime": 1512403200000,
+      "updateTime": 1517886061000,
+      "create_time": "2017-12-05 12:00:00",
+      "update_time": "2018-02-06 11:01:01"
+    },
+    {
+      "id": "3                               ",
+      "roleName": "分部",
+      "roleDescribe": "订单详情、交易额详情、每月对账、机构管理（进入汇总信息为对应分部的页面）、理财师信息",
+      "remarks": "分部",
+      "createTime": 1512489600000,
+      "updateTime": 1517886061000,
+      "create_time": "2017-12-06 12:00:00",
+      "update_time": "2018-02-06 11:01:01"
+    },
+    {
+      "id": "4                               ",
+      "roleName": "子分部",
+      "roleDescribe": "订单详情、交易额详情、每月对账、理财师信息（可查看对应子分部下所有理财师信息）",
+      "remarks": "子分部",
+      "createTime": 1512662400000,
+      "updateTime": 1517886061000,
+      "create_time": "2017-12-08 12:00:00",
+      "update_time": "2018-02-06 11:01:01"
+    },
+    {
+      "id": "5                               ",
+      "roleName": "理财师",
+      "roleDescribe": "订单详情、交易额详情、每月对账、理财师信息（仅可查看自己的信息）",
+      "remarks": "理财师",
+      "createTime": 1512489600000,
+      "updateTime": 1517886061000,
+      "create_time": "2017-12-06 12:00:00",
+      "update_time": "2018-02-06 11:01:01"
+    }
+  ],
+  "code": 20000
+}
+
+系统管理————>角色管理
+
+{
+  "msg": "成功",
+  "data": {
+    "pageNum": 1,
+    "pageSize": 10,
+    "total": 5,
+    "totalPage": 1,
+    "rows": [
+      {
+        "id": "1                               ",
+        "roleName": "管理员",
+        "roleDescribe": null,
+        "remarks": "管理员",
+        "createTime": 1512489600000,
+        "updateTime": 1517886061000,
+        "create_time": null,
+        "update_time": null
+      },
+      {
+        "id": "2                               ",
+        "roleName": "机构",
+        "roleDescribe": null,
+        "remarks": "机构",
+        "createTime": 1512403200000,
+        "updateTime": 1517886061000,
+        "create_time": null,
+        "update_time": null
+      },
+      {
+        "id": "3                               ",
+        "roleName": "分部",
+        "roleDescribe": null,
+        "remarks": "分部",
+        "createTime": 1512489600000,
+        "updateTime": 1517886061000,
+        "create_time": null,
+        "update_time": null
+      },
+      {
+        "id": "4                               ",
+        "roleName": "子分部",
+        "roleDescribe": null,
+        "remarks": "子分部",
+        "createTime": 1512662400000,
+        "updateTime": 1517886061000,
+        "create_time": null,
+        "update_time": null
+      },
+      {
+        "id": "5                               ",
+        "roleName": "理财师",
+        "roleDescribe": null,
+        "remarks": "理财师",
+        "createTime": 1512489600000,
+        "updateTime": 1517886061000,
+        "create_time": null,
+        "update_time": null
+      }
+    ]
+  },
+  "code": 20000
+}
+
+
+系统管理---->系统用户
+	{
+  "msg": "成功",
+  "data": {
+    "pageNum": 1,
+    "pageSize": 10,
+    "total": 10,
+    "totalPage": 1,
+    "rows": [
+      {
+        "user_id": "1",
+        "levalArent": "1",
+        "userName": "张三",
+        "roleName": "机构",
+        "createTime": "2017-12-13T00:00:00+08:00",
+        "updateTime": "2018-02-06T01:01:01+08:00"
+      },
+      {
+        "user_id": "10",
+        "levalArent": "1",
+        "userName": "alex",
+        "roleName": "机构",
+        "createTime": "2018-02-28T01:01:01+08:00",
+        "updateTime": "2018-02-06T01:01:01+08:00"
+      },
+      {
+        "user_id": "2",
+        "levalArent": "2",
+        "userName": "李四",
+        "roleName": "分部",
+        "createTime": "2017-12-06T00:00:00+08:00",
+        "updateTime": "2018-02-06T01:01:01+08:00"
+      },
+      {
+        "user_id": "7",
+        "levalArent": "2",
+        "userName": "张依依",
+        "roleName": "分部",
+        "createTime": "2018-01-29T00:00:00+08:00",
+        "updateTime": "2018-02-06T01:01:01+08:00"
+      },
+      {
+        "user_id": "3",
+        "levalArent": "3",
+        "userName": "王五",
+        "roleName": "子分部",
+        "createTime": "2017-12-04T00:00:00+08:00",
+        "updateTime": "2018-02-06T01:01:01+08:00"
+      },
+      {
+        "user_id": "9",
+        "levalArent": "3",
+        "userName": "江乐",
+        "roleName": "子分部",
+        "createTime": "2018-02-28T01:01:01+08:00",
+        "updateTime": "2018-02-06T01:01:01+08:00"
+      },
+      {
+        "user_id": "8",
+        "levalArent": "3",
+        "userName": "徐微微",
+        "roleName": "子分部",
+        "createTime": "2018-01-29T00:00:00+08:00",
+        "updateTime": "2018-02-06T01:01:01+08:00"
+      },
+      {
+        "user_id": "6",
+        "levalArent": "3",
+        "userName": "蒋婕妤",
+        "roleName": "子分部",
+        "createTime": "2018-01-28T00:00:00+08:00",
+        "updateTime": "2018-02-06T01:01:01+08:00"
+      },
+      {
+        "user_id": "4",
+        "levalArent": "3",
+        "userName": "大飞",
+        "roleName": "子分部",
+        "updateTime": "2018-02-06T01:01:01+08:00"
+      },
+      {
+        "user_id": "5",
+        "levalArent": "4",
+        "userName": "星河",
+        "roleName": "理财师",
+        "createTime": "2018-01-26T00:00:00+08:00",
+        "updateTime": "2018-02-06T01:01:01+08:00"
+      }
+    ]
+  },
+  "code": 20000
+}
+}
