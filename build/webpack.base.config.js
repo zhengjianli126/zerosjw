@@ -22,8 +22,8 @@ module.exports = {
         port:9090,
         host:'127.0.0.1',
         proxy:{
-            '/SJWCRM/*':{
-                target:'http://10.253.43.83:8101/',
+            '/v1/*':{
+                target:'http://192.168.1.130:8085/',
                 changeOrigin: true,
                 secure: false
             }

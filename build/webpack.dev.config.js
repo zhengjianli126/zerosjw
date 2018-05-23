@@ -29,7 +29,7 @@ module.exports = merge(webpackBaseConfig, {
             minChunks: Infinity
         }),
         new HtmlWebpackPlugin({
-            title: '首金网CRM管理系统 v' + package.version,
+            title: '首金网Zero管理系统 v' + package.version,
             filename: '../index.html',
             template: './src/template/index.ejs',
             inject: false

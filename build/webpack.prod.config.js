@@ -77,7 +77,7 @@ module.exports = merge(webpackBaseConfig, {
             ]
         }),
         new HtmlWebpackPlugin({
-            title: '首金网CRM管理系统 v' + package.version,
+            title: '首金网Zero管理系统 v' + package.version,
             favicon: './td_icon.ico',
             filename: '../index.html',
             template: './src/template/index.ejs',
