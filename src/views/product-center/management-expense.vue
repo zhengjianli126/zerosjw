@@ -66,40 +66,38 @@
         
     <i-button type="primary" small @click="lookFindAllFee">查看费用</i-button>
     <i-button type="primary" small @click="addFindAllFee">新增费用</i-button>
-        <Modal width="800px" ok-text="保存" v-model="modal1" :title="titleDig"
+    <!-- 费用弹框 -->
+        <Modal width="800px" v-model="modal1" :title="titleDig"
         :loading="loading">
+
           <Row>
             <Col span="12">
-                <span>费用名称：</span><i-input v-model="digFeeName" placeholder="请输入..." style="width: 200px"></i-input>
+                <span>费用名称：</span><i-input :disabled="digFlag" v-model="FeeInfo.feeName" placeholder="请输入..." style="width: 200px"></i-input>
             </Col>
              <Col span="12">
-                <span>费用类型：&nbsp;&nbsp;&nbsp;</span><i-select  @on-change="digFeeTypeJs"   v-model="digFeeType" span="6" style="width:200px">
+                <span>费用类型：&nbsp;&nbsp;&nbsp;</span><i-select  :disabled="digFlag" @on-change="digFeeTypeJs"   v-model="FeeInfo.feeType" span="6" style="width:200px">
           <i-option v-for="item in findAllFeeTypeList" :value="item.value">{{ item.label }}</i-option>
         </i-select>
             </Col>
           </Row>
            <Row style="margin-top:10px;">
              <Col span="12">
-                <span>费用大类：</span> <i-select  @on-change="changeName1"  :disabled="organizeDisabled" :model.sync="organize" span="6" style="width:200px">
-        <i-option v-for="item in name1" :value="item.id+-+item.levelArent">{{ item.organizeName }}</i-option>
+                <span>费用大类：</span> <i-select v-model="FeeInfo.feeCategory" :disabled="digFlag"   span="6" style="width:200px">
+        <i-option v-for="item in findAllCostCategory" :value="item.value">{{ item.label }}</i-option>
         </i-select>
             </Col>
               <Col span="12">
-                <span>费用项：</span><i-input  placeholder="请输入..." style="width: 200px"></i-input>
+                <span>费用项：</span><i-input v-model="FeeInfo.feeTag"  :disabled="digFlag" placeholder="请输入..." style="width: 200px"></i-input>
             </Col>
           </Row>
           <Row style="margin-top:10px;">
-               <span>计算公式：</span><i-input  placeholder="请输入..." style="width: 400px"></i-input>
+               <span>计算公式：</span><i-input :disabled="digFlag" placeholder="请输入..." style="width: 400px"></i-input>
           </Row>
           <Row style="margin-top:10px;">
               <Col span="12">
                   <span>收取形式：</span>
-                 <Radio-group v-model="sqxs">
-                    <Radio label="0">
-                        <span>线上</span>
-                    </Radio>
-                    <Radio label="1">
-                        <span>线下</span>
+                 <Radio-group :disabled="digFlag" v-model="FeeInfo.feeWay">
+                    <Radio v-for="item in findAllReceivingForm" :disabled="digFlag" :label="item.value"><span>{{item.label}}</span></Radio>
                     </Radio>
                 </Radio-group>
               </Col>
@@ -107,27 +105,9 @@
         <Row style="margin-top:10px;">
             <Col span="24">
                 <span>收款方：&nbsp;&nbsp;&nbsp;</span>
-                 <Radio-group v-model="skf">
-                    <Radio label="0">
-                        <span>借款人</span>
-                    </Radio>
-                    <Radio label="1">
-                        <span>担保人</span>
-                    </Radio>
-                    <Radio label="2">
-                        <span>代偿人</span>
-                    </Radio>
-                    <Radio label="3">
-                        <span>渠道方</span>
-                    </Radio>
-                    <Radio label="4">
-                        <span>供应商</span>
-                    </Radio>
-                    <Radio label="5">
-                        <span>出借人</span>
-                    </Radio>
-                    <Radio label="6">
-                        <span>其他</span>
+                 <Radio-group v-model="FeeInfo.recCode">
+                    <Radio  v-for="item in findAllRecipientParty" :disabled="digFlag" :label="item.value">
+                        <span>{{item.label}}</span>
                     </Radio>
                 </Radio-group>
               </Col>
@@ -136,27 +116,9 @@
         <Row style="margin-top:10px;">
             <Col span="24">
                 <span>付款方：&nbsp;&nbsp;&nbsp;</span>
-                 <Radio-group v-model="fkf">
-                    <Radio label="0">
-                        <span>借款人</span>
-                    </Radio>
-                    <Radio label="1">
-                        <span>担保人</span>
-                    </Radio>
-                    <Radio label="2">
-                        <span>代偿人</span>
-                    </Radio>
-                    <Radio label="3">
-                        <span>渠道方</span>
-                    </Radio>
-                    <Radio label="4">
-                        <span>供应商</span>
-                    </Radio>
-                    <Radio label="5">
-                        <span>出借人</span>
-                    </Radio>
-                    <Radio label="6">
-                        <span>其他</span>
+                 <Radio-group :disabled="digFlag" v-model="FeeInfo.payCode">
+                    <Radio v-for="item in findAllPayer"  :disabled="digFlag" :label="item.value">
+                        <span>{{item.label}}</span>
                     </Radio>
                 </Radio-group>
               </Col>
@@ -166,10 +128,15 @@
                     <span>描述：</span>
                 </Col>
                 <Col span="16">
-                    <i-input v-model="ms" type="textarea" placeholder="Enter something..."></i-input>
+                    <i-input :disabled="digFlag" v-model="FeeInfo.feeDesc" type="textarea" placeholder="Enter something..."></i-input>
                 </Col>
             </Row>
+             <div slot="footer">
+                <Button type="ghost" @click="cancelDig">取消</Button>
+                <Button v-show="!digFlag" @click="submitDig" type="primary">保存</Button>
+            </div>
         </Modal>
+    <!-- 搜索 -->
     <Row style="margin-top:10px">
        <span>费用名称：</span><i-input v-model="feeName" placeholder="请输入..." style="width: 300px"></i-input>
         <span>类型：</span>
@@ -178,9 +145,11 @@
         </i-select>
         <i-button style="margin-left:20px;" type="primary" icon="ios-search" @click="searchClick()">搜索</i-button>
     </Row>
+    <!-- 表格 -->
     <div style="clear:both;padding-top:20px;">
       <Table @on-selection-change="changeFindSec" :loading="loading" border :columns="tableColumns3" :data="data8" size="small" ref="table"></Table>
     </div>
+    <!-- 分页 -->
     <div style="margin-top:10px;float:right">
       <Page :total="pageTotal"  show-elevator @on-change="pageChange"></Page>
     </div>
@@ -221,7 +190,23 @@
         // 弹框费用名称
         digFeeName:'',
         digFeeType:'',
-       
+        // 新增 
+        FeeInfo:[],
+        // 控制弹框 可选
+        digFlag:false,
+        // 查询所有的付款方
+        findAllPayer:[],
+        //查询所有的收款方 
+        findAllRecipientParty:[],
+        // 查询所有的收取方式
+        findAllReceivingForm:[],
+        // 判断 是修改还是查看
+        isLookOrRe:'add',
+        // 修改的code
+        reCode:'',
+        // 费用大类
+        findAllCostCategory:[],
+        
         data8: []
       };
     },
@@ -230,8 +215,7 @@
         let columns = [{
             title: "序号",
             type: "index",
-            fixed: "left",
-            width: 100
+            width: 80
           },
           {
             type: 'selection',
@@ -281,7 +265,8 @@
           {
             title: "操作",
             key: "status",
-            width: 200,
+            width: 150,
+            align: 'center',
             render: (h, params) => {
               let curData = [
                 h('Button', {
@@ -294,7 +279,24 @@
                   },
                   on: {
                     click: () => {
-                      this.findAllFeeList();
+                        if(params.row.status==0){
+                            this.$Message.error('禁用状态，不可修改')
+                        }else{
+                            // 修改 
+                            this.reCode = params.row.feeCode;
+                            this.isLookOrRe ='re';
+                            util.ajax('v1/feeInfo/getAllFeeInfoByFeeCode', {
+                              method: 'get',
+                              params:{
+                                feeCode:this.reCode
+                              }
+                            }).then(res => {
+                                this.FeeInfo = res.data.data;
+                                this.digFlag = false;
+                                this.titleDig = "修改费用";
+                                this.modal1 = true;
+                            })
+                        }
                     }
                   }
                 }, '修改'),
@@ -374,10 +376,17 @@
     mounted() {
       this.findAllFeeList();
       this.findAllFeeType();
-  
+      this.feeInfoDig();
     },
     created() {
   
+    },
+    watch:{
+        modal1(val){
+          if(!val){
+             // 清除弹框数据
+          }
+        }
     },
     methods: {
       // 表格数据
@@ -456,34 +465,74 @@
         }
         return flag ;
       },
+      // 表单中，单选信息
+      feeInfoDig(){
+           util.ajax('v1/feeInfo/findAllPayer', {
+              method: 'get',
+            }).then(res => {
+               this.findAllPayer = res.data.data;
+            })
+            util.ajax('v1/feeInfo/findAllRecipientParty', {
+              method: 'get',
+            }).then(res => {
+               this.findAllRecipientParty = res.data.data;
+            })
+            util.ajax('v1/feeInfo/findAllReceivingForm', {
+              method: 'get',
+            }).then(res => {
+               this.findAllReceivingForm = res.data.data;
+            })
+            util.ajax('v1/feeInfo/findAllCostCategory', {
+              method: 'get',
+            }).then(res => {
+               this.findAllCostCategory = res.data.data;
+            })
+
+      } ,
+      // 关闭弹框
+      cancelDig(){
+          this.modal1 = false;
+          
+      },
+      // 保存 
+      submitDig(){
+        console.log(this.FeeInfo)
+        // 保存逻辑
+        if(this.isLookOrRe=='add'){
+            //新增
+        }else{
+          // 修改
+        
+      }
+      },
+      // 查看弹框
       lookFindAllFee(){
         let flag = this.isSelectionData();
+        
           if(flag){
-         console.log(this.selectionData);
-            
            util.ajax('v1/feeInfo/getAllFeeInfoByFeeCode', {
               method: 'get',
               params:{
                 feeCode:this.selectionData[0].feeCode
               }
             }).then(res => {
-                let curData = res.data.data;
-                this.digFeeName = curData.feeName;
-                this.digFeeType = curData.feeType;
-
+                
+                this.FeeInfo = res.data.data;
+                this.digFlag = true;
+                this.titleDig = "查看费用";
+                this.modal1 = true;
             })
-            this.titleDig = "查看费用"
-            this.modal1 = true;
+           
           }
           
       },
+      // 新增弹框
       addFindAllFee(){
-        let flag = this.isSelectionData();
-        if(flag){
-          this.titleDig = "新增费用"
-          this.modal1 = true;
-        }  
-          
+        
+              this.isLookOrRe = 'add';
+              this.digFlag = false;
+              this.titleDig = "新增费用";
+              this.modal1 = true;
       },
     }
   };
