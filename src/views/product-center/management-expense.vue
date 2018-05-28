@@ -8,18 +8,23 @@
     <Modal styles="z-index:1000;" width="800px" v-model="modal2" title="公式编辑" :loading="loading">
       <Row>
         <Col span="8">
-          <Menu @on-select="route" :theme="theme2" accordion="true" style="min-height:100px;">
-            <Submenu name="1">
-              <template slot="title">系统变量</template>
+        <Menu @on-select="route" :theme="theme2" accordion="true" style="min-height:100px;">
+          <Submenu name="1">
+            <template slot="title">系统变量
+</template>
               <MenuItem v-for="item in findAllSystemVariables" :name="item.label+'-'+item.value">{{item.label}}</MenuItem>
             </Submenu>
             <Submenu name="2">
-              <template slot="title">系统函数</template>
+<template slot="title">
+  系统函数
+</template>
                 <MenuItem v-for="item in findAllSystemFunction" :name="item.label">{{item.label}}</MenuItem>
                
             </Submenu>
              <Submenu name="3">
-              <template slot="title">运算符号</template>
+<template slot="title">
+  运算符号
+</template>
                 <MenuItem v-for="item in ysfhJs" :name="item.label">{{item.label}}</MenuItem>
                
             </Submenu>
@@ -154,9 +159,9 @@
     data() {
       return {
         // 系统函数
-        findAllSystemFunction:[],
+        findAllSystemFunction: [],
         // 系统变量
-        findAllSystemVariables:[],
+        findAllSystemVariables: [],
         // 线上线下
         sqxs: '1',
         // 收款方
@@ -168,10 +173,10 @@
         //输入公式。
         srgs: '',
         // 传值
-        srgs1:'',
+        srgs1: '',
         //查看修改新增
         modal1: false,
-        titleDig:'',
+        titleDig: '',
         modal2: false,
         // 表格loading
         loading: false,
@@ -184,73 +189,91 @@
         findAllFeeTypeml: '1',
         findAllFeeTypeList: [],
         //表单选中项
-        selectionData:[],
+        selectionData: [],
         // 弹框费用名称
-        digFeeName:'',
-        digFeeType:'',
+        digFeeName: '',
+        digFeeType: '',
         // 新增 
-        FeeInfo:{
-            feeName:[],
-            feeType:[],
-            feeCategory:[],
-            feeTag:[],
-            feeWay:[],
-            recCode:[],
-            payCode:[],
-            feeDesc:[],
-            feeFormulaApiQO:{},
-            status:1
+        FeeInfo: {
+          feeName: [],
+          feeType: [],
+          feeCategory: [],
+          feeTag: [],
+          feeWay: [],
+          recCode: [],
+          payCode: [],
+          feeDesc: [],
+          formula: '',
+          status: 1
         },
         // 控制弹框 可选
-        digFlag:false,
+        digFlag: false,
         // 查询所有的付款方
-        findAllPayer:[],
+        findAllPayer: [],
         //查询所有的收款方 
-        findAllRecipientParty:[],
+        findAllRecipientParty: [],
         // 查询所有的收取方式
-        findAllReceivingForm:[],
+        findAllReceivingForm: [],
         // 运算符号
-        ysfhJs:[],
+        ysfhJs: [],
         // 运算保存 标识，
-        ysBcFlag:false,
+        ysBcFlag: false,
         // 判断 是修改还是查看
-        showFormula1:'',
-        isLookOrRe:'add',
+        showFormula1: '',
+        isLookOrRe: 'add',
         // 修改的code
-        reCode:'',
+        reCode: '',
         // 费用大类
-        findAllCostCategory:[],
-        
+        findAllCostCategory: [],
+  
         data8: [],
         // 校验
-        digValidate:{
-            feeName:[
-            
-                  { required: true, message: '不能为空', trigger: 'blur' }
-              
-            ],
-            feeType:[
-               { required: true, message: '不能为空', trigger: 'change' }
-            ],
-            feeCategory:[
-               { required: true, message: '不能为空', trigger: 'change' }
-            ],
-            feeTag:[
-               { required: true, message: '不能为空', trigger: 'blur' }
-            ],
-            feeWay:[
-                 { required: true, message: '不能为空', trigger: 'change' }
-            ],
-            recCode:[
-               { required: true, message: '不能为空', trigger: 'change' }
-            ],
-            payCode:[
-               { required: true, message: '不能为空', trigger: 'change' }
-            ],
-            feeDesc:[
-               { required: true, message: '不能为空', trigger: 'change' }
-            ],
-            
+        digValidate: {
+          feeName: [
+  
+            {
+              required: true,
+              message: '不能为空',
+              trigger: 'blur'
+            }
+  
+          ],
+          feeType: [{
+            required: true,
+            message: '不能为空',
+            trigger: 'change'
+          }],
+          feeCategory: [{
+            required: true,
+            message: '不能为空',
+            trigger: 'change'
+          }],
+          feeTag: [{
+            required: true,
+            message: '不能为空',
+            trigger: 'blur'
+          }],
+          feeWay: [{
+            required: true,
+            message: '不能为空',
+            trigger: 'change'
+          }],
+          recCode: [{
+            required: true,
+            message: '不能为空',
+            trigger: 'change'
+          }],
+          payCode: [{
+            required: true,
+            message: '不能为空',
+            trigger: 'change'
+          }],
+          feeDesc: [{
+            required: true,
+            message: '不能为空',
+            trigger: 'change'
+          }],
+  
         }
       };
     },
@@ -323,25 +346,27 @@
                   },
                   on: {
                     click: () => {
-                        if(params.row.status==0){
-                            this.$Message.error('禁用状态，不可修改')
-                        }else{
-                            this.FeeInfo.status = params.row.status;
-                            // 修改 
-                            this.reCode = params.row.feeCode;
-                            this.isLookOrRe ='re';
-                            util.ajax('v1/feeInfo/getAllFeeInfoByFeeCode', {
-                              method: 'get',
-                              params:{
-                                feeCode:this.reCode
-                              }
-                            }).then(res => {
-                                this.FeeInfo = res.data.data;
-                                this.digFlag = false;
-                                this.titleDig = "修改费用";
-                                this.modal1 = true;
-                            })
-                        }
+                      if (params.row.status == 0) {
+                        this.$Message.error('禁用状态，不可修改')
+                      } else {
+                        this.FeeInfo.status = params.row.status;
+                        // 修改 
+                        this.reCode = params.row.feeCode;
+                        this.isLookOrRe = 're';
+                        util.ajax('v1/feeInfo/getAllFeeInfoByFeeCode', {
+                          method: 'get',
+                          params: {
+                            feeCode: this.reCode
+                          }
+                        }).then(res => {
+                          this.FeeInfo = res.data.data;
+                          this.FeeInfo.formula = res.data.data.feeFormulaVO.formula;
+                          this.showFormula1 = res.data.data.feeFormulaVO.formula;
+                          this.digFlag = false;
+                          this.titleDig = "修改费用";
+                          this.modal1 = true;
+                        })
+                      }
                     }
                   }
                 }, '修改'),
@@ -416,7 +441,7 @@
         ];
         return columns;
       }
-     
+  
     },
     mounted() {
       this.findAllFeeList();
@@ -426,33 +451,37 @@
     created() {
   
     },
-    watch:{
-        modal1(val){
-              if(!val){
-              if(!this.modal2){ 
-               this.$refs["FeeInfo"].resetFields();
-               }
+    watch: {
+      modal1(val) {
+        if (!val) {
+          if (!this.modal2) {
+            this.$refs["FeeInfo"].resetFields();
+            this.srgs = '';
+            this.srgs1 = '';
+            this.showFormula1 = '';
           }
-        },
-        modal2(val){
-            if(!val){
-                this.ysBcFlag = false;
-                 this.srgs ='';
-            }
         }
+      },
+      modal2(val) {
+        if (!val) {
+          this.ysBcFlag = false;
+          this.srgs = '';
+
+        }
+      }
     },
     methods: {
-     //计算公式
-      route(name){
-         
-         this.srgs += name.split('-')[0];
-         this.srgs1+= name.split('-')[1];
-         
+      //计算公式
+      route(name) {
+  
+        this.srgs += name.split('-')[0];
+        this.srgs1 += name.split('-')[1];
+  
       },
-       
+  
       // 验证公式
-      vildGs(){
-          util.ajax({
+      vildGs() {
+        util.ajax({
             url: "v1/feeFormula/formulaBudget",
             method: "get",
             params: {
@@ -460,26 +489,26 @@
             }
           })
           .then(res => {
-              console.log(res)
-              if(res.data.code==20000){
-                this.$Message.success(res.data.msg)
-                this.ysBcFlag = true;
-              }else{
-                this.$Message.error(res.data.msg)
-                this.ysBcFlag = false;
-              }
+            console.log(res)
+            if (res.data.code == 20000) {
+              this.$Message.success(res.data.msg)
+              this.ysBcFlag = true;
+            } else {
+              this.$Message.error(res.data.msg)
+              this.ysBcFlag = false;
+            }
           })
       },
       // 保存公式
-      submitGs(){
-          if(this.ysBcFlag==true){
-            this.modal2 = false;
-            this.modal1 = true;
-            this.showFormula1 = this.srgs;
-            this.FeeInfo.feeFormulaApiQO.formula = this.srgs1;
-          }else{
-             this.$Message.error('请验证！')
-          }
+      submitGs() {
+        if (this.ysBcFlag == true) {
+          this.modal2 = false;
+          this.modal1 = true;
+          this.showFormula1 = this.srgs;
+          this.FeeInfo.formula = this.srgs1;
+        } else {
+          this.$Message.error('请验证！')
+        }
       },
       // 表格数据
       findAllFeeList(index) {
@@ -495,7 +524,7 @@
           })
           .then(res => {
             this.data8 = res.data.data.content;
-            this.pageTotal = res.data.data.totalPages;
+            this.pageTotal = res.data.data.totalElements;
             this.loading = false;
           })
       },
@@ -517,7 +546,7 @@
         }).then(res => {
           if (res.data.code == 20000) {
             this.data8 = res.data.data.content;
-            this.pageTotal = res.data.data.totalPages;
+            this.pageTotal = res.data.data.totalElements;
             this.loading = false;
           } else {
             this.$Message.error(res.data.msg);
@@ -529,7 +558,7 @@
       findAllFeeTypeJs(s) {
         this.findAllFeeTypeml = s;
       },
-      digFeeTypeJs(s){
+      digFeeTypeJs(s) {
         this.digFeeType = s;
       },
       // 费用类型获取
@@ -540,123 +569,150 @@
           this.findAllFeeTypeList = res.data.data;
         })
       },
-      changeFindSec(selection){
+      changeFindSec(selection) {
         this.selectionData = selection;
       },
       //判断表格选项
-      isSelectionData(){
-        let flag = false ;
-        if(this.selectionData.length>1){
+      isSelectionData() {
+        let flag = false;
+        if (this.selectionData.length > 1) {
           this.$Message.error('只能选择一项');
           flag = false;
-        }else if(this.selectionData.length==1){
-            flag = true;
-        }else{
+        } else if (this.selectionData.length == 1) {
+          flag = true;
+        } else {
           this.$Message.error('请选择一项');
           flag = false;
         }
-        return flag ;
+        return flag;
       },
       // 表单中，单选信息
-      feeInfoDig(){
-           util.ajax('v1/feeInfo/findAllPayer', {
-              method: 'get',
-            }).then(res => {
-               this.findAllPayer = res.data.data;
-            })
-            util.ajax('v1/feeInfo/findAllRecipientParty', {
-              method: 'get',
-            }).then(res => {
-               this.findAllRecipientParty = res.data.data;
-            })
-            util.ajax('v1/feeInfo/findAllReceivingForm', {
-              method: 'get',
-            }).then(res => {
-               this.findAllReceivingForm = res.data.data;
-            })
-            util.ajax('v1/feeInfo/findAllCostCategory', {
-              method: 'get',
-            }).then(res => {
-               this.findAllCostCategory = res.data.data;
-            })
-
-      } ,
+      feeInfoDig() {
+        util.ajax('v1/feeInfo/findAllPayer', {
+          method: 'get',
+        }).then(res => {
+          this.findAllPayer = res.data.data;
+        })
+        util.ajax('v1/feeInfo/findAllRecipientParty', {
+          method: 'get',
+        }).then(res => {
+          this.findAllRecipientParty = res.data.data;
+        })
+        util.ajax('v1/feeInfo/findAllReceivingForm', {
+          method: 'get',
+        }).then(res => {
+          this.findAllReceivingForm = res.data.data;
+        })
+        util.ajax('v1/feeInfo/findAllCostCategory', {
+          method: 'get',
+        }).then(res => {
+          this.findAllCostCategory = res.data.data;
+        })
+  
+      },
       // 关闭弹框
-      cancelDig(){
-          this.modal1 = false;
-          
+      cancelDig() {
+        this.modal1 = false;
+  
       },
       // 保存 
-      submitDig(){
+      submitDig() {
         console.log(this.FeeInfo)
         // 保存逻辑
-        if(this.isLookOrRe=='add'){
-            //新增
-            
-            util.ajax('v1/feeInfo/AddFee', {
-              method: 'post',
-              params:this.FeeInfo
-            }).then(res => {
-              console.log(res)
-            })
-        }else{
+        delete this.FeeInfo['feeFormulaVO'];
+        if (this.isLookOrRe == 'add') {
+          //新增
+  
+          util.ajax('v1/feeInfo/AddFee', {
+            method: 'post',
+            data: this.FeeInfo
+  
+          }).then(res => {
+            console.log(res)
+            if(res.data.code==20000){
+                this.$Message.success(res.data.msg)
+                this.modal1 = false;
+                this.findAllFeeList();
+            }else{
+              this.$Message.error(res.data.msg)
+            }
+          
+          })
+        } else {
           // 修改
-        
-      }
+          this.FeeInfo.feeCode = this.reCode;
+          this.FeeInfo.createTime = '';
+         util.ajax('v1/feeInfo/modifyFeeInfo', {
+            method: 'put',
+            data: this.FeeInfo
+  
+          }).then(res => {
+            console.log(res)
+            if(res.data.code==20000){
+                this.$Message.success(res.data.msg)
+                this.modal1 = false;
+                this.findAllFeeList();
+            }else{
+              this.$Message.error(res.data.msg)
+            }
+          
+          })
+        }
       },
       // 计算公式弹框
-      feeFormuJs(){
-       
-          this.modal2 = true;
-          this.modal1 = false;
-          util.ajax('v1/feeInfo/findAllSystemVariables', {
-              method: 'get'
-            
-            }).then(res => {
-              this.findAllSystemVariables = res.data.data;
-            })
-          util.ajax('v1/feeInfo/findAllSystemFunction', {
-            method: 'get'
-          }).then(res => {
-            this.findAllSystemFunction = res.data.data;
-          })
-           util.ajax('v1/feeInfo/findAllOperation', {
-            method: 'get'
-          }).then(res => {
-            this.ysfhJs = res.data.data;
-          })
-          
-
+      feeFormuJs() {
+  
+        this.modal2 = true;
+        this.modal1 = false;
+        util.ajax('v1/feeInfo/findAllSystemVariables', {
+          method: 'get'
+  
+        }).then(res => {
+          this.findAllSystemVariables = res.data.data;
+        })
+        util.ajax('v1/feeInfo/findAllSystemFunction', {
+          method: 'get'
+        }).then(res => {
+          this.findAllSystemFunction = res.data.data;
+        })
+        util.ajax('v1/feeInfo/findAllOperation', {
+          method: 'get'
+        }).then(res => {
+          this.ysfhJs = res.data.data;
+        })
+  
+  
       },
       // 查看弹框
-      lookFindAllFee(){
+      lookFindAllFee() {
         let flag = this.isSelectionData();
-        
-          if(flag){
-           util.ajax('v1/feeInfo/getAllFeeInfoByFeeCode', {
-              method: 'get',
-              params:{
-                feeCode:this.selectionData[0].feeCode
-              }
-            }).then(res => {
-                
-                this.FeeInfo = res.data.data;
-                this.digFlag = true;
-                this.titleDig = "查看费用";
-                this.modal1 = true;
-              
-            })
-           
-          }
-          
+  
+        if (flag) {
+          util.ajax('v1/feeInfo/getAllFeeInfoByFeeCode', {
+            method: 'get',
+            params: {
+              feeCode: this.selectionData[0].feeCode
+            }
+          }).then(res => {
+  
+            this.FeeInfo = res.data.data;
+            this.showFormula1 = res.data.data.feeFormulaVO.formula;
+            this.digFlag = true;
+            this.titleDig = "查看费用";
+            this.modal1 = true;
+  
+          })
+  
+        }
+  
       },
       // 新增弹框
-      addFindAllFee(){
-              this.FeeInfo.status = 1;
-              this.isLookOrRe = 'add';
-              this.digFlag = false;
-              this.titleDig = "新增费用";
-              this.modal1 = true;
+      addFindAllFee() {
+        this.FeeInfo.status = 1;
+        this.isLookOrRe = 'add';
+        this.digFlag = false;
+        this.titleDig = "新增费用";
+        this.modal1 = true;
       },
     }
   };
