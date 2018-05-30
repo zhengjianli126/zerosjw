@@ -4,7 +4,6 @@
 
 <template>
   <div style="padding:15px;background:#FFF;overflow:hidden">
-    <i-button type="primary" @click="modal2 = true">显示对话框1</i-button>
     <Modal styles="z-index:1000;" width="800px" v-model="modal2" title="公式编辑" :loading="loading">
       <Row>
         <Col span="8">
@@ -12,20 +11,20 @@
           <Submenu name="1">
             <template slot="title">系统变量
 </template>
-              <MenuItem v-for="item in findAllSystemVariables" :name="item.label+'-'+item.value">{{item.label}}</MenuItem>
+              <MenuItem v-for="item in findAllSystemVariables" :name="item.label+'&'+item.value">{{item.label}}</MenuItem>
             </Submenu>
             <Submenu name="2">
 <template slot="title">
   系统函数
 </template>
-                <MenuItem v-for="item in findAllSystemFunction" :name="item.label">{{item.label}}</MenuItem>
+                <MenuItem v-for="item in findAllSystemFunction" :name="item.label+'&'+item.value">{{item.label}}</MenuItem>
                
             </Submenu>
              <Submenu name="3">
 <template slot="title">
   运算符号
 </template>
-                <MenuItem v-for="item in ysfhJs" :name="item.label">{{item.label}}</MenuItem>
+                <MenuItem v-for="item in ysfhJs" :name="item.label+'&'+item.value">{{item.label}}</MenuItem>
                
             </Submenu>
           </Menu>
@@ -360,8 +359,7 @@
                           }
                         }).then(res => {
                           this.FeeInfo = res.data.data;
-                          this.FeeInfo.formula = res.data.data.feeFormulaVO.formula;
-                          this.showFormula1 = res.data.data.feeFormulaVO.formula;
+                          this.showFormula1 = res.data.data.feeFormulaVO.cformula;
                           this.digFlag = false;
                           this.titleDig = "修改费用";
                           this.modal1 = true;
@@ -474,8 +472,8 @@
       //计算公式
       route(name) {
   
-        this.srgs += name.split('-')[0];
-        this.srgs1 += name.split('-')[1];
+        this.srgs += name.split('&')[0];
+        this.srgs1 += name.split('&')[1];
   
       },
   
@@ -505,7 +503,9 @@
           this.modal2 = false;
           this.modal1 = true;
           this.showFormula1 = this.srgs;
-          this.FeeInfo.formula = this.srgs1;
+          this.FeeInfo.eformula = this.srgs1;
+          this.FeeInfo.cformula = this.srgs;
+
         } else {
           this.$Message.error('请验证！')
         }
@@ -633,7 +633,11 @@
                 this.$Message.success(res.data.msg)
                 this.modal1 = false;
                 this.findAllFeeList();
-            }else{
+            }else if(res.data.data.code==10008||res.data.data.code===10005){
+              this.$Message.error(res.data.details[0])
+            }
+            
+            else{
               this.$Message.error(res.data.msg)
             }
           
@@ -652,6 +656,8 @@
                 this.$Message.success(res.data.msg)
                 this.modal1 = false;
                 this.findAllFeeList();
+            }else if(res.data.data.code==10008||res.data.data.code===10005){
+              this.$Message.error(res.data.details[0])
             }else{
               this.$Message.error(res.data.msg)
             }
@@ -696,7 +702,7 @@
           }).then(res => {
   
             this.FeeInfo = res.data.data;
-            this.showFormula1 = res.data.data.feeFormulaVO.formula;
+            this.showFormula1 = res.data.data.feeFormulaVO.cformula;
             this.digFlag = true;
             this.titleDig = "查看费用";
             this.modal1 = true;
