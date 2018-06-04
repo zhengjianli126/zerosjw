@@ -751,7 +751,7 @@ export default {
                   props: {
                     type: "info",
                     size: "small",
-                    disabled: true == !this.modifyShow ? "disabled" : false
+                    disabled: true == this.modifyShow ? "disabled" : false
                   },
                   style: {
                     marginLeft: "10px"
@@ -782,7 +782,7 @@ export default {
                   props: {
                     type: "error",
                     size: "small",
-                    disabled: true == !this.modifyShow ? "disabled" : false
+                    disabled: true == this.modifyShow ? "disabled" : false
                   },
                   style: {
                     marginLeft: "10px"
@@ -1208,7 +1208,7 @@ export default {
     addFeeBtn() {
       util
         .ajax({
-          url: "fee-master-web/v1/feeInfo/findAllFeeList",
+          url: "fee-master-web/v1/feeInfo/findFeeListByNameAndCategory",
           // url: 'v1/prdFeeRelation/getFeeList',
           method: "get",
           params: {
@@ -1229,8 +1229,8 @@ export default {
     searchFeeList(index) {
       util
         .ajax({
-          url: "fee-master-web/v1/feeInfo/findFeeListByNameAndType",
-          // url: 'v1/prdFeeRelation/getFeeList',
+          url: "fee-master-web/v1/feeInfo/findFeeListByNameAndCategory",
+          // url: 'v1/feeInfo/findFeeListByNameAndCategory',
           method: "get",
           params: {
             pageNumber: index,
