@@ -1085,7 +1085,7 @@ export default {
       this.prodLoading = true;
       util
         .ajax({
-          url: "v1/product/getPageQuery",
+          url: "product-web/v1/product/getPageQuery",
           method: "post",
           headers: {
             "Content-Type": "application/json"
@@ -1112,7 +1112,7 @@ export default {
     getProdStatus() {
       util
         .ajax({
-          url: "v1/prdDictionary/get/productStatus",
+          url: "product-web/v1/prdDictionary/get/productStatus",
           method: "get"
         })
         .then(res => {
@@ -1141,7 +1141,7 @@ export default {
     // 产品管理删除按钮
     deleteProduct(params) {
       util.ajax({
-        url: "v1/product/delete/asset/"+ params.row.productCode + "/" + params.row.productStatus,
+        url: "product-web/v1/product/delete/asset/"+ params.row.productCode + "/" + params.row.productStatus,
         method: "delete"
       }).then(res => {
         if (res.data.code == 20000) {
@@ -1156,7 +1156,7 @@ export default {
     getProductType() {
       util
         .ajax({
-          url: "v1/prdDictionary/get/productType",
+          url: "product-web/v1/prdDictionary/get/productType",
           method: "get"
         })
         .then(res => {
@@ -1175,7 +1175,7 @@ export default {
     getPayType() {
       util
         .ajax({
-          url: "v1/prdDictionary/get/payType",
+          url: "product-web/v1/prdDictionary/get/payType",
           method: "get"
         })
         .then(res => {
@@ -1186,8 +1186,8 @@ export default {
     getFeeCategory() {
       util
         .ajax({
-          // url: "v1/feeInfo/findAllCostCategory",
-          url: 'v1/prdFeeRelation/findAllCostCategory',
+          url: "fee-web/v1/feeInfo/findAllCostCategory",
+          // url: 'fee-web/v1/prdFeeRelation/findAllCostCategory',
           method: "get"
         })
         .then(res => {
@@ -1198,8 +1198,8 @@ export default {
     addFeeBtn() {
       util
         .ajax({
-          // url: "v1/feeInfo/findAllFeeList",
-          url: 'v1/prdFeeRelation/getFeeList',
+          url: "fee-web/v1/feeInfo/findAllFeeList",
+          // url: 'fee-web/v1/prdFeeRelation/getFeeList',
           method: "get",
           params: {
             pageNumber: 1,
@@ -1217,8 +1217,8 @@ export default {
     searchFeeList() {
       util
         .ajax({
-          // url: "v1/feeInfo/findFeeListByNameAndType",
-          url: 'v1/prdFeeRelation/getFeeList',
+          url: "fee-web/v1/feeInfo/findFeeListByNameAndType",
+          // url: 'v1/prdFeeRelation/getFeeList',
           method: "get",
           params: {
             pageNumber: 1,
@@ -1250,7 +1250,7 @@ export default {
     getOrgCode() {
       util
         .ajax({
-          url: "v1/prdDictionary/getDeparts",
+          url: "product-web/v1/prdDictionary/getDeparts",
           method: "get"
         })
         .then(res => {
@@ -1264,7 +1264,7 @@ export default {
     getBelongCode() {
       util
         .ajax({
-          url: "v1/prdDictionary/getBelongs",
+          url: "product-web/v1/prdDictionary/getBelongs",
           method: "get"
         })
         .then(res => {
@@ -1278,7 +1278,7 @@ export default {
     getRecComps() {
       util
         .ajax({
-          url: "v1/prdDictionary/getRecComps",
+          url: "product-web/v1/prdDictionary/getRecComps",
           method: "get"
         })
         .then(res => {
@@ -1292,7 +1292,7 @@ export default {
     getRecCode(params) {
       util
         .ajax({
-          url: "v1/prdDictionary/getFeeRecs",
+          url: "product-web/v1/prdDictionary/getFeeRecs",
           method: "get",
           params: {
             feeCode: params.row.feeCode
@@ -1309,7 +1309,7 @@ export default {
     getPayCode(params) {
       util
         .ajax({
-          url: "v1/prdDictionary/getFeePays",
+          url: "product-web/v1/prdDictionary/getFeePays",
           method: "get",
           params: {
             feeCode: params.row.feeCode
@@ -1326,7 +1326,7 @@ export default {
     productBaseInfo(params) {
       util
         .ajax({
-          url: "v1/product/getByCode/asset/" + params.row.productCode,
+          url: "product-web/v1/product/getByCode/asset/" + params.row.productCode,
           method: "get"
         })
         .then(res => {
@@ -1353,7 +1353,7 @@ export default {
     checkGuaranteeInfo(params) {
       util
         .ajax({
-          url: "v1/prdGuaranteeModel/getGuaranteeMods/" + params.row.productCode,
+          url: "product-web/v1/prdGuaranteeModel/getGuaranteeMods/" + params.row.productCode,
           method: "get"
         })
         .then(res => {
@@ -1365,7 +1365,7 @@ export default {
     checkContractInfo(params) {
       util
         .ajax({
-          url: "v1/prdContractRelation/getContractRels/" + params.row.productCode,
+          url: "product-web/v1/prdContractRelation/getContractRels/" + params.row.productCode,
           method: "get"
         })
         .then(res => {
@@ -1377,7 +1377,7 @@ export default {
     checkFeeInfo(params) {
       util
         .ajax({
-          url: "v1/prdFeeRelation/getFeeRels/" + params.row.productCode,
+          url: "product-web/v1/prdFeeRelation/getFeeRels/" + params.row.productCode,
           method: "get"
         })
         .then(res => {
@@ -1418,7 +1418,7 @@ export default {
           if (valid) {
             util
               .ajax({
-                url: "v1/product/save",
+                url: "product-web/v1/product/save",
                 method: "post",
                 headers: {
                   "Content-Type": "application/json"
@@ -1460,7 +1460,7 @@ export default {
       this.productInfo.fronInterval = Number(this.productInfo.fronInterval);
       this.productInfo.startInterestDay = Number(this.productInfo.startInterestDay)
       util.ajax({
-          url: "v1/product/update",
+          url: "product-web/v1/product/update",
           method: "put",
           headers: {
             "Content-Type": "application/json"
@@ -1481,7 +1481,7 @@ export default {
     // 合同保存
     saveContractInfo(params) {
       util.ajax({
-          url: "v1/prdContractRelation/save",
+          url: "product-web/v1/prdContractRelation/save",
           method: "post",
           headers: {
             "Content-Type": "application/json"
@@ -1504,7 +1504,7 @@ export default {
     // 保存费用信息
     saveFeeInfo(params) {
       util.ajax({
-          url: "v1/prdFeeRelation/save",
+          url: "product-web/v1/prdFeeRelation/save",
           method: "post",
           headers: {
             "Content-Type": "application/json"
@@ -1537,7 +1537,7 @@ export default {
     // 保存保障模型信息
     saveSafeModel() {
       util.ajax({
-          url: "v1/prdGuaranteeModel/save",
+          url: "product-web/v1/prdGuaranteeModel/save",
           method: "post",
           headers: {
             "Content-Type": "application/json"
@@ -1555,7 +1555,7 @@ export default {
     // 删除保障模型模块
     deleteGuarantee(index) {
       util.ajax({
-          url: "v1/prdGuaranteeModel/delete/"+ index.id,
+          url: "product-web/v1/prdGuaranteeModel/delete/"+ index.id,
           method: "delete",
         })
         .then(res => {
@@ -1563,7 +1563,7 @@ export default {
             this.guaranteeModelList.splice(index,1);
             util
             .ajax({
-              url: "v1/prdGuaranteeModel/getGuaranteeMods/" + index.productCode,
+              url: "product-web/v1/prdGuaranteeModel/getGuaranteeMods/" + index.productCode,
               method: "get"
             })
             .then(res => {
@@ -1578,7 +1578,7 @@ export default {
     // 删除合同
     deleteContract(params) {
       util.ajax({
-          url: "v1/prdContractRelation/delete/"+ params.row.id,
+          url: "product-web/v1/prdContractRelation/delete/"+ params.row.id,
           method: "delete",
         })
         .then(res => {
@@ -1592,7 +1592,7 @@ export default {
     // 删除费用
     deleteFee(params) {
       util.ajax({
-          url: "v1/prdFeeRelation/delete/"+ params.row.id,
+          url: "product-web/v1/prdFeeRelation/delete/"+ params.row.id,
           method: "delete",
         })
         .then(res => {
