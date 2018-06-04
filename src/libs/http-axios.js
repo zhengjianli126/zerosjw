@@ -2,7 +2,7 @@ import axios from 'axios'
 import {router} from '../router/index'
 import Cookies from 'js-cookie';
 let axiosAjax =  axios.create({
-    baseURL:'http://172.31.20.14:9999/api',
+    baseURL:'http://172.31.20.18:81/api',
     headers: {
         'Content-Type': 'application/json;charset=UTF-8',
     },
