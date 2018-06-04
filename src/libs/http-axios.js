@@ -2,9 +2,9 @@ import axios from 'axios'
 import {router} from '../router/index'
 import Cookies from 'js-cookie';
 let axiosAjax =  axios.create({
-    //baseURL:ajaxUrl,
+    baseURL:'http://172.31.20.14:9999/',
     headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Type': 'application/json;charset=UTF-8',
     },
     timeout: 30000
 });

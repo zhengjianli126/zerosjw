@@ -352,7 +352,7 @@
                         // 修改 
                         this.reCode = params.row.feeCode;
                         this.isLookOrRe = 're';
-                        util.ajax('v1/feeInfo/getAllFeeInfoByFeeCode', {
+                        util.ajax('fee-master-web/v1/feeInfo/getAllFeeInfoByFeeCode', {
                           method: 'get',
                           params: {
                             feeCode: this.reCode
@@ -380,7 +380,7 @@
                     click: () => {
                       this.loading = true;
                       util.ajax({
-                          url: "v1/feeInfo/updateFeeStatusToEnable",
+                          url: "fee-master-web/v1/feeInfo/updateFeeStatusToEnable",
                           method: "put",
                           params: {
                             feeCode: params.row.feeCode
@@ -409,7 +409,7 @@
                     click: () => {
                       this.loading = true;
                       util.ajax({
-                          url: "v1/feeInfo/updateFeeStatusToOff",
+                          url: "fee-master-web/v1/feeInfo/updateFeeStatusToOff",
                           method: "put",
                           params: {
                             feeCode: params.row.feeCode
@@ -480,7 +480,7 @@
       // 验证公式
       vildGs() {
         util.ajax({
-            url: "v1/feeFormula/formulaBudget",
+            url: "fee-master-web/v1/feeFormula/formulaBudget",
             method: "get",
             params: {
               formula: this.srgs
@@ -515,7 +515,7 @@
         index = index || 1;
         this.loading = true;
         util.ajax({
-            url: "v1/feeInfo/findAllFeeList",
+            url: "fee-master-web/v1/feeInfo/findAllFeeList",
             method: "get",
             params: {
               pageNumber: index,
@@ -535,7 +535,7 @@
       // 搜索
       searchClick() {
         this.loading = true;
-        util.ajax('v1/feeInfo/findFeeListByNameAndType', {
+        util.ajax('fee-master-web/v1/feeInfo/findFeeListByNameAndType', {
           method: 'get',
           params: {
             feeName: this.feeName,
@@ -563,7 +563,7 @@
       },
       // 费用类型获取
       findAllFeeType() {
-        util.ajax('v1/feeInfo/findAllFeeType', {
+        util.ajax('fee-master-web/v1/feeInfo/findAllFeeType', {
           method: 'get',
         }).then(res => {
           this.findAllFeeTypeList = res.data.data;
@@ -588,22 +588,22 @@
       },
       // 表单中，单选信息
       feeInfoDig() {
-        util.ajax('v1/feeInfo/findAllPayer', {
+        util.ajax('fee-master-web/v1/feeInfo/findAllPayer', {
           method: 'get',
         }).then(res => {
           this.findAllPayer = res.data.data;
         })
-        util.ajax('v1/feeInfo/findAllRecipientParty', {
+        util.ajax('fee-master-web/v1/feeInfo/findAllRecipientParty', {
           method: 'get',
         }).then(res => {
           this.findAllRecipientParty = res.data.data;
         })
-        util.ajax('v1/feeInfo/findAllReceivingForm', {
+        util.ajax('fee-master-web/v1/feeInfo/findAllReceivingForm', {
           method: 'get',
         }).then(res => {
           this.findAllReceivingForm = res.data.data;
         })
-        util.ajax('v1/feeInfo/findAllCostCategory', {
+        util.ajax('fee-master-web/v1/feeInfo/findAllCostCategory', {
           method: 'get',
         }).then(res => {
           this.findAllCostCategory = res.data.data;
@@ -623,7 +623,7 @@
         if (this.isLookOrRe == 'add') {
           //新增
   
-          util.ajax('v1/feeInfo/AddFee', {
+          util.ajax('fee-master-web/v1/feeInfo/AddFee', {
             method: 'post',
             data: this.FeeInfo
   
@@ -646,7 +646,7 @@
           // 修改
           this.FeeInfo.feeCode = this.reCode;
           this.FeeInfo.createTime = '';
-         util.ajax('v1/feeInfo/modifyFeeInfo', {
+         util.ajax('fee-master-web/v1/feeInfo/modifyFeeInfo', {
             method: 'put',
             data: this.FeeInfo
   
@@ -670,18 +670,18 @@
   
         this.modal2 = true;
         this.modal1 = false;
-        util.ajax('v1/feeInfo/findAllSystemVariables', {
+        util.ajax('fee-master-web/v1/feeInfo/findAllSystemVariables', {
           method: 'get'
   
         }).then(res => {
           this.findAllSystemVariables = res.data.data;
         })
-        util.ajax('v1/feeInfo/findAllSystemFunction', {
+        util.ajax('fee-master-web/v1/feeInfo/findAllSystemFunction', {
           method: 'get'
         }).then(res => {
           this.findAllSystemFunction = res.data.data;
         })
-        util.ajax('v1/feeInfo/findAllOperation', {
+        util.ajax('fee-master-web/v1/feeInfo/findAllOperation', {
           method: 'get'
         }).then(res => {
           this.ysfhJs = res.data.data;
@@ -694,7 +694,7 @@
         let flag = this.isSelectionData();
   
         if (flag) {
-          util.ajax('v1/feeInfo/getAllFeeInfoByFeeCode', {
+          util.ajax('fee-master-web/v1/feeInfo/getAllFeeInfoByFeeCode', {
             method: 'get',
             params: {
               feeCode: this.selectionData[0].feeCode
