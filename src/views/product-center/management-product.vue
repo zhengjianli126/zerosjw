@@ -193,7 +193,7 @@
                           <Col span="8">
                             <Form-item label="机构名称：" prop="orgCode">
                               <i-select :disabled="checkGuaranteeFlag" @on-change="changeorgCode" v-model="guaranteeInfo.orgCode" placeholder="请选择" style="width: 200px">
-                                  <i-option v-for="item in orgCodeList" :value="item.value">{{ item.label }}</i-option>
+                                  <i-option v-for="item in orgCodeList"  :value="item.CUSTID+-+item.CUSTTYPE">{{ item.CUSTNAME }}</i-option>
                               </i-select>
                             </Form-item>
                           </Col>
@@ -414,6 +414,20 @@ export default {
         // 描述
         feeDesc: ''
       },
+      // 保存基础信息点击次数
+      saveClick: 0,
+      // 保存合同点击次数
+      saveContractClick: 0,
+      // 保存费用保障点击次数
+      saveFeeClick: 0,
+      // 保存保障模型点击次数
+      saveGuaranteeClick: 0,
+      // 新增标识
+      addFlag: false,
+      // 查看标识
+      seeFlag: false,
+      // 修改标识
+      modifyFlag: false,
       // 编辑时index标识
       indexFlag: 0,
       // 审核备注展示
@@ -751,7 +765,7 @@ export default {
                   props: {
                     type: "info",
                     size: "small",
-                    disabled: true == this.modifyShow ? "disabled" : false
+                    disabled: true == !this.seeFlag ? "disabled" : false
                   },
                   style: {
                     marginLeft: "10px"
@@ -782,7 +796,7 @@ export default {
                   props: {
                     type: "error",
                     size: "small",
-                    disabled: true == this.modifyShow ? "disabled" : false
+                    disabled: true == !this.seeFlag ? "disabled" : false
                   },
                   style: {
                     marginLeft: "10px"
@@ -852,7 +866,7 @@ export default {
         },
         {
           title: "状态",
-          key: "productStatus",
+          key: "productStatusDetail",
           width: 180,
           align: "center"
         },
@@ -886,6 +900,7 @@ export default {
                       this.checkBaseFlag = true;
                       this.checkGuaranteeFlag = true;
                       this.modifyShow = false;
+                      this.seeFlag = false;
                       this.productBaseInfo(params);
                       this.checkGuaranteeInfo(params);
                       this.checkContractInfo(params);
@@ -913,6 +928,7 @@ export default {
                       this.checkBaseFlag = false;
                       this.checkGuaranteeFlag = false;
                       this.modifyShow = true;
+                      this.seeFlag = true;
                       this.productBaseInfo(params);
                       this.checkGuaranteeInfo(params);
                       this.checkContractInfo(params);
@@ -940,6 +956,7 @@ export default {
                       this.checkBaseFlag = false;
                       this.checkGuaranteeFlag = false;
                       this.modifyShow = false;
+                      this.seeFlag = true;
                       this.productBaseInfo(params);
                       this.checkGuaranteeInfo(params);
                       this.checkContractInfo(params);
@@ -1064,6 +1081,8 @@ export default {
       if (!val) {
         if (!this.modal2) {
           this.clearHistory();
+          this.saveClick = 0;
+          this.saveGuaranteeClick = 0;
           this.checkBaseFlag = false;
           this.checkGuaranteeFlag = false;
         }
@@ -1135,6 +1154,7 @@ export default {
       this.getBelongCode();
       this.getRecComps();
       this.modifyShow = false;
+      this.seeFlag = true;
       this.productModel = true;
     },
     // 打开产品信息页面默认请求的列表接口
@@ -1147,6 +1167,7 @@ export default {
     },
     // 产品管理删除按钮
     deleteProduct(params) {
+
       util.ajax({
         url: "product-web/v1/product/delete/asset/"+ params.row.productCode + "/" + params.row.productStatus,
         // url: "v1/product/delete/asset/"+ params.row.productCode + "/" + params.row.productStatus,
@@ -1208,8 +1229,8 @@ export default {
     addFeeBtn() {
       util
         .ajax({
-          url: "fee-master-web/v1/feeInfo/findFeeListByNameAndCategory",
-          // url: 'v1/prdFeeRelation/getFeeList',
+          url: "fee-master-web/v1/feeInfo/findAllUsingFeeList",
+          // url: 'v1/feeInfo/findAllUsingFeeList',
           method: "get",
           params: {
             pageNumber: 1,
@@ -1229,8 +1250,8 @@ export default {
     searchFeeList(index) {
       util
         .ajax({
-          url: "fee-master-web/v1/feeInfo/findFeeListByNameAndCategory",
-          // url: 'v1/feeInfo/findFeeListByNameAndCategory',
+          url: "fee-master-web/v1/feeInfo/findAllUsingFeeList",
+          // url: 'v1/feeInfo/findAllUsingFeeList',
           method: "get",
           params: {
             pageNumber: index,
@@ -1265,10 +1286,14 @@ export default {
         .ajax({
           url: "product-web/v1/prdDictionary/getDeparts",
           // url: "v1/prdDictionary/getDeparts",
-          method: "get"
+          method: "get",
+          params: {
+            // 查询担保机构
+            orgType: 3
+          }
         })
         .then(res => {
-          this.orgCodeList = res.data.data;
+          this.orgCodeList = res.data.data.list;
         });
     },
     changeorgCode(s) {
@@ -1278,8 +1303,8 @@ export default {
     getBelongCode() {
       util
         .ajax({
-          url: "product-web/v1/prdDictionary/getBelongs",
-          // url: "v1/prdDictionary/getBelongs",
+          url: "product-web/v1/prdDictionary/get/belongCode",
+          // url: "v1/prdDictionary/get/belongCode",
           method: "get"
         })
         .then(res => {
@@ -1293,8 +1318,8 @@ export default {
     getRecComps() {
       util
         .ajax({
-          url: "product-web/v1/prdDictionary/getRecComps",
-          // url: "v1/prdDictionary/getRecComps",
+          url: "product-web/v1/prdDictionary/get/recComp",
+          // url: "v1/prdDictionary/get/recComp",
           method: "get"
         })
         .then(res => {
@@ -1308,8 +1333,8 @@ export default {
     getRecCode(params) {console.log(params);
       util
         .ajax({
-          url: "product-web/v1/prdDictionary/getFeeRecs",
-          // url: "v1/prdDictionary/getFeeRecs",
+          url: "product-web/v1/prdDictionary/get/feePayRecType",
+          // url: "v1/prdDictionary/get/feePayRecType",
           method: "get",
           params: {
             feeCode: params.row.recCode
@@ -1326,8 +1351,8 @@ export default {
     getPayCode(params) {
       util
         .ajax({
-          url: "product-web/v1/prdDictionary/getFeePays",
-          // url: "v1/prdDictionary/getFeePays",
+          url: "product-web/v1/prdDictionary/get/feePayRecType",
+          // url: "v1/prdDictionary/get/feePayRecType",
           method: "get",
           params: {
             feeCode: params.row.payCode
@@ -1377,7 +1402,6 @@ export default {
           method: "get"
         })
         .then(res => {
-          console.log(222,res);
           this.guaranteeModelList = res.data.data;
         });
     },
@@ -1390,7 +1414,6 @@ export default {
           method: "get"
         })
         .then(res => {
-          console.log(44,res);
           this.contractData = res.data.data;
         });
     },
@@ -1403,7 +1426,6 @@ export default {
           method: "get"
         })
         .then(res => {
-          console.log(333,res)
           this.costData = res.data.data;
         });
     },
@@ -1476,11 +1498,17 @@ export default {
     // 清除表单中得历史数据
     clearHistory() {
       this.$refs["productInfo"].resetFields();
-      this.guaranteeModelList.splice(0);
+      if(this.guaranteeModelList) {
+        this.guaranteeModelList.splice(0);
+      }
     },
 
     // 修改时基础信息保存按钮
     saveBaseInfo() {
+      if (this.saveClick > 0) {
+        this.$Message.error('不能重复保存');
+        return false;
+      }
       this.productInfo.fronInterval = Number(this.productInfo.fronInterval);
       this.productInfo.startInterestDay = Number(this.productInfo.startInterestDay)
       util.ajax({
@@ -1498,6 +1526,7 @@ export default {
         .then(res => {
           if (res.data.code == 20000) {
             this.$Message.success(res.data.msg);
+            this.saveClick++;
           } else {
             this.$Message.error(res.data.msg);
           }
@@ -1563,6 +1592,11 @@ export default {
     },
     // 保存保障模型信息
     saveSafeModel(index) {
+      if (this.saveGuaranteeClick > 0) {
+        this.$Message.success('不能重复保存');
+        return false;
+      }
+      
       this.guaranteeModelList.guaOrder = index+1;
       util.ajax({
           url: "product-web/v1/prdGuaranteeModel/save",
@@ -1576,6 +1610,7 @@ export default {
         .then(res => {
           if (res.data.code == 20000) {
             this.$Message.success(res.data.msg);
+            this.saveGuaranteeClick++;
           } else {
             this.$Message.error(res.data.details[0]);
           }
@@ -1623,10 +1658,20 @@ export default {
     },
     // 删除费用
     deleteFee(params) {
-      util.ajax({
-          url: "product-web/v1/prdFeeRelation/delete/"+ params.row.id,
-          // url: "v1/prdFeeRelation/delete/"+ params.row.id,
+      if(!params.row.productCode) {
+        this.costData.splice(params.index,1);
+      } else {
+        util.ajax({
+          url: "product-web/v1/prdFeeRelation/deleteByCode",
+          // url: "v1/prdFeeRelation/deleteByCode",
           method: "delete",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          data: {
+            productCode: params.row.productCode,
+            feeCode:  params.row.feeCode
+          }
         })
         .then(res => {
           if (res.data.code == 20000) {
@@ -1635,6 +1680,7 @@ export default {
             this.$Message.error(res.data.msg);
           }
         });
+      }
     },
     // 改变类型
     changeTypeCode(index, $event) {
