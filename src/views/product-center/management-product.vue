@@ -193,7 +193,7 @@
                           <Col span="8">
                             <Form-item label="机构名称：" prop="orgCode">
                               <i-select :disabled="checkGuaranteeFlag" @on-change="changeorgCode" v-model="guaranteeInfo.orgCode" placeholder="请选择" style="width: 200px">
-                                  <i-option v-for="item in orgCodeList" :value="item.value">{{ item.label }}</i-option>
+                                  <i-option v-for="item in orgCodeList"  :value="item.CUSTID+-+item.CUSTTYPE">{{ item.CUSTNAME }}</i-option>
                               </i-select>
                             </Form-item>
                           </Col>
@@ -266,15 +266,17 @@
                             </Form-item>
                           </Col>
                         </Row>
-                        
+                    </Row>
+                    <Row type="flex" v-show="modifyShow" justify="end"  style="margin-top:10px;">
+                      <i-button  type="success" @click="saveSafeModel(index)">保存</i-button>
                     </Row>
                   </li>
                 </ul>
               </i-form> 
             </Row>
-        <Row type="flex" v-show="modifyShow" justify="end"  style="margin-top:10px;">
+        <!-- <Row type="flex" v-show="modifyShow" justify="end"  style="margin-top:10px;">
           <i-button  type="success" @click="saveSafeModel">保存</i-button>
-        </Row>
+        </Row> -->
            
         <!-- 审核记录 -->
         <Row style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #C2C2C2;">
@@ -308,7 +310,7 @@
             </i-select>
         </Col>
         <Col span="8">
-            <i-button style="float:right;" @click="searchFeeList" type="primary">查询</i-button>
+            <i-button style="float:right;" @click="searchFeeList(1)" type="primary">查询</i-button>
         </Col>
       </Row>
       <Row>
@@ -316,7 +318,7 @@
       </Row>
       <Row>
         <div style="margin-top:10px;float:right">
-          <Page :total="pageTotal1"  show-elevator @on-change="pageChange"></Page>
+          <Page :total="pageTotal1"  show-elevator @on-change="pageChange1"></Page>
         </div>
       </Row>
       
@@ -334,19 +336,19 @@
           <Col span="12">
             <span>收款方：</span>
             <i-select  @on-change="changeRecCode" v-model="recCode" span="6" style="width:150px">
-                <i-option v-for="item in recCodeList" :value="item.value">{{ item.label }}</i-option>
+                <i-option v-for="item in recCodeList" :value="item.label">{{ item.label }}</i-option>
             </i-select>
           </Col>
           <Col span="12">
             <span>付款方：</span>
             <i-select  @on-change="changePayCode" v-model="payCode" span="6" style="width:150px">
-                <i-option v-for="item in payCodeList" :value="item.value">{{ item.label }}</i-option>
+                <i-option v-for="item in payCodeList" :value="item.label">{{ item.label }}</i-option>
             </i-select>
           </Col>
         </Row>
         <Row style="margin-top: 20px;">
           <span>顺序：</span>
-          <i-input v-model="value" placeholder="" style="width: 120px; margin-left: 20px;"></i-input>
+          <i-input v-model="feeOrder" placeholder="" style="width: 120px; margin-left: 20px;"></i-input>
         </Row>
         <Row style="margin-top: 20px;">
           <Col span="12">
@@ -382,7 +384,7 @@
         <Table border :columns="productList" :data="productData" size="small" ref="table"></Table>
       </div>
       <div style="margin-top:10px;float:right">
-        <Page :total="pageTotal"  show-elevator @on-change="pageChange1"></Page>
+        <Page :total="pageTotal"  show-elevator @on-change="pageChange"></Page>
       </div>
     </Row>
   </div>
@@ -412,14 +414,30 @@ export default {
         // 描述
         feeDesc: ''
       },
+      // 保存基础信息点击次数
+      saveClick: 0,
+      // 保存合同点击次数
+      saveContractClick: 0,
+      // 保存费用保障点击次数
+      saveFeeClick: 0,
+      // 保存保障模型点击次数
+      saveGuaranteeClick: 0,
+      // 新增标识
+      addFlag: false,
+      // 查看标识
+      seeFlag: false,
+      // 修改标识
+      modifyFlag: false,
       // 编辑时index标识
-      indexFlag: '',
+      indexFlag: 0,
       // 审核备注展示
       reviewFlag: false,
       // 参数配置收款方
       recCode: "",
       // 参数配置付款方
       payCode: "",
+      // 参数配置中的顺序
+      feeOrder: "",
       // 付款方列表
       payCodeList: [],
       // 收款方列表
@@ -431,8 +449,8 @@ export default {
       // 拷贝时的保存按钮
       modifyShow: false,
       // 分页总数
-      pageTotal: "",
-      pageTotal1: "",
+      pageTotal: 0,
+      pageTotal1: 0,
       // 加载
       prodLoading: true,
       // 弹窗加载
@@ -554,6 +572,7 @@ export default {
            // 利息是否默认
           interestFlag: false,
           typeCode: "",
+          guaOrder: 0,
           orgCode: "",
           isLading: "",
           guaranteeFeeList: ["0"],
@@ -746,13 +765,13 @@ export default {
                   props: {
                     type: "info",
                     size: "small",
-                    disabled: true == !this.modifyShow ? "disabled" : false
+                    disabled: true == !this.seeFlag ? "disabled" : false
                   },
                   style: {
                     marginLeft: "10px"
                   },
                   on: {
-                    click: (index) => {
+                    click: () => {
                       this.getRecCode(params);
                       this.getPayCode(params);
                       this.holdFeeInfo.feeName = params.row.feeName,
@@ -765,7 +784,7 @@ export default {
                       this.holdFeeInfo.feeDesc = params.row.feeDesc,
                       this.payCode = params.row.payCode,
                       this.modal2 = true;
-                      this.indexFlag = index;
+                      this.indexFlag = params.index;
                     }
                   }
                 },
@@ -777,7 +796,7 @@ export default {
                   props: {
                     type: "error",
                     size: "small",
-                    disabled: true == !this.modifyShow ? "disabled" : false
+                    disabled: true == !this.seeFlag ? "disabled" : false
                   },
                   style: {
                     marginLeft: "10px"
@@ -847,7 +866,7 @@ export default {
         },
         {
           title: "状态",
-          key: "productStatus",
+          key: "productStatusDetail",
           width: 180,
           align: "center"
         },
@@ -881,6 +900,7 @@ export default {
                       this.checkBaseFlag = true;
                       this.checkGuaranteeFlag = true;
                       this.modifyShow = false;
+                      this.seeFlag = false;
                       this.productBaseInfo(params);
                       this.checkGuaranteeInfo(params);
                       this.checkContractInfo(params);
@@ -908,6 +928,7 @@ export default {
                       this.checkBaseFlag = false;
                       this.checkGuaranteeFlag = false;
                       this.modifyShow = true;
+                      this.seeFlag = true;
                       this.productBaseInfo(params);
                       this.checkGuaranteeInfo(params);
                       this.checkContractInfo(params);
@@ -935,6 +956,7 @@ export default {
                       this.checkBaseFlag = false;
                       this.checkGuaranteeFlag = false;
                       this.modifyShow = false;
+                      this.seeFlag = true;
                       this.productBaseInfo(params);
                       this.checkGuaranteeInfo(params);
                       this.checkContractInfo(params);
@@ -1059,6 +1081,8 @@ export default {
       if (!val) {
         if (!this.modal2) {
           this.clearHistory();
+          this.saveClick = 0;
+          this.saveGuaranteeClick = 0;
           this.checkBaseFlag = false;
           this.checkGuaranteeFlag = false;
         }
@@ -1076,9 +1100,9 @@ export default {
         this.getProductList(index)
       },
       // 分页
-      // pageChange1(index) {
-      //   this.findAllFeeList(index)
-      // },
+      pageChange1(index) {
+        this.addFeeBtn()
+      },
     // 获取产品管理列表
     getProductList(index) {
       index = index || 1;
@@ -1086,6 +1110,7 @@ export default {
       util
         .ajax({
           url: "product-web/v1/product/getPageQuery",
+          // url: "v1/product/getPageQuery",
           method: "post",
           headers: {
             "Content-Type": "application/json"
@@ -1100,7 +1125,7 @@ export default {
         })
         .then(res => {
           this.productData = res.data.data.content;
-          this.pageTotal = res.data.data.totalPages;
+          this.pageTotal = res.data.data.totalElements;
           this.prodLoading = false;
         });
     },
@@ -1113,6 +1138,7 @@ export default {
       util
         .ajax({
           url: "product-web/v1/prdDictionary/get/productStatus",
+          // url: "v1/prdDictionary/get/productStatus",
           method: "get"
         })
         .then(res => {
@@ -1128,6 +1154,7 @@ export default {
       this.getBelongCode();
       this.getRecComps();
       this.modifyShow = false;
+      this.seeFlag = true;
       this.productModel = true;
     },
     // 打开产品信息页面默认请求的列表接口
@@ -1140,8 +1167,10 @@ export default {
     },
     // 产品管理删除按钮
     deleteProduct(params) {
+
       util.ajax({
         url: "product-web/v1/product/delete/asset/"+ params.row.productCode + "/" + params.row.productStatus,
+        // url: "v1/product/delete/asset/"+ params.row.productCode + "/" + params.row.productStatus,
         method: "delete"
       }).then(res => {
         if (res.data.code == 20000) {
@@ -1157,6 +1186,7 @@ export default {
       util
         .ajax({
           url: "product-web/v1/prdDictionary/get/productType",
+          // url: "v1/prdDictionary/get/productType",
           method: "get"
         })
         .then(res => {
@@ -1176,6 +1206,7 @@ export default {
       util
         .ajax({
           url: "product-web/v1/prdDictionary/get/payType",
+          // url: "v1/prdDictionary/get/payType",
           method: "get"
         })
         .then(res => {
@@ -1186,39 +1217,20 @@ export default {
     getFeeCategory() {
       util
         .ajax({
-          url: "fee-web/v1/feeInfo/findAllCostCategory",
-          // url: 'fee-web/v1/prdFeeRelation/findAllCostCategory',
+          url: "fee-master-web/v1/feeInfo/findAllCostCategory",
+          // url: 'v1/prdFeeRelation/findAllCostCategory',
           method: "get"
         })
         .then(res => {
           this.feeTypeList = res.data.data;
         });
     },
-    // 费用添加按钮 获取费用表格
+    // 费用设置添加按钮 获取费用表格
     addFeeBtn() {
       util
         .ajax({
-          url: "fee-web/v1/feeInfo/findAllFeeList",
-          // url: 'fee-web/v1/prdFeeRelation/getFeeList',
-          method: "get",
-          params: {
-            pageNumber: 1,
-            pageSize: 10
-          }
-        })
-        .then(res => {
-          this.feeData = res.data.data.content;
-          this.pageTotal1 = res.data.data.totalPages;
-        });
-      this.getFeeCategory();
-      this.feeListModal = true;
-    },
-    // 查询费用表格按钮
-    searchFeeList() {
-      util
-        .ajax({
-          url: "fee-web/v1/feeInfo/findFeeListByNameAndType",
-          // url: 'v1/prdFeeRelation/getFeeList',
+          url: "fee-master-web/v1/feeInfo/findAllUsingFeeList",
+          // url: 'v1/feeInfo/findAllUsingFeeList',
           method: "get",
           params: {
             pageNumber: 1,
@@ -1229,21 +1241,43 @@ export default {
         })
         .then(res => {
           this.feeData = res.data.data.content;
-          this.pageTotal1 = res.data.data.totalPages;
+          this.pageTotal1 = res.data.data.totalElements;
+        });
+      this.getFeeCategory();
+      this.feeListModal = true;
+    },
+    // 查询费用表格按钮
+    searchFeeList(index) {
+      util
+        .ajax({
+          url: "fee-master-web/v1/feeInfo/findAllUsingFeeList",
+          // url: 'v1/feeInfo/findAllUsingFeeList',
+          method: "get",
+          params: {
+            pageNumber: index,
+            pageSize: 10,
+            feeName: (this.feeName = this.feeName || ""),
+            feeCategory: (this.feeCategory = this.feeCategory || "")
+          }
+        })
+        .then(res => {
+          this.feeData = res.data.data.content;
+          this.pageTotal1 = res.data.data.totalElements;
         });
     },
     // 费用列表里的添加
     addFeeInfo(params) {
       this.costData.push({
-        feeName: this.holdFeeInfo.feeName,
-        feeCategory: this.holdFeeInfo.feeCategory,
-        feeTag: this.holdFeeInfo.feeTag,
-        payCode: this.holdFeeInfo.payCode,
-        recCode: this.holdFeeInfo.recCode,
-        formualId: this.holdFeeInfo.formualId,
-        feeOrder: this.holdFeeInfo.feeOrder,
-        feeDesc: this.holdFeeInfo.feeDesc
+        feeName: params.row.feeName,
+        feeCategory: params.row.feeCategory,
+        feeTag: params.row.feeTag,
+        payCode: params.row.payCode,
+        recCode: params.row.recCode,
+        formualId: params.row.formualId,
+        feeOrder: params.row.feeOrder,
+        feeDesc: params.row.feeDesc
        });
+       this.feeListModal = false;
 
     },
     // 获取保障模型机构名称
@@ -1251,10 +1285,15 @@ export default {
       util
         .ajax({
           url: "product-web/v1/prdDictionary/getDeparts",
-          method: "get"
+          // url: "v1/prdDictionary/getDeparts",
+          method: "get",
+          params: {
+            // 查询担保机构
+            orgType: 3
+          }
         })
         .then(res => {
-          this.orgCodeList = res.data.data;
+          this.orgCodeList = res.data.data.list;
         });
     },
     changeorgCode(s) {
@@ -1264,7 +1303,8 @@ export default {
     getBelongCode() {
       util
         .ajax({
-          url: "product-web/v1/prdDictionary/getBelongs",
+          url: "product-web/v1/prdDictionary/get/belongCode",
+          // url: "v1/prdDictionary/get/belongCode",
           method: "get"
         })
         .then(res => {
@@ -1278,7 +1318,8 @@ export default {
     getRecComps() {
       util
         .ajax({
-          url: "product-web/v1/prdDictionary/getRecComps",
+          url: "product-web/v1/prdDictionary/get/recComp",
+          // url: "v1/prdDictionary/get/recComp",
           method: "get"
         })
         .then(res => {
@@ -1289,13 +1330,14 @@ export default {
       this.recComps = s;
     },
     // 获取参数配置收款方
-    getRecCode(params) {
+    getRecCode(params) {console.log(params);
       util
         .ajax({
-          url: "product-web/v1/prdDictionary/getFeeRecs",
+          url: "product-web/v1/prdDictionary/get/feePayRecType",
+          // url: "v1/prdDictionary/get/feePayRecType",
           method: "get",
           params: {
-            feeCode: params.row.feeCode
+            feeCode: params.row.recCode
           }
         })
         .then(res => {
@@ -1309,10 +1351,11 @@ export default {
     getPayCode(params) {
       util
         .ajax({
-          url: "product-web/v1/prdDictionary/getFeePays",
+          url: "product-web/v1/prdDictionary/get/feePayRecType",
+          // url: "v1/prdDictionary/get/feePayRecType",
           method: "get",
           params: {
-            feeCode: params.row.feeCode
+            feeCode: params.row.payCode
           }
         })
         .then(res => {
@@ -1327,6 +1370,7 @@ export default {
       util
         .ajax({
           url: "product-web/v1/product/getByCode/asset/" + params.row.productCode,
+          // url: "v1/product/getByCode/asset/" + params.row.productCode,
           method: "get"
         })
         .then(res => {
@@ -1354,10 +1398,10 @@ export default {
       util
         .ajax({
           url: "product-web/v1/prdGuaranteeModel/getGuaranteeMods/" + params.row.productCode,
+          // url: "v1/prdGuaranteeModel/getGuaranteeMods/" + params.row.productCode,
           method: "get"
         })
         .then(res => {
-          console.log(222,res);
           this.guaranteeModelList = res.data.data;
         });
     },
@@ -1366,10 +1410,10 @@ export default {
       util
         .ajax({
           url: "product-web/v1/prdContractRelation/getContractRels/" + params.row.productCode,
+          // url: "v1/prdContractRelation/getContractRels/" + params.row.productCode,
           method: "get"
         })
         .then(res => {
-          console.log(44,res);
           this.contractData = res.data.data;
         });
     },
@@ -1378,10 +1422,10 @@ export default {
       util
         .ajax({
           url: "product-web/v1/prdFeeRelation/getFeeRels/" + params.row.productCode,
+          // url: "v1/prdFeeRelation/getFeeRels/" + params.row.productCode,
           method: "get"
         })
         .then(res => {
-          console.log(333,res)
           this.costData = res.data.data;
         });
     },
@@ -1391,6 +1435,7 @@ export default {
           // 利息是否默认
             interestFlag: false,
             typeCode: "",
+            guaOrder: 0,
             orgCode: "",
             isLading: "",
             guaranteeFeeList: ["0"],
@@ -1404,7 +1449,7 @@ export default {
     },
 
     // 暂存按钮
-    holdBtn(productInfo, guaranteeModelList) {
+    holdBtn(productInfo) {
       var collectData = {
                   asset: this.productInfo,
                   feeRelList: this.costData,
@@ -1419,6 +1464,7 @@ export default {
             util
               .ajax({
                 url: "product-web/v1/product/save",
+                // url: "v1/product/save",
                 method: "post",
                 headers: {
                   "Content-Type": "application/json"
@@ -1434,11 +1480,11 @@ export default {
                   this.productModel = false;
                   this.getProductList(1);
                 } else {
-                  this.$Message.error(res.data.msg);
+                  this.$Message.error(res.data.details[0]);
                 }
               });
           } else {
-              this.$Message.error('Fail!');
+              this.$Message.error('暂存失败！');
           }
       });
       
@@ -1452,15 +1498,22 @@ export default {
     // 清除表单中得历史数据
     clearHistory() {
       this.$refs["productInfo"].resetFields();
-      this.guaranteeModelList.splice(0);
+      if(this.guaranteeModelList) {
+        this.guaranteeModelList.splice(0);
+      }
     },
 
     // 修改时基础信息保存按钮
     saveBaseInfo() {
+      if (this.saveClick > 0) {
+        this.$Message.error('不能重复保存');
+        return false;
+      }
       this.productInfo.fronInterval = Number(this.productInfo.fronInterval);
       this.productInfo.startInterestDay = Number(this.productInfo.startInterestDay)
       util.ajax({
           url: "product-web/v1/product/update",
+          // url: "v1/product/update",
           method: "put",
           headers: {
             "Content-Type": "application/json"
@@ -1473,6 +1526,7 @@ export default {
         .then(res => {
           if (res.data.code == 20000) {
             this.$Message.success(res.data.msg);
+            this.saveClick++;
           } else {
             this.$Message.error(res.data.msg);
           }
@@ -1482,6 +1536,7 @@ export default {
     saveContractInfo(params) {
       util.ajax({
           url: "product-web/v1/prdContractRelation/save",
+          // url: "v1/prdContractRelation/save",
           method: "post",
           headers: {
             "Content-Type": "application/json"
@@ -1505,6 +1560,7 @@ export default {
     saveFeeInfo(params) {
       util.ajax({
           url: "product-web/v1/prdFeeRelation/save",
+          // url: "v1/prdFeeRelation/save",
           method: "post",
           headers: {
             "Content-Type": "application/json"
@@ -1529,26 +1585,34 @@ export default {
     },
     // 费用编辑确定按钮
     updateFeeInfo() {
-      this.costData[this.indexFlag].push({
-        payCode: this.holdFeeInfo.payCode,
-        recCode: this.holdFeeInfo.recCode,
-      });
+      this.costData[this.indexFlag].payCode = this.payCode;
+      this.costData[this.indexFlag].recCode = this.recCode;
+      this.costData[this.indexFlag].feeOrder = this.feeOrder;
+      this.modal2 = false;
     },
     // 保存保障模型信息
-    saveSafeModel() {
+    saveSafeModel(index) {
+      if (this.saveGuaranteeClick > 0) {
+        this.$Message.success('不能重复保存');
+        return false;
+      }
+      
+      this.guaranteeModelList.guaOrder = index+1;
       util.ajax({
           url: "product-web/v1/prdGuaranteeModel/save",
+          // url: "v1/prdGuaranteeModel/save",
           method: "post",
           headers: {
             "Content-Type": "application/json"
           },
-          data: this.guaranteeModelList
+          data: this.guaranteeModelList[index]
         })
         .then(res => {
           if (res.data.code == 20000) {
             this.$Message.success(res.data.msg);
+            this.saveGuaranteeClick++;
           } else {
-            this.$Message.error(res.data.msg);
+            this.$Message.error(res.data.details[0]);
           }
         });
     },
@@ -1556,6 +1620,7 @@ export default {
     deleteGuarantee(index) {
       util.ajax({
           url: "product-web/v1/prdGuaranteeModel/delete/"+ index.id,
+          // url: "v1/prdGuaranteeModel/delete/"+ index.id,
           method: "delete",
         })
         .then(res => {
@@ -1564,6 +1629,7 @@ export default {
             util
             .ajax({
               url: "product-web/v1/prdGuaranteeModel/getGuaranteeMods/" + index.productCode,
+              // url: "v1/prdGuaranteeModel/getGuaranteeMods/" + index.productCode,
               method: "get"
             })
             .then(res => {
@@ -1579,6 +1645,7 @@ export default {
     deleteContract(params) {
       util.ajax({
           url: "product-web/v1/prdContractRelation/delete/"+ params.row.id,
+          // url: "v1/prdContractRelation/delete/"+ params.row.id,
           method: "delete",
         })
         .then(res => {
@@ -1591,9 +1658,20 @@ export default {
     },
     // 删除费用
     deleteFee(params) {
-      util.ajax({
-          url: "product-web/v1/prdFeeRelation/delete/"+ params.row.id,
+      if(!params.row.productCode) {
+        this.costData.splice(params.index,1);
+      } else {
+        util.ajax({
+          url: "product-web/v1/prdFeeRelation/deleteByCode",
+          // url: "v1/prdFeeRelation/deleteByCode",
           method: "delete",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          data: {
+            productCode: params.row.productCode,
+            feeCode:  params.row.feeCode
+          }
         })
         .then(res => {
           if (res.data.code == 20000) {
@@ -1602,6 +1680,7 @@ export default {
             this.$Message.error(res.data.msg);
           }
         });
+      }
     },
     // 改变类型
     changeTypeCode(index, $event) {
