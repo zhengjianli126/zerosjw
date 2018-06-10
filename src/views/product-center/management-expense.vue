@@ -47,7 +47,7 @@
                         </li> 
                      </ul>
                      <div>
-                        结果：<span></span></br>
+                        结果：<span>{{gsjg}}</span></br>
                          <Button size='small' type="primary" @click="operationJs()">运算</Button>
                      </div>
                </Col>
@@ -234,6 +234,7 @@
         ysfhJs: [],
         //公式试算列表
         gsSsList:[],
+        gsjg:'',
         // 运算保存 标识，
         ysBcFlag: false,
         // 判断 是修改还是查看
@@ -569,12 +570,15 @@
           util.ajax({
             url: this.urlBase+"v1/feeFormula/trialCalculation",
             method: "post",
-            data: {
-              map:curObj
-            }
+            data: curObj
+            
           })
           .then(res => {
-              console.log(res)
+              if(res.data.code==20000){
+                this.gsjg = res.data.data
+              }else{
+                this.$Message.error(res.data.msg)
+              }
           })
       },
       // 验证公式
