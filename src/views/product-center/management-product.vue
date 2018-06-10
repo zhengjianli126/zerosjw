@@ -12,7 +12,7 @@
     <i-button type="primary" @click="modal2 = true">参数配置</i-button>
 
     <!-- 新增产品 -->
-    <Modal width="1080px" ok-text="保存" v-model="productModel" :mask-closable="false" title="新增/查看/修改产品" :loading="modalLoading">
+    <Modal width="1080px" ok-text="保存" v-model="productModel" :mask-closable="false" title="新增/查看/修改产品">
       <i-form ref=productInfo :model="productInfo" :rules="prodRuleValidate" :label-width="100">
         <Row>
           <div style="font-size: 20px; margin-bottom: 10px;">基础信息：</div>
@@ -151,7 +151,7 @@
         <!-- 合同模板 -->
         <Row style="padding-top:20px; border-top: 1px solid #C2C2C2; margin-top:20px">
             <span style="font-size: 20px;">合同模板：</span>
-            <i-button :disabled="checkBaseFlag" style="float:right;" type="primary">添加</i-button>
+            <i-button :disabled="checkBaseFlag" @click="addContract(1)" style="float:right;" type="primary">添加</i-button>
             <Table style="margin-top: 30px;" border :columns="contractColumns" :data="contractData" size="small" ref="table"></Table>
         </Row>
         <!-- <Row type="flex" v-show="modifyShow" justify="end"  style="margin-top:20px;">
@@ -162,7 +162,7 @@
         <Row style="padding-top:20px; margin-top:20px; border-top: 1px solid #C2C2C2;">
             <span style="font-size: 20px;">费用设置：</span>
             <i-button :disabled="checkBaseFlag" style="float:right;" @click="addFeeBtn" type="primary">添加</i-button>
-            <Table style="margin-top: 30px;" border :columns="costColumns" :data="costData" size="small" ref="table"></Table>
+            <Table style="margin-top: 30px;" border :columns="costColumns" :data="costData" size="small" ref="table" :loading="feeSetLoading"></Table>
         </Row>
         <!-- <Row type="flex" v-show="modifyShow" justify="end"  style="margin-top:20px;">
           <i-button type="success" @click="saveFeeInfo">保存</i-button>
@@ -193,7 +193,7 @@
                           <Col span="8">
                             <Form-item label="机构名称：" prop="orgCode">
                               <i-select :disabled="checkGuaranteeFlag" @on-change="changeorgCode" v-model="guaranteeInfo.orgCode" placeholder="请选择" style="width: 200px">
-                                  <i-option v-for="item in orgCodeList"  :value="item.CUSTID+-+item.CUSTTYPE">{{ item.CUSTNAME }}</i-option>
+                                  <i-option v-for="item in orgCodeList"  :value="item.CUSTID+$+item.CUSTNAME+$+item.CUSTTYPE+$+item.TYPENAME">{{ item.CUSTNAME }}</i-option>
                               </i-select>
                             </Form-item>
                           </Col>
@@ -281,7 +281,7 @@
         <!-- 审核记录 -->
         <Row style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #C2C2C2;">
           <span style="font-size: 20px;" >审核记录：</span>
-          <Table style="margin-top: 20px;" border :columns="columns4" :data="data4" size="small" ref="table"></Table>
+          <Table style="margin-top: 20px;" border :columns="auditColumn" :data="auditData" size="small" ref="table"></Table>
         </Row>
 
         <Row v-show="reviewFlag" style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #C2C2C2;">
@@ -290,9 +290,37 @@
         </Row>
       
       <div slot="footer">
-          <Button :disabled="checkBaseFlag" type="success" @click="holdBtn('productInfo','guaranteeModelList')">暂存</Button>
-          <Button :disabled="checkBaseFlag" v-show="true" @click="submitBtn" type="primary">提交</Button>
+          <Button :disabled="checkBaseFlag" type="success" @click="holdBtn('productInfo')">暂存</Button>
+          <Button :disabled="checkBaseFlag" v-show="true" @click="submitBtn('productInfo')" type="primary">提交</Button>
           <Button :disabled="checkBaseFlag" v-show="true" @click="cancelBtn">取消</Button>
+      </div>
+    </Modal>
+
+    <!-- 合同列表 -->
+    <Modal width="1200px" :mask-closable="false"  v-model="contractListModal" title="合同列表" :loading="loading">
+      <Row>
+        <Col span="8">
+            <span>合同名称：</span>
+            <i-input v-model="contractName" placeholder="请输入名称" style="width: 200px"></i-input>
+        </Col>
+        <Col span="8">
+            <span>合同编号：</span>
+            <i-input v-model="contractNo" placeholder="请输入编号" style="width: 200px"></i-input>
+        </Col>
+        <Col span="8">
+            <i-button style="float:right;" @click="addContract(1)" type="primary">查询</i-button>
+        </Col>
+      </Row>
+      <Row>
+        <Table style="margin-top: 30px;" border :columns="contractListColumns" :data="contractListData" size="small" ref="table" :loading="contractListLoading"></Table>
+      </Row>
+      <Row>
+        <div style="margin-top:10px;float:right">
+          <Page :total="pageTotal2"  show-elevator @on-change="pageChange2"></Page>
+        </div>
+      </Row>
+      
+      <div slot="footer">
       </div>
     </Modal>
 
@@ -314,7 +342,7 @@
         </Col>
       </Row>
       <Row>
-        <Table style="margin-top: 30px;" border :columns="feeColumns" :data="feeData" size="small" ref="table"></Table>
+        <Table style="margin-top: 30px;" border :columns="feeColumns" :data="feeData" size="small" ref="table" :loading="feeListLoading"></Table>
       </Row>
       <Row>
         <div style="margin-top:10px;float:right">
@@ -330,19 +358,19 @@
     <Modal width="800px" :mask-closable="false" v-model="modal2" title="参数配置" :loading="loading">
         <Row>
           <span>公式：</span>
-          <i-input type="textarea" disabled v-model="value" :rows="4" placeholder="费用公式" style="width: 600px; margin-left: 20px;"></i-input>
+          <i-input type="textarea" disabled v-model="formula" :rows="4" placeholder="" style="width: 600px; margin-left: 20px;"></i-input>
         </Row>
         <Row style="margin-top: 20px;">
           <Col span="12">
             <span>收款方：</span>
             <i-select  @on-change="changeRecCode" v-model="recCode" span="6" style="width:150px">
-                <i-option v-for="item in recCodeList" :value="item.label">{{ item.label }}</i-option>
+                <i-option v-for="item in recCodeList" :value="item.label+-+item.value">{{ item.label }}</i-option>
             </i-select>
           </Col>
           <Col span="12">
             <span>付款方：</span>
             <i-select  @on-change="changePayCode" v-model="payCode" span="6" style="width:150px">
-                <i-option v-for="item in payCodeList" :value="item.label">{{ item.label }}</i-option>
+                <i-option v-for="item in payCodeList" :value="item.label+-+item.value">{{ item.label }}</i-option>
             </i-select>
           </Col>
         </Row>
@@ -362,30 +390,30 @@
         </Row>
         <div slot="footer">
             <Button @click="updateFeeInfo" type="primary">确定</Button>
-            <Button default>取消</Button>
+            <Button default @click="cancelFeeInfo">取消</Button>
         </div>
     </Modal>
     
     <!-- 产品管理 -->
-    <Row style="margin-top:10px" :loading="prodLoading">
-      <row>
-        <span>产品名称：</span>
-        <i-input v-model="productName"  placeholder="请输入..." style="width: 200px"></i-input>
-        <span style="margin-left:20px;">状态：</span>
-        <i-select  @on-change="changeStatus" v-model="prodStatusChange" span="6" style="width:200px">
-          <i-option v-for="item in prodStatusList" :value="item.value">{{ item.label }}</i-option>
-        </i-select>
-        <div class="handleBtn">
-          <i-button @click="getProductList(1)" type="primary">查询</i-button>
-          <i-button @click="increaseProduct" type="primary">新增</i-button>
+    <Row style="margin-top:10px" >
+        <row>
+          <span>产品名称：</span>
+          <i-input v-model="productName"  placeholder="请输入..." style="width: 200px"></i-input>
+          <span style="margin-left:20px;">状态：</span>
+          <i-select  @on-change="changeStatus" v-model="prodStatusChange" span="6" style="width:200px">
+            <i-option v-for="item in prodStatusList" :value="item.value">{{ item.label }}</i-option>
+          </i-select>
+          <div class="handleBtn">
+            <i-button @click="getProductList(1)" type="primary">查询</i-button>
+            <i-button @click="increaseProduct" type="primary">新增</i-button>
+          </div>
+        </row>
+        <div style="clear:both;padding-top:20px;">
+          <Table border :columns="productList" :data="productData" size="small" ref="table" :loading="prodLoading"></Table>
         </div>
-      </row>
-      <div style="clear:both;padding-top:20px;">
-        <Table border :columns="productList" :data="productData" size="small" ref="table"></Table>
-      </div>
-      <div style="margin-top:10px;float:right">
-        <Page :total="pageTotal"  show-elevator @on-change="pageChange"></Page>
-      </div>
+        <div style="margin-top:10px;float:right">
+          <Page :total="pageTotal"  show-elevator @on-change="pageChange"></Page>
+        </div>
     </Row>
   </div>
  
@@ -395,6 +423,7 @@ import util from "../../libs/util";
 export default {
   data() {
     return {
+      productCodeAll: '',
       // 点击编辑时暂存费用信息
       holdFeeInfo: {
         // 费用名称
@@ -408,12 +437,18 @@ export default {
         // 收方
         recCode: '',
         // 公式
-        formualId: '',
+        formula: '',
         // 顺序
         feeOrder: '',
         // 描述
         feeDesc: ''
       },
+      // 合同模板
+      contractListModal: false,
+      // 合同名称
+      contractName: "",
+      // 合同编号
+      contractNo: "",
       // 保存基础信息点击次数
       saveClick: 0,
       // 保存合同点击次数
@@ -438,6 +473,8 @@ export default {
       payCode: "",
       // 参数配置中的顺序
       feeOrder: "",
+      // 参数配置中的公式
+      formula: "",
       // 付款方列表
       payCodeList: [],
       // 收款方列表
@@ -455,6 +492,10 @@ export default {
       prodLoading: true,
       // 弹窗加载
       modalLoading: false,
+      // 费用设置加载
+      feeSetLoading: false,
+      // 费用大类加载
+      feeListLoading: false,
       // 产品管理字段
       productName: "",
       // 产品状态
@@ -471,7 +512,12 @@ export default {
       feeCategory: "",
       // 费用名称
       feeName: "",
-
+      // 点击费用列表里添加时保存隐藏的的收方
+      hideRecCode: "",
+      hideRecType: "",
+      // 点击费用列表里添加时保存隐藏的的付方
+      hidePayCode: "",
+      hidePayType: "",
       // 新增产品页面
       
       // 首期还款日固定日
@@ -574,6 +620,9 @@ export default {
           typeCode: "",
           guaOrder: 0,
           orgCode: "",
+          orgName: "",
+          orgType: "",
+          orgTypeName: "",
           isLading: "",
           guaranteeFeeList: ["0"],
           belongCode: "",
@@ -619,13 +668,13 @@ export default {
       contractColumns: [
         {
           title: "合同名称",
-          key: "contTemplateCode",
+          key: "contTemplateName",
           width: 332,
           align: "center"
         },
         {
           title: "合同类型",
-          key: "contTemplateType",
+          key: "contTemplateTypeName",
           width: 332,
           align: "center"
         },
@@ -643,7 +692,6 @@ export default {
                     type: "success",
                     size: "small",
                     disabled: true == !this.modifyShow ? "disabled" : false
-                    
                   },
                   style: {
                     marginLeft: "10px"
@@ -662,7 +710,7 @@ export default {
                   props: {
                     type: "error",
                     size: "small",
-                    disabled: true == !this.modifyShow ? "disabled" : false
+                    disabled: true == !this.seeFlag ? "disabled" : false
                   },
                   style: {
                     marginLeft: "10px"
@@ -704,19 +752,19 @@ export default {
         },
         {
           title: "付方",
-          key: "payCode",
+          key: "payName",
           width: 100,
           align: "center"
         },
         {
           title: "收方",
-          key: "recCode",
+          key: "recName",
           width: 100,
           align: "center"
         },
         {
           title: "公式",
-          key: "formualId",
+          key: "formula",
           width: 160,
           align: "center"
         },
@@ -732,6 +780,30 @@ export default {
           width: 160,
           align: "center"
         },
+        // {
+        //   title: "",
+        //   key: "payCode",
+        //   width: 0,
+        //   align: "right"
+        // },
+        // {
+        //   title: "",
+        //   key: "recCode",
+        //   width: 0,
+        //   align: "right"
+        // },
+        // {
+        //   title: "",
+        //   key: "hideRecType",
+        //   width: 0,
+        //   align: "center"
+        // },
+        // {
+        //   title: "",
+        //   key: "hidePayType",
+        //   width: 0,
+        //   align: "center"
+        // },
         {
           title: "操作",
           key: "action",
@@ -771,9 +843,10 @@ export default {
                     marginLeft: "10px"
                   },
                   on: {
-                    click: () => {
+                    click: () => {console.log(params)
                       this.getRecCode(params);
                       this.getPayCode(params);
+                      // 暂存数据
                       this.holdFeeInfo.feeName = params.row.feeName,
                       this.holdFeeInfo.feeCategory = params.row.feeCategory,
                       this.holdFeeInfo.feeTag = params.row.feeTag,
@@ -782,7 +855,13 @@ export default {
                       this.holdFeeInfo.formualId = params.row.formualId,
                       this.holdFeeInfo.feeOrder = params.row.feeOrder,
                       this.holdFeeInfo.feeDesc = params.row.feeDesc,
+                      this.holdFeeInfo.formula = params.row.formula,
+
+                      this.formula = params.row.formula,
+                      this.recCode = params.row.recCode,
                       this.payCode = params.row.payCode,
+                      this.hideRecType = params.row.hideRecType,
+                      this.hidePayType = params.row.hidePayType,
                       this.modal2 = true;
                       this.indexFlag = params.index;
                     }
@@ -816,33 +895,33 @@ export default {
       ],
       // 费用设置内容
       costData: [],
-      columns4: [
+      auditColumn: [
         {
           title: "审核结果",
-          key: "customerName2",
+          key: "result",
           width: 180,
           align: "center"
         },
         {
           title: "审核时间",
-          key: "orderId2",
+          key: "checkTime",
           width: 283,
           align: "center"
         },
         {
           title: "审核人",
-          key: "customerName3",
+          key: "operator",
           width: 182,
           align: "center"
         },
         {
           title: "审核备注",
-          key: "orderId4",
+          key: "remark",
           width: 400,
           align: "center"
         }
       ],
-      data4: [],
+      auditData: [],
       // 产品列表
       productList: [
         {
@@ -897,6 +976,7 @@ export default {
                     click: () => {
                       this.clearHistory();
                       this.productDefaultList();
+                      this.productCodeAll = params.row.productCode;
                       this.checkBaseFlag = true;
                       this.checkGuaranteeFlag = true;
                       this.modifyShow = false;
@@ -905,6 +985,7 @@ export default {
                       this.checkGuaranteeInfo(params);
                       this.checkContractInfo(params);
                       this.checkFeeInfo(params);
+                      this.checkAuditList();
                       this.productModel = true;
                     }
                   }
@@ -925,6 +1006,7 @@ export default {
                     click: () => {
                       this.clearHistory();
                       this.productDefaultList();
+                      this.productCodeAll = params.row.productCode; 
                       this.checkBaseFlag = false;
                       this.checkGuaranteeFlag = false;
                       this.modifyShow = true;
@@ -933,7 +1015,9 @@ export default {
                       this.checkGuaranteeInfo(params);
                       this.checkContractInfo(params);
                       this.checkFeeInfo(params);
+                      this.checkAuditList();
                       this.productModel = true;
+
                     }
                   }
                 },
@@ -953,6 +1037,7 @@ export default {
                     click: () => {
                       this.clearHistory();
                       this.productDefaultList();
+                      this.productCodeAll = params.row.productCode; 
                       this.checkBaseFlag = false;
                       this.checkGuaranteeFlag = false;
                       this.modifyShow = false;
@@ -1025,7 +1110,7 @@ export default {
         },
         {
           title: "公式",
-          key: "formual",
+          key: "formula",
           width: 165,
           align: "center"
         },
@@ -1066,7 +1151,89 @@ export default {
         }
       ],
       // 费用数据内容
-      feeData: []
+      feeData: [],
+      // 合同列表
+      contractListColumns: [
+        {
+          title: "合同id",
+          key: "id",
+          width: 180,
+          align: "center"
+        },
+        {
+          title: "合同编号",
+          key: "no",
+          width: 100,
+          align: "center"
+        },
+        {
+          title: "合同名称",
+          key: "name",
+          width: 185,
+          align: "center"
+        },
+        {
+          title: "备注",
+          key: "remark",
+          width: 100,
+          align: "center"
+        },
+        {
+          title: "启用状态",
+          key: "enableStatusText",
+          width: 100,
+          align: "center"
+        },
+        {
+          title: "提交状态",
+          key: "submitStatusText",
+          width: 100,
+          align: "center"
+        },
+        {
+          title: "合同模板编码",
+          key: "typeCode",
+          width: 110,
+          align: "center"
+        },
+        {
+          title: "合同模板名称",
+          key: "typeName",
+          width: 110,
+          align: "center"
+        },
+        {
+          title: "操作",
+          key: "action",
+          width: 80,
+          align: "center",
+          render: (h, params) => {
+            let curData = [
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "info",
+                    size: "small"
+                  },
+                  style: {
+                    marginLeft: "10px"
+                  },
+                  on: {
+                    click: () => {
+                      this.addContractInfo(params);
+                    }
+                  }
+                },
+                "添加"
+              )
+            ];
+            return h("div", curData);
+          }
+        }
+      ],
+      // 合同数据内容
+      contractListData: []
     };
   },
   mounted() {
@@ -1087,14 +1254,50 @@ export default {
           this.checkGuaranteeFlag = false;
         }
       }
+    },
+    modal2(val) {
+      if(!val) {
+        this.recCode = '',
+        this.payCode = '',
+        this.feeOrder = ''
+      }
     }
-    // modal2(val) {
-    //   if(!val) {
-
-    //   }
-    // }
   },
   methods: {
+    // 合同模板添加按钮
+    addContract(index) {
+      this.contractListModal = true;
+      index = index || 1;
+      util
+        .ajax({
+          url: "product-web/v1/prdContractRelation/getContractList",
+          // url: "v1/prdContractRelation/getContractList",
+          method: "post",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          data: {
+            pageNum: index,
+            pageSize: 10,
+            contractName: (this.contractName = this.contractName || ""),
+            contractNo: (this.contractNo = this.contractNo || "")
+          }
+        })
+        .then(res => {
+          this.contractListData = res.data.data.content;
+          this.pageTotal = res.data.data.totalElements;
+        });
+    },
+    // 合同列表里的添加按钮
+    addContractInfo(params) {
+      this.contractData.push({
+        contTemplateName: params.row.name,
+        contTemplateTypeName: params.row.typeName,
+        contTemplateCode: params.row.no,
+        contTemplateType: params.row.typeCode,
+       });
+       this.contractListModal = false;
+    },
     // 分页
       pageChange(index) {
         this.getProductList(index)
@@ -1102,6 +1305,10 @@ export default {
       // 分页
       pageChange1(index) {
         this.addFeeBtn()
+      },
+      // 分页
+      pageChange2(index) {
+        this.addContract()
       },
     // 获取产品管理列表
     getProductList(index) {
@@ -1148,6 +1355,8 @@ export default {
     // 新增产品
     increaseProduct() {
       this.clearHistory();
+      this.contractData =[];
+      this.costData =[];
       this.getProductType();
       this.getPayType();
       this.getOrgCode();
@@ -1215,6 +1424,7 @@ export default {
     },
     // 点击费用设置添加时获取费用大类
     getFeeCategory() {
+      this.feeSetLoading = true;
       util
         .ajax({
           url: "fee-master-web/v1/feeInfo/findAllCostCategory",
@@ -1222,6 +1432,7 @@ export default {
           method: "get"
         })
         .then(res => {
+          this.feeSetLoading = false;
           this.feeTypeList = res.data.data;
         });
     },
@@ -1230,13 +1441,14 @@ export default {
       util
         .ajax({
           url: "fee-master-web/v1/feeInfo/findAllUsingFeeList",
-          // url: 'v1/feeInfo/findAllUsingFeeList',
+          url: 'v1/feeInfo/findAllUsingFeeList',
+          // url: 'v1/prdFeeRelation/getFeeList',
           method: "get",
           params: {
             pageNumber: 1,
             pageSize: 10,
-            feeName: (this.feeName = this.feeName || ""),
-            feeCategory: (this.feeCategory = this.feeCategory || "")
+            feeName: "",
+            feeCategory: "1"
           }
         })
         .then(res => {
@@ -1273,12 +1485,13 @@ export default {
         feeTag: params.row.feeTag,
         payCode: params.row.payCode,
         recCode: params.row.recCode,
-        formualId: params.row.formualId,
+        formula: params.row.formula,
         feeOrder: params.row.feeOrder,
-        feeDesc: params.row.feeDesc
+        feeDesc: params.row.feeDesc,
+        hideRecType: params.row.recCode,
+        hidePayType: params.row.payCode
        });
        this.feeListModal = false;
-
     },
     // 获取保障模型机构名称
     getOrgCode() {
@@ -1330,14 +1543,14 @@ export default {
       this.recComps = s;
     },
     // 获取参数配置收款方
-    getRecCode(params) {console.log(params);
+    getRecCode(params) {
       util
         .ajax({
-          url: "product-web/v1/prdDictionary/get/feePayRecType",
-          // url: "v1/prdDictionary/get/feePayRecType",
+          url: "product-web/v1/prdDictionary/getFeeRecs",
+          // url: "v1/prdDictionary/getFeeRecs",
           method: "get",
           params: {
-            feeCode: params.row.recCode
+            feeCode: params.row.hideRecType
           }
         })
         .then(res => {
@@ -1351,11 +1564,11 @@ export default {
     getPayCode(params) {
       util
         .ajax({
-          url: "product-web/v1/prdDictionary/get/feePayRecType",
-          // url: "v1/prdDictionary/get/feePayRecType",
+          url: "product-web/v1/prdDictionary/getFeePays",
+          // url: "v1/prdDictionary/getFeePays",
           method: "get",
           params: {
-            feeCode: params.row.payCode
+            feeCode: params.row.hidePayType
           }
         })
         .then(res => {
@@ -1391,6 +1604,7 @@ export default {
           this.productInfo.isTransfer = res.data.data.isTransfer;
           this.productInfo.productStatus = res.data.data.productStatus;
           this.productInfo.prdDesc = res.data.data.prdDesc;
+          this.productInfo.productCode = res.data.data.productCode;
         });
     },
     // 查看保障设置信息接口
@@ -1410,7 +1624,7 @@ export default {
       util
         .ajax({
           url: "product-web/v1/prdContractRelation/getContractRels/" + params.row.productCode,
-          // url: "v1/prdContractRelation/getContractRels/" + params.row.productCode,
+          // url: "v1/prdContractRelation/getContractRels/" + this.productCodeAll,
           method: "get"
         })
         .then(res => {
@@ -1419,13 +1633,15 @@ export default {
     },
     // 查看产品费用设置信息接口
     checkFeeInfo(params) {
+      this.feeSetLoading = true;
       util
         .ajax({
           url: "product-web/v1/prdFeeRelation/getFeeRels/" + params.row.productCode,
-          // url: "v1/prdFeeRelation/getFeeRels/" + params.row.productCode,
+          // url: "v1/prdFeeRelation/getFeeRels/" + this.productCodeAll,
           method: "get"
         })
         .then(res => {
+          this.feeSetLoading = false;
           this.costData = res.data.data;
         });
     },
@@ -1437,6 +1653,9 @@ export default {
             typeCode: "",
             guaOrder: 0,
             orgCode: "",
+            orgName: "",
+            orgType: "",
+            orgTypeName: "",
             isLading: "",
             guaranteeFeeList: ["0"],
             belongCode: "",
@@ -1452,6 +1671,7 @@ export default {
     holdBtn(productInfo) {
       var collectData = {
                   asset: this.productInfo,
+                  contractRelList: this.contractData,
                   feeRelList: this.costData,
                   guaranteeModelList: this.guaranteeModelList
                 };
@@ -1477,8 +1697,8 @@ export default {
               .then(res => {
                 if (res.data.code == 20000) {
                   this.$Message.success(res.data.msg);
-                  this.productModel = false;
-                  this.getProductList(1);
+                  // this.productModel = false;
+                  // this.getProductList(1);
                 } else {
                   this.$Message.error(res.data.details[0]);
                 }
@@ -1487,8 +1707,47 @@ export default {
               this.$Message.error('暂存失败！');
           }
       });
-      
+    },
+    // 提交按钮
+    submitBtn(productInfo) {
+      var collectData = {
+                  asset: this.productInfo,
+                  contractRelList: this.contractData,
+                  feeRelList: this.costData,
+                  guaranteeModelList: this.guaranteeModelList
+                };
 
+      if(this.productInfo.specificRepayDate == 1) {
+        this.productInfo.specificRepayDate = this.fixAddTime;
+      };
+      this.$refs["productInfo"].validate((valid) => {
+          if (valid) {
+            util
+              .ajax({
+                url: "product-web/v1/product/commit",
+                // url: "v1/product/commit",
+                method: "post",
+                headers: {
+                  "Content-Type": "application/json"
+                },
+                data: {
+                  param: JSON.stringify(collectData),
+                  productStyle: "asset"
+                }
+              })
+              .then(res => {
+                if (res.data.code == 20000) {
+                  this.$Message.success(res.data.msg);
+                  this.productModel = false;
+                  this.getProductList(1);
+                } else {
+                  this.$Message.error(res.data.details[0]);
+                }
+              });
+          } else {
+              this.$Message.error('提交失败！');
+          }
+      });
     },
     // 取消按钮
     cancelBtn() {
@@ -1542,8 +1801,10 @@ export default {
             "Content-Type": "application/json"
           },
           data: {
-            id: '',
-            productCode: params.row.productCode,
+            id: params.row.id,
+            productCode: this.productInfo.productCode,
+            contTemplateName: params.row.contTemplateName,
+            contTemplateTypeName: params.row.contTemplateTypeName,
             contTemplateCode: params.row.contTemplateCode,
             contTemplateType: params.row.contTemplateType
           }
@@ -1551,6 +1812,7 @@ export default {
         .then(res => {
           if (res.data.code == 20000) {
             this.$Message.success(res.data.msg);
+            this.checkContractInfo();
           } else {
             this.$Message.error(res.data.msg);
           }
@@ -1566,38 +1828,55 @@ export default {
             "Content-Type": "application/json"
           },
           data: {
-            id: '',
-            productCode: params.row.productCode,
+            id: params.row.id,
+            productCode: this.productInfo.productCode,
             feeCode: params.row.feeCode,
             feeOrder: params.row.feeOrder,
             feeTime: params.row.feeTime,
+            // 收付方code
             payCode: params.row.payCode,
-            recCode: params.row.recCode
+            recCode: params.row.recCode,
+            // 收付方名称
+            payName: params.row.payName,
+            recName: params.row.recName,
+            // 费用配的类型
+            hideRecType: params.row.hideRecType,
+            hidePayType: params.row.hidePayType
           }
         })
         .then(res => {
           if (res.data.code == 20000) {
             this.$Message.success(res.data.msg);
+            this.checkFeeInfo();
           } else {
-            this.$Message.error(res.data.msg);
+            this.$Message.error(res.data.details[0]);
           }
         });
     },
     // 费用编辑确定按钮
     updateFeeInfo() {
-      this.costData[this.indexFlag].payCode = this.payCode;
-      this.costData[this.indexFlag].recCode = this.recCode;
+      this.costData[this.indexFlag].payCode = this.payCode.split('-')[0];
+      this.costData[this.indexFlag].recCode = this.recCode.split('-')[0];
       this.costData[this.indexFlag].feeOrder = this.feeOrder;
+      this.costData[this.indexFlag].payName = this.payCode.split('-')[1];
+      this.costData[this.indexFlag].recName = this.recCode.split('-')[1];
+      this.modal2 = false;
+    },
+    // 费用编辑取消按钮
+    cancelFeeInfo() {
       this.modal2 = false;
     },
     // 保存保障模型信息
     saveSafeModel(index) {
       if (this.saveGuaranteeClick > 0) {
-        this.$Message.success('不能重复保存');
+        this.$Message.error('不能重复保存');
         return false;
       }
-      
-      this.guaranteeModelList.guaOrder = index+1;
+      this.guaranteeModelList[index].guaOrder = index+1;
+      this.guaranteeModelList[index].orgCode = this.guaranteeModelList[index].orgCode.split("$")[0];
+      this.guaranteeModelList[index].orgName = this.guaranteeModelList[index].orgCode.split("$")[1];
+      this.guaranteeModelList[index].orgType = this.guaranteeModelList[index].orgCode.split("$")[2];
+      this.guaranteeModelList[index].orgTypeName = this.guaranteeModelList[index].orgCode.split("$")[3];
       util.ajax({
           url: "product-web/v1/prdGuaranteeModel/save",
           // url: "v1/prdGuaranteeModel/save",
@@ -1644,13 +1923,21 @@ export default {
     // 删除合同
     deleteContract(params) {
       util.ajax({
-          url: "product-web/v1/prdContractRelation/delete/"+ params.row.id,
-          // url: "v1/prdContractRelation/delete/"+ params.row.id,
+          url: "product-web/v1/prdContractRelation/deleteByCode",
+          // url: "v1/prdContractRelation/deleteByCode",
           method: "delete",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          params: {
+            productCode: params.row.productCode,
+            contTemplateCode:  params.row.contTemplateCode
+          }
         })
         .then(res => {
           if (res.data.code == 20000) {
             this.$Message.success(res.data.msg);
+            // this.checkContractInfo();
           } else {
             this.$Message.error(res.data.msg);
           }
@@ -1665,10 +1952,7 @@ export default {
           url: "product-web/v1/prdFeeRelation/deleteByCode",
           // url: "v1/prdFeeRelation/deleteByCode",
           method: "delete",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          data: {
+          params: {
             productCode: params.row.productCode,
             feeCode:  params.row.feeCode
           }
@@ -1676,11 +1960,27 @@ export default {
         .then(res => {
           if (res.data.code == 20000) {
             this.$Message.success(res.data.msg);
+
           } else {
             this.$Message.error(res.data.msg);
           }
         });
       }
+    },
+    // 查询审核记录列表
+    checkAuditList() {
+      util.ajax({
+         url: "product-web/v1/product/getRecords/asset/"+ this.productCodeAll,
+        // url: "v1/product/getRecords/asset/"+ this.productCodeAll,
+        method: 'get'
+      }).then(res => {
+        if (res.data.code == 20000) {
+            // this.$Message.success(res.data.msg);
+            this.auditData = res.data.data;
+          } else {
+            this.$Message.error(res.data.msg);
+          }
+      })
     },
     // 改变类型
     changeTypeCode(index, $event) {
