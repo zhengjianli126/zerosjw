@@ -11,7 +11,7 @@
           <Submenu name="1">
             <template slot="title">系统变量
 </template>
-              <MenuItem v-for="item in findAllSystemVariables" :name="item.label+'&'+item.value">{{item.label}}</MenuItem>
+              <MenuItem v-for="item in findAllSystemVariables" :name="item.label+'&'+item.value+'&1'">{{item.label}}</MenuItem>
             </Submenu>
             <Submenu name="2">
 <template slot="title">
@@ -28,15 +28,28 @@
                
             </Submenu>
           </Menu>
-        </Col>
+        </Col>        .
                <Col span="12">
                    <span>输入公式：</span>
+                   
                     <Input style="margin-top:10px;" v-model="srgs" type="textarea" placeholder="Enter something..."></Input>
+                   <Button style="margin-top:20px;" type="primary" size='small' @click='resetVarJs()'>重置</Button>
                      <Card style="margin-top:10px;background:#f1f1f1" dis-hover="true">
                         <div style="text-align:center;">
                             <h5>变量和函数的说明</h5>
                         </div>
                     </Card>
+                     <span style="margin-top:20px;display:block;">公式试算：</span>
+                     <ul>
+                        <li style="margin-top:10px;" v-for="item in gsSsList">
+                          <span>{{item.a}}:</span>
+                          <Input v-model="item.jsgs"  placeholder="请输入..." style="width: 200px"/>
+                        </li> 
+                     </ul>
+                     <div>
+                        结果：<span></span></br>
+                         <Button size='small' type="primary" @click="operationJs()">运算</Button>
+                     </div>
                </Col>
             </Row>
             <div slot="footer">
@@ -157,6 +170,10 @@
   export default {
     data() {
       return {
+        // 开发
+        urlBase:'',
+      // 生产
+      //  urlBase:'fee-master-web/',
         // 系统函数
         findAllSystemFunction: [],
         // 系统变量
@@ -203,7 +220,7 @@
           payCode: [],
           feeDesc: [],
           formula: '',
-          status: 1
+          status: 2 
         },
         // 控制弹框 可选
         digFlag: false,
@@ -215,6 +232,8 @@
         findAllReceivingForm: [],
         // 运算符号
         ysfhJs: [],
+        //公式试算列表
+        gsSsList:[],
         // 运算保存 标识，
         ysBcFlag: false,
         // 判断 是修改还是查看
@@ -224,8 +243,11 @@
         reCode: '',
         // 费用大类
         findAllCostCategory: [],
-  
+        // 分页索引
+        pageFIndex:'1',
         data8: [],
+        // 表格的状态
+        tableStatus:'',
         // 校验
         digValidate: {
           feeName: [
@@ -328,13 +350,30 @@
             align: 'center'
             //    "sortable": true
           },
+           {
+            title: "创建状态",
+            key: "status",
+            width: 150,
+            align: 'center',
+            //    "sortable": true
+            render: (h, params) => {
+               if (params.row.status == 2) {
+                return h('div', '创建中');
+              } else if(params.row.status == 1 ) {
+                return h('div','启用')
+              }else{
+                return h('div', '禁用');
+              }
+            }
+          },
           {
             title: "操作",
             key: "status",
             width: 150,
             align: 'center',
             render: (h, params) => {
-              let curData = [
+              let curData = [];
+              let dataList = [
                 h('Button', {
                   props: {
                     type: 'info',
@@ -352,13 +391,15 @@
                         // 修改 
                         this.reCode = params.row.feeCode;
                         this.isLookOrRe = 're';
-                        util.ajax('fee-master-web/v1/feeInfo/getAllFeeInfoByFeeCode', {
+                        util.ajax(this.urlBase+'v1/feeInfo/getAllFeeInfoByFeeCode', {
                           method: 'get',
                           params: {
                             feeCode: this.reCode
                           }
                         }).then(res => {
                           this.FeeInfo = res.data.data;
+                          this.FeeInfo.eformula = res.data.data.feeFormulaVO.eformula;
+                           this.FeeInfo.cformula = res.data.data.feeFormulaVO.cformula;
                           this.showFormula1 = res.data.data.feeFormulaVO.cformula;
                           this.digFlag = false;
                           this.titleDig = "修改费用";
@@ -368,6 +409,36 @@
                     }
                   }
                 }, '修改'),
+                h('Button', {
+                  props: {
+                    type: 'info',
+                    size: 'small'
+                  },
+                  style: {
+                    marginLeft: '10px'
+                  },
+                  on: {
+                    click: () => {
+                        this.FeeInfo.status = params.row.status;
+                        // 修改 
+                        this.reCode = params.row.feeCode;
+                        this.isLookOrRe = 'look';
+                        util.ajax(this.urlBase+'v1/feeInfo/getAllFeeInfoByFeeCode', {
+                          method: 'get',
+                          params: {
+                            feeCode: this.reCode
+                          }
+                        }).then(res => {
+                          this.FeeInfo = res.data.data;
+                          this.showFormula1 = res.data.data.feeFormulaVO.cformula;
+                          this.digFlag = true;
+                          this.titleDig = "查看费用";
+                          this.modal1 = true;
+                        })
+                      
+                    }
+                  }
+                }, '查看'),
                 h('Button', {
                   props: {
                     type: 'success',
@@ -380,7 +451,7 @@
                     click: () => {
                       this.loading = true;
                       util.ajax({
-                          url: "fee-master-web/v1/feeInfo/updateFeeStatusToEnable",
+                          url: this.urlBase+"v1/feeInfo/updateFeeStatusToEnable",
                           method: "put",
                           params: {
                             feeCode: params.row.feeCode
@@ -392,7 +463,8 @@
                           } else {
                             this.$Message.success(res.data.msg);
                           }
-                          this.findAllFeeList();
+                         
+                          this.findAllFeeList(this.pageFIndex);
                         })
                     }
                   }
@@ -409,7 +481,7 @@
                     click: () => {
                       this.loading = true;
                       util.ajax({
-                          url: "fee-master-web/v1/feeInfo/updateFeeStatusToOff",
+                          url: this.urlBase+"v1/feeInfo/updateFeeStatusToOff",
                           method: "put",
                           params: {
                             feeCode: params.row.feeCode
@@ -421,17 +493,20 @@
                           } else {
                             this.$Message.success(res.data.msg);
                           }
-                          this.findAllFeeList();
+                           this.findAllFeeList(this.pageFIndex);
                         })
                     }
                   }
-                }, '停用')
+                }, '禁用')
               ];
+              
               // 判断 status 来进行判断 摁扭展示
-              if (params.row.status == 0) {
-                curData.splice(2, 1);
-              } else {
-                curData.splice(1, 1);
+              if (params.row.status == 2) {
+                curData.push(dataList[0],dataList[2])
+              } else if(params.row.status == 1) {
+                 curData.push(dataList[1],dataList[3])
+              }else{
+                 curData.push(dataList[1])
               }
               return h('div', curData);
             }
@@ -471,16 +546,41 @@
     methods: {
       //计算公式
       route(name) {
-  
         this.srgs += name.split('&')[0];
         this.srgs1 += name.split('&')[1];
-  
+        if(name.split('&')[2]==1){
+         
+          this.gsSsList.push({
+            a:name.split('&')[0],
+            b:name.split('&')[1],
+            jsgs:''
+          })
+           console.log(this.gsSsList)
+        }
+       
       },
-  
+      operationJs(){
+          let curObj= {};
+          this.gsSsList.forEach(function(item,index){
+            curObj[item.b] = item.jsgs;
+          })
+          curObj.formula = this.srgs1;
+          console.log(curObj)
+          util.ajax({
+            url: this.urlBase+"v1/feeFormula/trialCalculation",
+            method: "post",
+            data: {
+              map:curObj
+            }
+          })
+          .then(res => {
+              console.log(res)
+          })
+      },
       // 验证公式
       vildGs() {
         util.ajax({
-            url: "fee-master-web/v1/feeFormula/formulaBudget",
+            url: this.urlBase+"v1/feeFormula/formulaBudget",
             method: "get",
             params: {
               formula: this.srgs
@@ -510,12 +610,17 @@
           this.$Message.error('请验证！')
         }
       },
+      resetVarJs(){
+        this.srgs = '';
+        this.srgs1 = '';
+        this.gsSsList = [];
+      },
       // 表格数据
       findAllFeeList(index) {
         index = index || 1;
         this.loading = true;
         util.ajax({
-            url: "fee-master-web/v1/feeInfo/findAllFeeList",
+            url: this.urlBase+"v1/feeInfo/findAllFeeList",
             method: "get",
             params: {
               pageNumber: index,
@@ -530,12 +635,13 @@
       },
       // 分页
       pageChange(index) {
+        this.pageFIndex = index;
         this.findAllFeeList(index)
       },
       // 搜索
       searchClick() {
         this.loading = true;
-        util.ajax('fee-master-web/v1/feeInfo/findFeeListByNameAndType', {
+        util.ajax(this.urlBase+'v1/feeInfo/findFeeListByNameAndType', {
           method: 'get',
           params: {
             feeName: this.feeName,
@@ -559,11 +665,21 @@
         this.findAllFeeTypeml = s;
       },
       digFeeTypeJs(s) {
+        console.log(s);
         this.digFeeType = s;
+         util.ajax(this.urlBase+'v1/feeInfo/findAllCategoryByType', {
+          method: 'get',
+          params	:{
+            feeType:s
+          },
+        }).then(res => {
+          console.log(res.data.data)
+          this.findAllCostCategory = res.data.data;
+        })
       },
       // 费用类型获取
       findAllFeeType() {
-        util.ajax('fee-master-web/v1/feeInfo/findAllFeeType', {
+        util.ajax(this.urlBase+'v1/feeInfo/findAllFeeType', {
           method: 'get',
         }).then(res => {
           this.findAllFeeTypeList = res.data.data;
@@ -588,26 +704,22 @@
       },
       // 表单中，单选信息
       feeInfoDig() {
-        util.ajax('fee-master-web/v1/feeInfo/findAllPayer', {
+        util.ajax(this.urlBase+'v1/feeInfo/findAllPayer', {
           method: 'get',
         }).then(res => {
           this.findAllPayer = res.data.data;
         })
-        util.ajax('fee-master-web/v1/feeInfo/findAllRecipientParty', {
+        util.ajax(this.urlBase+'v1/feeInfo/findAllRecipientParty', {
           method: 'get',
         }).then(res => {
           this.findAllRecipientParty = res.data.data;
         })
-        util.ajax('fee-master-web/v1/feeInfo/findAllReceivingForm', {
+        util.ajax(this.urlBase+'v1/feeInfo/findAllReceivingForm', {
           method: 'get',
         }).then(res => {
           this.findAllReceivingForm = res.data.data;
         })
-        util.ajax('fee-master-web/v1/feeInfo/findAllCostCategory', {
-          method: 'get',
-        }).then(res => {
-          this.findAllCostCategory = res.data.data;
-        })
+       
   
       },
       // 关闭弹框
@@ -622,8 +734,8 @@
         delete this.FeeInfo['feeFormulaVO'];
         if (this.isLookOrRe == 'add') {
           //新增
-  
-          util.ajax('fee-master-web/v1/feeInfo/AddFee', {
+          
+          util.ajax(this.urlBase+'v1/feeInfo/AddFee', {
             method: 'post',
             data: this.FeeInfo
   
@@ -646,7 +758,7 @@
           // 修改
           this.FeeInfo.feeCode = this.reCode;
           this.FeeInfo.createTime = '';
-         util.ajax('fee-master-web/v1/feeInfo/modifyFeeInfo', {
+         util.ajax(this.urlBase+'v1/feeInfo/modifyFeeInfo', {
             method: 'put',
             data: this.FeeInfo
   
@@ -670,18 +782,18 @@
   
         this.modal2 = true;
         this.modal1 = false;
-        util.ajax('fee-master-web/v1/feeInfo/findAllSystemVariables', {
+        util.ajax(this.urlBase+'v1/feeInfo/findAllSystemVariables', {
           method: 'get'
   
         }).then(res => {
           this.findAllSystemVariables = res.data.data;
         })
-        util.ajax('fee-master-web/v1/feeInfo/findAllSystemFunction', {
+        util.ajax(this.urlBase+'v1/feeInfo/findAllSystemFunction', {
           method: 'get'
         }).then(res => {
           this.findAllSystemFunction = res.data.data;
         })
-        util.ajax('fee-master-web/v1/feeInfo/findAllOperation', {
+        util.ajax(this.urlBase+'v1/feeInfo/findAllOperation', {
           method: 'get'
         }).then(res => {
           this.ysfhJs = res.data.data;
@@ -694,7 +806,7 @@
         let flag = this.isSelectionData();
   
         if (flag) {
-          util.ajax('fee-master-web/v1/feeInfo/getAllFeeInfoByFeeCode', {
+          util.ajax(this.urlBase+'v1/feeInfo/getAllFeeInfoByFeeCode', {
             method: 'get',
             params: {
               feeCode: this.selectionData[0].feeCode
@@ -703,6 +815,7 @@
   
             this.FeeInfo = res.data.data;
             this.showFormula1 = res.data.data.feeFormulaVO.cformula;
+             this.FeeInfo.eformula = res.data.data.feeFormulaVO.cformula;
             this.digFlag = true;
             this.titleDig = "查看费用";
             this.modal1 = true;
@@ -714,7 +827,7 @@
       },
       // 新增弹框
       addFindAllFee() {
-        this.FeeInfo.status = 1;
+        this.FeeInfo.status = 2;
         this.isLookOrRe = 'add';
         this.digFlag = false;
         this.titleDig = "新增费用";
