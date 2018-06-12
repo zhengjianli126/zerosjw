@@ -4,7 +4,7 @@
 
 <template>
   <div style="padding:15px;background:#FFF;overflow:hidden">
-    <Modal styles="z-index:1000;" width="800px" v-model="modal2" title="公式编辑" :loading="loading">
+    <Modal  @on-cancel="jsgsCancel" :mask-closable="false" styles="z-index:1000;" width="800px" v-model="modal2" title="公式编辑" :loading="loading">
       <Row>
         <Col span="8">
         <Menu @on-select="route" :theme="theme2" accordion="true" style="min-height:100px;">
@@ -95,7 +95,7 @@
             </Col>
           </Row>
           <Row style="margin-top:10px;">
-                <FormItem label="计算公式：" >
+                <FormItem label="计算公式：">
                   <i-input :disabled="digFlag" @on-focus="feeFormuJs" v-model="showFormula1" placeholder="请输入..." style="width: 400px"></i-input>
                 </FormItem> 
           </Row>
@@ -171,9 +171,9 @@
     data() {
       return {
         // 开发
-      // urlBase:'',
+       urlBase:'',
       // 生产
-       urlBase:'fee-master-web/',
+      // urlBase:'fee-master-web/',
         // 系统函数
         findAllSystemFunction: [],
         // 系统变量
@@ -294,8 +294,8 @@
             required: true,
             message: '不能为空',
             trigger: 'change'
-          }],
-  
+          }]
+         
         }
       };
     },
@@ -604,6 +604,11 @@
             }
           })
       },
+      // 关闭公式弹框
+      jsgsCancel(){
+          this.modal2 = false;
+          this.modal1 = true;
+      },
       // 保存公式
       submitGs() {
         if (this.ysBcFlag == true) {
@@ -754,8 +759,9 @@
                 this.$Message.success(res.data.msg)
                 this.modal1 = false;
                 this.findAllFeeList();
-            }else if(res.data.data.code==10008||res.data.data.code==10005){
-              this.$Message.error(res.data.details[0])
+            }else if(res.data.code==10008||res.data.code==10005){
+              
+              this.$Message.error(res.data.details[0]||res.data.msg)
             }
             
             else{
@@ -777,8 +783,8 @@
                 this.$Message.success(res.data.msg)
                 this.modal1 = false;
                 this.findAllFeeList();
-            }else if(res.data.data.code==10008||res.data.data.code===10005){
-              this.$Message.error(res.data.details[0])
+            }else if(res.data.code==10008||res.data.code===10005){
+                this.$Message.error(res.data.details[0]||res.data.msg)
             }else{
               this.$Message.error(res.data.msg)
             }
