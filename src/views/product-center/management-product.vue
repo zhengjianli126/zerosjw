@@ -428,6 +428,9 @@ import util from "../../libs/util";
 export default {
   data() {
     return {
+
+      // 拷贝标识
+      copyFlag: 0,
       // 页面productCode
       productCodeAll: '',
       // 页面status
@@ -995,6 +998,7 @@ export default {
                     click: () => {
                       this.clearHistory();
                       this.productDefaultList();
+                      this.copyFlag = 0;
                       this.productCodeAll = params.row.productCode;
                       // this.productIdAll = params.row.id;
                       this.productStatusAll = params.row.productStatus;
@@ -1031,6 +1035,7 @@ export default {
                     click: () => {
                       this.clearHistory();
                       this.productDefaultList();
+                      this.copyFlag = 0;
                       this.productCodeAll = params.row.productCode;
                       // this.productIdAll = params.row.id;
                       this.productStatusAll = params.row.productStatus;
@@ -1071,6 +1076,7 @@ export default {
 
                       this.clearHistory();
                       this.productDefaultList();
+                      this.copyFlag = 0;
                       this.productCodeAll = params.row.productCode;
                       // this.productIdAll = params.row.id;
                       this.productStatusAll = params.row.productStatus;
@@ -1144,6 +1150,7 @@ export default {
                     click: () => {
                       this.clearHistory();
                       this.productDefaultList();
+                      this.copyFlag = 1;
                       this.productCodeAll = params.row.productCode; 
                       this.checkBaseFlag = false;
                       this.checkGuaranteeFlag = false;
@@ -1507,6 +1514,9 @@ export default {
       this.getRecComps();
       this.modifyShow = false;
       this.seeFlag = true;
+      this.commitShow = true;
+      this.temporaryShow = true;
+      this.reviewShow = false;
       this.productModel = true;
     },
     // 打开产品信息页面默认请求的列表接口
@@ -1731,10 +1741,18 @@ export default {
     },
     // 查询产品基础信息接口
     productBaseInfo(params) {
+      let getByCodeUrl;
+      if (this.copyFlag == 1) {
+        getByCodeUrl = "product-web/v1/product/copyByCode/asset/" + params.row.productCode;
+        // getByCodeUrl = "v1/product/copyByCode/asset/" + params.row.productCode;
+      } else {
+        getByCodeUrl = "product-web/v1/product/getByCode/asset/" + params.row.productCode;
+        // getByCodeUrl = "v1/product/getByCode/asset/" + params.row.productCode;
+      };
       util
         .ajax({
-          url: "product-web/v1/product/getByCode/asset/" + params.row.productCode,
-          // url: "v1/product/getByCode/asset/" + params.row.productCode,
+          // url: "product-web/v1/product/getByCode/asset/" + params.row.productCode,
+          url: getByCodeUrl,
           method: "get"
         })
         .then(res => {
@@ -1761,10 +1779,18 @@ export default {
     },
     // 查看保障设置信息接口
     checkGuaranteeInfo(params) {
+      let getByCodeUrl1;
+      if (this.copyFlag == 1) {
+        getByCodeUrl1 = "product-web/v1/prdGuaranteeModel/copyGuaranteeMods/" + params.row.productCode;
+        // getByCodeUrl1 = "v1/prdGuaranteeModel/copyGuaranteeMods/" + params.row.productCode;
+      } else {
+        getByCodeUrl1 = "product-web/v1/prdGuaranteeModel/getGuaranteeMods/" + params.row.productCode;
+        // getByCodeUrl1 = "v1/prdGuaranteeModel/getGuaranteeMods/" + params.row.productCode;
+      };
       util
         .ajax({
-          url: "product-web/v1/prdGuaranteeModel/getGuaranteeMods/" + params.row.productCode,
-          // url: "v1/prdGuaranteeModel/getGuaranteeMods/" + params.row.productCode,
+          // url: "product-web/v1/prdGuaranteeModel/getGuaranteeMods/" + params.row.productCode,
+          url: getByCodeUrl1,
           method: "get"
         })
         .then(res => {
@@ -1773,10 +1799,18 @@ export default {
     },
     // 查看产品合同信息接口
     checkContractInfo(params) {
+      let getByCodeUrl2;
+      if (this.copyFlag == 1) {
+        getByCodeUrl2 = "product-web/v1/prdContractRelation/copyContractRels/" + this.productCodeAll;
+        // getByCodeUrl2 = "v1/prdContractRelation/copyContractRels/" + this.productCodeAll;
+      } else {
+        getByCodeUrl2 = "product-web/v1/prdContractRelation/getContractRels/" + this.productCodeAll;
+        // getByCodeUrl2 = "v1/prdContractRelation/getContractRels/" + this.productCodeAll;
+      };
       util
         .ajax({
-          url: "product-web/v1/prdContractRelation/getContractRels/" + params.row.productCode,
-          // url: "v1/prdContractRelation/getContractRels/" + this.productCodeAll,
+          // url: "product-web/v1/prdContractRelation/getContractRels/" + params.row.productCode,
+          url: getByCodeUrl2,
           method: "get"
         })
         .then(res => {
@@ -1786,10 +1820,18 @@ export default {
     // 查看产品费用设置信息接口
     checkFeeInfo(params) {
       this.feeSetLoading = true;
+      let getByCodeUrl3;
+      if (this.copyFlag == 1) {
+        getByCodeUrl3 = "product-web/v1/prdFeeRelation/copyFeeRels/" + this.productCodeAll;
+        // getByCodeUrl3 = "v1/prdFeeRelation/copyFeeRels/" + this.productCodeAll;
+      } else {
+        getByCodeUrl3 = "product-web/v1/prdFeeRelation/copyFeeRels/" + this.productCodeAll;
+        // getByCodeUrl3 = "v1/prdFeeRelation/getFeeRels/" + this.productCodeAll;
+      }
       util
         .ajax({
-          url: "product-web/v1/prdFeeRelation/getFeeRels/" + params.row.productCode,
-          // url: "v1/prdFeeRelation/getFeeRels/" + this.productCodeAll,
+          // url: "product-web/v1/prdFeeRelation/getFeeRels/" + params.row.productCode,
+          url: getByCodeUrl3,
           method: "get"
         })
         .then(res => {
