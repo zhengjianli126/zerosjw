@@ -9,8 +9,6 @@
 </style>
 <template>
   <div style="padding:15px;background:#FFF;overflow:hidden">
-    <i-button type="primary" @click="modal2 = true">参数配置</i-button>
-
     <!-- 新增产品 -->
     <Modal width="1080px" ok-text="保存" v-model="productModel" :mask-closable="false" title="新增/查看/修改产品">
       <i-form ref=productInfo :model="productInfo" :rules="prodRuleValidate" :label-width="100">
@@ -19,6 +17,7 @@
         </Row>
         <Row>
           <i-input v-model="productInfo.productCode" type="hidden"></i-input>
+          <i-input v-model="productInfo.id" type="hidden"></i-input>
           <Col span="8">
             <Form-item label="名称：" prop="productName">
               <i-input  :disabled="checkBaseFlag" v-model="productInfo.productName" placeholder="请输入名称" style="width: 200px"></i-input>
@@ -284,15 +283,21 @@
           <Table style="margin-top: 20px;" border :columns="auditColumn" :data="auditData" size="small" ref="table"></Table>
         </Row>
 
+        <!-- 审核备注 -->
         <Row v-show="reviewFlag" style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #C2C2C2;">
           <Row><span style="font-size: 20px;" >审核备注：</span></Row>
-          <i-input type="textarea" v-model="reviewNote" placeholder="请描述..." style="width: 950px; margin-top:20px;"></i-input>
+          <i-input :disabled="reviewInputFlag" type="textarea" v-model="remark" placeholder="请描述..." style="width: 1050px; margin-top:20px;"></i-input>
         </Row>
       
-      <div slot="footer">
+      <div v-show="commitShow" slot="footer">
           <Button :disabled="checkBaseFlag" type="success" @click="holdBtn('productInfo')">暂存</Button>
           <Button :disabled="checkBaseFlag" v-show="true" @click="submitBtn('productInfo')" type="primary">提交</Button>
           <Button :disabled="checkBaseFlag" v-show="true" @click="cancelBtn">取消</Button>
+      </div>
+      <div v-show="reviewShow" slot="footer">
+          <Button type="success" @click="reviewPass">审核通过</Button>
+          <Button v-show="true" @click="reviewRefuse" type="error">审核拒绝</Button>
+          <Button v-show="true" @click="reviewCancel">取消</Button>
       </div>
     </Modal>
 
@@ -423,7 +428,10 @@ import util from "../../libs/util";
 export default {
   data() {
     return {
+      // 页面productCode
       productCodeAll: '',
+      // 页面status
+      productStatusAll: '',
       // 点击编辑时暂存费用信息
       holdFeeInfo: {
         // 费用名称
@@ -467,6 +475,14 @@ export default {
       indexFlag: 0,
       // 审核备注展示
       reviewFlag: false,
+      // 审核是否可填
+      reviewInputFlag: false,
+      // 提交展示
+      commitShow: true,
+      // 审核展示
+      reviewShow: false,
+      // 审核备注
+      remark: "",
       // 参数配置收款方
       recCode: "",
       // 参数配置付款方
@@ -537,6 +553,7 @@ export default {
         productName: "",
         productType: "",
         productCode: "",
+        id: "",
         fundType: "1",
         deadlineType: "",
         minDeadline: 0,
@@ -977,6 +994,8 @@ export default {
                       this.clearHistory();
                       this.productDefaultList();
                       this.productCodeAll = params.row.productCode;
+                      // this.productIdAll = params.row.id;
+                      this.productStatusAll = params.row.productStatus;
                       this.checkBaseFlag = true;
                       this.checkGuaranteeFlag = true;
                       this.modifyShow = false;
@@ -986,6 +1005,9 @@ export default {
                       this.checkContractInfo(params);
                       this.checkFeeInfo(params);
                       this.checkAuditList();
+                      this.commitShow = true;
+                      this.reviewInputFlag = true;
+                      this.reviewShow = false;
                       this.productModel = true;
                     }
                   }
@@ -1006,7 +1028,9 @@ export default {
                     click: () => {
                       this.clearHistory();
                       this.productDefaultList();
-                      this.productCodeAll = params.row.productCode; 
+                      this.productCodeAll = params.row.productCode;
+                      // this.productIdAll = params.row.id;
+                      this.productStatusAll = params.row.productStatus;
                       this.checkBaseFlag = false;
                       this.checkGuaranteeFlag = false;
                       this.modifyShow = true;
@@ -1016,12 +1040,91 @@ export default {
                       this.checkContractInfo(params);
                       this.checkFeeInfo(params);
                       this.checkAuditList();
+                      this.reviewInputFlag = false;
+                      this.commitShow = true;
+                      this.reviewShow = false;
                       this.productModel = true;
 
                     }
                   }
                 },
                 "修改"
+              ),
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "primary",
+                    size: "small"
+                  },
+                  style: {
+                    marginLeft: "10px"
+                  },
+                  on: {
+                    click: () => {
+                      this.reviewFlag = true;
+                      this.commitShow = false;
+                      this.reviewShow = true;
+
+                      this.clearHistory();
+                      this.productDefaultList();
+                      this.productCodeAll = params.row.productCode;
+                      // this.productIdAll = params.row.id;
+                      this.productStatusAll = params.row.productStatus;
+                      this.checkBaseFlag = true;
+                      this.checkGuaranteeFlag = true;
+                      this.modifyShow = false;
+                      this.seeFlag = false;
+                      this.productBaseInfo(params);
+                      this.checkGuaranteeInfo(params);
+                      this.checkContractInfo(params);
+                      this.checkFeeInfo(params);
+                      this.checkAuditList();
+                      this.reviewInputFlag = false;
+                      this.commitShow = false;
+                      this.reviewShow = true;
+                      this.productModel = true;
+
+                    }
+                  }
+                },
+                "审核"
+              ),
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "info",
+                    size: "small"
+                  },
+                  style: {
+                    marginLeft: "10px"
+                  },
+                  on: {
+                    click: () => {
+                      this.publishProduct(params);
+                    }
+                  }
+                },
+                "发布"
+              ),
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "success",
+                    size: "small"
+                  },
+                  style: {
+                    marginLeft: "10px"
+                  },
+                  on: {
+                    click: () => {
+                      this.soldOutProduct(params);
+                    }
+                  }
+                },
+                "下架"
               ),
               h(
                 "Button",
@@ -1046,6 +1149,9 @@ export default {
                       this.checkGuaranteeInfo(params);
                       this.checkContractInfo(params);
                       this.checkFeeInfo(params);
+                      this.reviewInputFlag = false;
+                      this.commitShow = true;
+                      this.reviewShow = false;
                       this.productModel = true;
                     }
                   }
@@ -1252,6 +1358,7 @@ export default {
           this.saveGuaranteeClick = 0;
           this.checkBaseFlag = false;
           this.checkGuaranteeFlag = false;
+          this.remark = '';
         }
       }
     },
@@ -1264,6 +1371,34 @@ export default {
     }
   },
   methods: {
+    // 审核
+    publishProduct(params) {
+      util.ajax({
+        url: "product-web/v1/product/publish/asset/"+ params.row.productCode + "/" + params.row.productStatus,
+        // url: "v1/product/publish/asset/"+ params.row.productCode + "/" + params.row.productStatus,
+        method: "put"
+      }).then(res => {
+        if (res.data.code == 20000) {
+            this.$Message.success(res.data.msg);
+          } else {
+            this.$Message.error(res.data.msg);
+          }
+      })
+    },
+    // 下架
+    soldOutProduct(params) {
+      util.ajax({
+        url: "product-web/v1/product/down/asset/"+ params.row.productCode + "/" + params.row.productStatus,
+        // url: "v1/product/down/asset/"+ params.row.productCode + "/" + params.row.productStatus,
+        method: "put"
+      }).then(res => {
+        if (res.data.code == 20000) {
+            this.$Message.success(res.data.msg);
+          } else {
+            this.$Message.error(res.data.msg);
+          }
+      })
+    },
     // 合同模板添加按钮
     addContract(index) {
       this.contractListModal = true;
@@ -1440,15 +1575,16 @@ export default {
     addFeeBtn() {
       util
         .ajax({
-          url: "fee-master-web/v1/feeInfo/findAllUsingFeeList",
-          url: 'v1/feeInfo/findAllUsingFeeList',
+          url: "fee-master-web/v1/feeInfo/findFeeListByNameAndCategory",
+          // url: 'v1/feeInfo/findAllUsingFeeList',
+          //本地
           // url: 'v1/prdFeeRelation/getFeeList',
           method: "get",
           params: {
             pageNumber: 1,
             pageSize: 10,
             feeName: "",
-            feeCategory: "1"
+            feeCategory: ""
           }
         })
         .then(res => {
@@ -1462,8 +1598,9 @@ export default {
     searchFeeList(index) {
       util
         .ajax({
-          url: "fee-master-web/v1/feeInfo/findAllUsingFeeList",
+          url: "fee-master-web/v1/feeInfo/findFeeListByNameAndCategory",
           // url: 'v1/feeInfo/findAllUsingFeeList',
+          // url: 'v1/prdFeeRelation/getFeeList',
           method: "get",
           params: {
             pageNumber: index,
@@ -1480,6 +1617,7 @@ export default {
     // 费用列表里的添加
     addFeeInfo(params) {
       this.costData.push({
+        feeCode: params.row.feeCode,
         feeName: params.row.feeName,
         feeCategory: params.row.feeCategory,
         feeTag: params.row.feeTag,
@@ -1589,6 +1727,7 @@ export default {
         .then(res => {
           this.productInfo.productName = res.data.data.productName;
           this.productInfo.productType = res.data.data.productType;
+          this.productInfo.id = res.data.data.id;
           this.productInfo.fundType = res.data.data.fundType;
           this.productInfo.deadlineType = res.data.data.deadlineType;
           this.productInfo.minDeadline = res.data.data.minDeadline;
@@ -1726,7 +1865,7 @@ export default {
               .ajax({
                 url: "product-web/v1/product/commit",
                 // url: "v1/product/commit",
-                method: "post",
+                method: "put",
                 headers: {
                   "Content-Type": "application/json"
                 },
@@ -1741,7 +1880,8 @@ export default {
                   this.productModel = false;
                   this.getProductList(1);
                 } else {
-                  this.$Message.error(res.data.details[0]);
+                  this.$Message.error(res.data.details[0] ? res.data.details[0] : res.data.msg);
+                  // this.$Message.error(res.data.details[0]);
                 }
               });
           } else {
@@ -1855,11 +1995,11 @@ export default {
     },
     // 费用编辑确定按钮
     updateFeeInfo() {
-      this.costData[this.indexFlag].payCode = this.payCode.split('-')[0];
-      this.costData[this.indexFlag].recCode = this.recCode.split('-')[0];
+      this.costData[this.indexFlag].payCode = this.payCode.split('-')[1];
+      this.costData[this.indexFlag].recCode = this.recCode.split('-')[1];
       this.costData[this.indexFlag].feeOrder = this.feeOrder;
-      this.costData[this.indexFlag].payName = this.payCode.split('-')[1];
-      this.costData[this.indexFlag].recName = this.recCode.split('-')[1];
+      this.costData[this.indexFlag].payName = this.payCode.split('-')[0];
+      this.costData[this.indexFlag].recName = this.recCode.split('-')[0];
       this.modal2 = false;
     },
     // 费用编辑取消按钮
@@ -1960,7 +2100,7 @@ export default {
         .then(res => {
           if (res.data.code == 20000) {
             this.$Message.success(res.data.msg);
-
+            this.checkFeeInfo();
           } else {
             this.$Message.error(res.data.msg);
           }
@@ -1982,6 +2122,51 @@ export default {
           }
       })
     },
+
+    // 审核通过
+    reviewPass() {
+      util.ajax({
+        url: "product-web/v1/product/check/asset/"+ this.productCodeAll +"/" + this.productStatusAll,
+        // url: "v1/product/check/asset/"+ this.productCodeAll +"/" + this.productStatusAll,
+        method: "post",
+        data: {
+          productCode: this.productCodeAll,
+          result: 1,
+          remark: this.remark
+        }
+      }).then(res => {
+        if (res.data.code == 20000) {
+            this.$Message.success(res.data.msg);
+
+          } else {
+            this.$Message.error(res.data.msg);
+          }
+      })
+    },
+    // 审核拒绝
+    reviewRefuse() {
+      util.ajax({
+        url: "product-web/v1/product/check/asset/"+ this.productCodeAll +"/" + this.productStatusAll,
+        // url: "v1/product/check/asset/"+ this.productCodeAll +"/" + this.productStatusAll,
+        method: "post",
+        data: {
+          productCode: this.productCodeAll,
+          result: 0,
+          remark: this.remark
+        }
+      }).then(res => {
+        if (res.data.code == 20000) {
+            this.$Message.success(res.data.msg);
+
+          } else {
+            this.$Message.error(res.data.msg);
+          }
+      })
+    },
+    reviewCancel() {
+      this.productModel = false;
+    },
+
     // 改变类型
     changeTypeCode(index, $event) {
       if($event == 0 || $event == 2) {
