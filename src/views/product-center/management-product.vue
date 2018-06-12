@@ -87,7 +87,7 @@
           </Col>
           <Col span="16">
             <Form-item label="利息费用公式："  :label-width="120" prop="costFormula">
-              <i-input @on-focus="feeFormuJs" :disabled="checkBaseFlag" v-model="productInfo.costFormula" placeholder="请输入公式" style="width: 400px;"></i-input>
+              <i-input @on-focus="feeFormuJs" :disabled="true" v-model="productInfo.costFormula" placeholder="请输入公式" style="width: 400px;"></i-input>
             </Form-item>
           </Col>
         </Row>
@@ -191,8 +191,8 @@
                         <Row>
                           <Col span="8">
                             <Form-item label="机构名称：" prop="orgCode">
-                              <i-select :disabled="checkGuaranteeFlag" @on-change="changeorgCode" v-model="guaranteeInfo.orgCode" placeholder="请选择" style="width: 200px">
-                                  <i-option v-for="item in orgCodeList"  :value="item.CUSTID+$+item.CUSTNAME+$+item.CUSTTYPE+$+item.TYPENAME">{{ item.CUSTNAME }}</i-option>
+                              <i-select :disabled="checkGuaranteeFlag" @on-change="changeorgCode(index)" v-model="guaranteeInfo.orgCode" placeholder="请选择" style="width: 200px">
+                                  <i-option v-for="item in orgCodeList"  :value="item.CUSTID+'$'+item.CUSTNAME+'$'+item.CUSTTYPE+'$'+item.TYPENAME">{{ item.CUSTNAME }}</i-option>
                               </i-select>
                             </Form-item>
                           </Col>
@@ -290,7 +290,7 @@
         </Row>
       
       <div v-show="commitShow" slot="footer">
-          <Button :disabled="checkBaseFlag" type="success" @click="holdBtn('productInfo')">暂存</Button>
+          <Button :disabled="checkBaseFlag" v-show="temporaryShow" type="success" @click="holdBtn('productInfo')">暂存</Button>
           <Button :disabled="checkBaseFlag" v-show="true" @click="submitBtn('productInfo')" type="primary">提交</Button>
           <Button :disabled="checkBaseFlag" v-show="true" @click="cancelBtn">取消</Button>
       </div>
@@ -480,7 +480,9 @@ export default {
       // 提交展示
       commitShow: true,
       // 审核展示
-      reviewShow: false,
+      reviewShow: true,
+      // 修改时暂存不显示
+      temporaryShow: false,
       // 审核备注
       remark: "",
       // 参数配置收款方
@@ -603,9 +605,9 @@ export default {
         payType: [
           { required: true, message: "请选择还款方式", trigger: "change" }
         ],
-        costFormula: [
-          { required: true, message: "利息费用公式不能为空", trigger: "blur" }
-        ],
+        // costFormula: [
+        //   { required: true, message: "利息费用公式不能为空", trigger: "blur" }
+        // ],
         startInterestType: [
           // { required: true, message: "起息日不能为空", trigger: "change" }
         ],
@@ -648,7 +650,7 @@ export default {
           // 代偿触发增加时间
           guaTime: "",
           isBuyBack: "",
-          buyBackPeriod: ""
+          buyBackPeriod: 0
         }
       ],
       // 保障模型设置验证
@@ -1008,6 +1010,7 @@ export default {
                       this.commitShow = true;
                       this.reviewInputFlag = true;
                       this.reviewShow = false;
+                      this.temporaryShow = true;
                       this.productModel = true;
                     }
                   }
@@ -1041,8 +1044,10 @@ export default {
                       this.checkFeeInfo(params);
                       this.checkAuditList();
                       this.reviewInputFlag = false;
+                      this.reviewFlag = false;
                       this.commitShow = true;
                       this.reviewShow = false;
+                      this.temporaryShow = false;
                       this.productModel = true;
 
                     }
@@ -1062,9 +1067,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.reviewFlag = true;
-                      this.commitShow = false;
-                      this.reviewShow = true;
+                      
 
                       this.clearHistory();
                       this.productDefaultList();
@@ -1081,6 +1084,7 @@ export default {
                       this.checkFeeInfo(params);
                       this.checkAuditList();
                       this.reviewInputFlag = false;
+                      this.reviewFlag = true;
                       this.commitShow = false;
                       this.reviewShow = true;
                       this.productModel = true;
@@ -1150,8 +1154,10 @@ export default {
                       this.checkContractInfo(params);
                       this.checkFeeInfo(params);
                       this.reviewInputFlag = false;
+                      this.reviewFlag = false;
                       this.commitShow = true;
                       this.reviewShow = false;
+                      this.temporaryShow = true;
                       this.productModel = true;
                     }
                   }
@@ -1371,7 +1377,7 @@ export default {
     }
   },
   methods: {
-    // 审核
+    // 发布
     publishProduct(params) {
       util.ajax({
         url: "product-web/v1/product/publish/asset/"+ params.row.productCode + "/" + params.row.productStatus,
@@ -1380,6 +1386,7 @@ export default {
       }).then(res => {
         if (res.data.code == 20000) {
             this.$Message.success(res.data.msg);
+            this.getProductList(1);
           } else {
             this.$Message.error(res.data.msg);
           }
@@ -1394,6 +1401,7 @@ export default {
       }).then(res => {
         if (res.data.code == 20000) {
             this.$Message.success(res.data.msg);
+            this.getProductList(1);
           } else {
             this.$Message.error(res.data.msg);
           }
@@ -1577,7 +1585,7 @@ export default {
         .ajax({
           url: "fee-master-web/v1/feeInfo/findFeeListByNameAndCategory",
           // url: 'v1/feeInfo/findAllUsingFeeList',
-          //本地
+          // 本地
           // url: 'v1/prdFeeRelation/getFeeList',
           method: "get",
           params: {
@@ -1647,8 +1655,13 @@ export default {
           this.orgCodeList = res.data.data.list;
         });
     },
-    changeorgCode(s) {
-      this.orgCode = s;
+    changeorgCode(index) {
+      // this.orgCode = s;
+      let orgCodeAll = this.guaranteeModelList[index].orgCode.split("$");
+      this.guaranteeModelList[index].orgName = orgCodeAll[1];
+      this.guaranteeModelList[index].orgType = orgCodeAll[2];
+      this.guaranteeModelList[index].orgTypeName = orgCodeAll[3];
+      this.guaranteeModelList[index].orgCode = orgCodeAll[0];
     },
     // 获取代偿后债权归属
     getBelongCode() {
@@ -1802,7 +1815,7 @@ export default {
             guaDay: "",
             guaTime: "",
             isBuyBack: "",
-            buyBackPeriod: ""
+            buyBackPeriod: 0
         })
     },
 
@@ -2013,10 +2026,10 @@ export default {
         return false;
       }
       this.guaranteeModelList[index].guaOrder = index+1;
-      this.guaranteeModelList[index].orgCode = this.guaranteeModelList[index].orgCode.split("$")[0];
-      this.guaranteeModelList[index].orgName = this.guaranteeModelList[index].orgCode.split("$")[1];
-      this.guaranteeModelList[index].orgType = this.guaranteeModelList[index].orgCode.split("$")[2];
-      this.guaranteeModelList[index].orgTypeName = this.guaranteeModelList[index].orgCode.split("$")[3];
+      // this.guaranteeModelList[index].orgCode = this.guaranteeModelList[index].orgCode.split("$")[0];
+      // this.guaranteeModelList[index].orgName = this.guaranteeModelList[index].orgCode.split("$")[1];
+      // this.guaranteeModelList[index].orgType = this.guaranteeModelList[index].orgCode.split("$")[2];
+      // this.guaranteeModelList[index].orgTypeName = this.guaranteeModelList[index].orgCode.split("$")[3];
       util.ajax({
           url: "product-web/v1/prdGuaranteeModel/save",
           // url: "v1/prdGuaranteeModel/save",
@@ -2137,7 +2150,7 @@ export default {
       }).then(res => {
         if (res.data.code == 20000) {
             this.$Message.success(res.data.msg);
-
+            this.getProductList(1);
           } else {
             this.$Message.error(res.data.msg);
           }
