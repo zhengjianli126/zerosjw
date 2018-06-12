@@ -173,7 +173,7 @@
         // 开发
       // urlBase:'',
       // 生产
-        urlBase:'fee-master-web/',
+       urlBase:'fee-master-web/',
         // 系统函数
         findAllSystemFunction: [],
         // 系统变量
@@ -533,6 +533,7 @@
             this.srgs = '';
             this.srgs1 = '';
             this.showFormula1 = '';
+            
           }
         }
       },
@@ -540,7 +541,9 @@
         if (!val) {
           this.ysBcFlag = false;
           this.srgs = '';
-
+          this.srgs1 = '';
+          this.gsjg = '';
+          this.gsSsList = [];
         }
       }
     },
@@ -736,9 +739,11 @@
         console.log(this.FeeInfo)
         // 保存逻辑
         delete this.FeeInfo['feeFormulaVO'];
-        if (this.isLookOrRe == 'add') {
+          this.$refs["FeeInfo"].validate((valid) => {
+                  if (valid) {
+                        if (this.isLookOrRe == 'add') {
           //新增
-          
+         
           util.ajax(this.urlBase+'v1/feeInfo/AddFee', {
             method: 'post',
             data: this.FeeInfo
@@ -749,7 +754,7 @@
                 this.$Message.success(res.data.msg)
                 this.modal1 = false;
                 this.findAllFeeList();
-            }else if(res.data.data.code==10008||res.data.data.code===10005){
+            }else if(res.data.data.code==10008||res.data.data.code==10005){
               this.$Message.error(res.data.details[0])
             }
             
@@ -780,6 +785,11 @@
           
           })
         }
+                    } else {
+                        this.$Message.error('Fail!');
+                    }
+           })
+        
       },
       // 计算公式弹框
       feeFormuJs() {
