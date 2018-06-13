@@ -230,8 +230,8 @@
                             </Form-item>
                           </Col>
                           <Col span="8">
-                            <Form-item label="代偿收款方：" prop="recComps">
-                              <i-select :disabled="checkGuaranteeFlag" v-model="guaranteeInfo.recComps" placeholder="请选择" style="width: 150px">
+                            <Form-item label="代偿收款方：" prop="recComp">
+                              <i-select :disabled="checkGuaranteeFlag" v-model="guaranteeInfo.recComp" placeholder="请选择" style="width: 150px">
                                   <i-option v-for="item in recCompsList" :value="item.value">{{ item.label }}</i-option>
                               </i-select>
                             </Form-item>
@@ -245,7 +245,7 @@
                           </Col>
                           <Col span="8">
                             <Form-item :label-width="120" label="" prop="guaTime">
-                              <Time-picker :disabled="checkGuaranteeFlag" format="HH:mm" placeholder="选择时间" v-model="guaTime" style="width: 112px"></Time-picker>
+                              <TimePicker :disabled="checkGuaranteeFlag" format="HH:mm" placeholder="选择时间" v-model="guaranteeInfo.guaTime" style="width: 112px"></TimePicker>
                             </Form-item>
                           </Col>
                         </Row>
@@ -428,7 +428,8 @@ import util from "../../libs/util";
 export default {
   data() {
     return {
-
+      // url前缀
+      frontUrl: 'product-web/',
       // 拷贝标识
       copyFlag: 0,
       // 页面productCode
@@ -648,8 +649,8 @@ export default {
           isLading: "",
           guaranteeFeeList: ["0"],
           belongCode: "",
-          recComps: "",
-          guaDay: "",
+          recComp: "",
+          guaDay: 0,
           // 代偿触发增加时间
           guaTime: "",
           isBuyBack: "",
@@ -673,7 +674,7 @@ export default {
         belongCode: [
           { required: false, message: "债权归属不能为空", trigger: "change" }
         ],
-        recComps: [
+        recComp: [
           { required: false, message: "债权收款方不能为空", trigger: "change" }
         ],
         // guaTime: [
@@ -1006,10 +1007,10 @@ export default {
                       this.checkGuaranteeFlag = true;
                       this.modifyShow = false;
                       this.seeFlag = false;
-                      this.productBaseInfo(params);
-                      this.checkGuaranteeInfo(params);
-                      this.checkContractInfo(params);
-                      this.checkFeeInfo(params);
+                      this.productBaseInfo();
+                      this.checkGuaranteeInfo();
+                      this.checkContractInfo();
+                      this.checkFeeInfo();
                       this.checkAuditList();
                       this.commitShow = true;
                       this.reviewInputFlag = true;
@@ -1043,10 +1044,10 @@ export default {
                       this.checkGuaranteeFlag = false;
                       this.modifyShow = true;
                       this.seeFlag = true;
-                      this.productBaseInfo(params);
-                      this.checkGuaranteeInfo(params);
-                      this.checkContractInfo(params);
-                      this.checkFeeInfo(params);
+                      this.productBaseInfo();
+                      this.checkGuaranteeInfo();
+                      this.checkContractInfo();
+                      this.checkFeeInfo();
                       this.checkAuditList();
                       this.reviewInputFlag = false;
                       this.reviewFlag = false;
@@ -1084,10 +1085,10 @@ export default {
                       this.checkGuaranteeFlag = true;
                       this.modifyShow = false;
                       this.seeFlag = false;
-                      this.productBaseInfo(params);
-                      this.checkGuaranteeInfo(params);
-                      this.checkContractInfo(params);
-                      this.checkFeeInfo(params);
+                      this.productBaseInfo();
+                      this.checkGuaranteeInfo();
+                      this.checkContractInfo();
+                      this.checkFeeInfo();
                       this.checkAuditList();
                       this.reviewInputFlag = false;
                       this.reviewFlag = true;
@@ -1156,10 +1157,10 @@ export default {
                       this.checkGuaranteeFlag = false;
                       this.modifyShow = false;
                       this.seeFlag = true;
-                      this.productBaseInfo(params);
-                      this.checkGuaranteeInfo(params);
-                      this.checkContractInfo(params);
-                      this.checkFeeInfo(params);
+                      this.productBaseInfo();
+                      this.checkGuaranteeInfo();
+                      this.checkContractInfo();
+                      this.checkFeeInfo();
                       this.reviewInputFlag = false;
                       this.reviewFlag = false;
                       this.commitShow = true;
@@ -1387,7 +1388,7 @@ export default {
     // 发布
     publishProduct(params) {
       util.ajax({
-        url: "product-web/v1/product/publish/asset/"+ params.row.productCode + "/" + params.row.productStatus,
+        url: frontUrl+"v1/product/publish/asset/"+ params.row.productCode + "/" + params.row.productStatus,
         // url: "v1/product/publish/asset/"+ params.row.productCode + "/" + params.row.productStatus,
         method: "put"
       }).then(res => {
@@ -1402,7 +1403,7 @@ export default {
     // 下架
     soldOutProduct(params) {
       util.ajax({
-        url: "product-web/v1/product/down/asset/"+ params.row.productCode + "/" + params.row.productStatus,
+        url: this.frontUrl + "v1/product/down/asset/"+ params.row.productCode + "/" + params.row.productStatus,
         // url: "v1/product/down/asset/"+ params.row.productCode + "/" + params.row.productStatus,
         method: "put"
       }).then(res => {
@@ -1420,7 +1421,7 @@ export default {
       index = index || 1;
       util
         .ajax({
-          url: "product-web/v1/prdContractRelation/getContractList",
+          url: this.frontUrl + "v1/prdContractRelation/getContractList",
           // url: "v1/prdContractRelation/getContractList",
           method: "post",
           headers: {
@@ -1466,7 +1467,7 @@ export default {
       this.prodLoading = true;
       util
         .ajax({
-          url: "product-web/v1/product/getPageQuery",
+          url: this.frontUrl + "v1/product/getPageQuery",
           // url: "v1/product/getPageQuery",
           method: "post",
           headers: {
@@ -1494,7 +1495,7 @@ export default {
     getProdStatus() {
       util
         .ajax({
-          url: "product-web/v1/prdDictionary/get/productStatus",
+          url: this.frontUrl + "v1/prdDictionary/get/productStatus",
           // url: "v1/prdDictionary/get/productStatus",
           method: "get"
         })
@@ -1531,7 +1532,7 @@ export default {
     deleteProduct(params) {
 
       util.ajax({
-        url: "product-web/v1/product/delete/asset/"+ params.row.productCode + "/" + params.row.productStatus,
+        url: this.frontUrl + "v1/product/delete/asset/"+ params.row.productCode + "/" + params.row.productStatus,
         // url: "v1/product/delete/asset/"+ params.row.productCode + "/" + params.row.productStatus,
         method: "delete"
       }).then(res => {
@@ -1547,7 +1548,7 @@ export default {
     getProductType() {
       util
         .ajax({
-          url: "product-web/v1/prdDictionary/get/productType",
+          url: this.frontUrl + "v1/prdDictionary/get/productType",
           // url: "v1/prdDictionary/get/productType",
           method: "get"
         })
@@ -1567,7 +1568,7 @@ export default {
     getPayType() {
       util
         .ajax({
-          url: "product-web/v1/prdDictionary/get/payType",
+          url: this.frontUrl + "v1/prdDictionary/get/payType",
           // url: "v1/prdDictionary/get/payType",
           method: "get"
         })
@@ -1653,7 +1654,7 @@ export default {
     getOrgCode() {
       util
         .ajax({
-          url: "product-web/v1/prdDictionary/getDeparts",
+          url: this.frontUrl + "v1/prdDictionary/getDeparts",
           // url: "v1/prdDictionary/getDeparts",
           method: "get",
           params: {
@@ -1677,7 +1678,7 @@ export default {
     getBelongCode() {
       util
         .ajax({
-          url: "product-web/v1/prdDictionary/get/belongCode",
+          url: this.frontUrl + "v1/prdDictionary/get/belongCode",
           // url: "v1/prdDictionary/get/belongCode",
           method: "get"
         })
@@ -1692,7 +1693,7 @@ export default {
     getRecComps() {
       util
         .ajax({
-          url: "product-web/v1/prdDictionary/get/recComp",
+          url: this.frontUrl + "v1/prdDictionary/get/recComp",
           // url: "v1/prdDictionary/get/recComp",
           method: "get"
         })
@@ -1701,13 +1702,13 @@ export default {
         });
     },
     changeRecComps(s) {
-      this.recComps = s;
+      this.recComp = s;
     },
     // 获取参数配置收款方
     getRecCode(params) {
       util
         .ajax({
-          url: "product-web/v1/prdDictionary/getFeeRecs",
+          url: this.frontUrl + "v1/prdDictionary/getFeeRecs",
           // url: "v1/prdDictionary/getFeeRecs",
           method: "get",
           params: {
@@ -1725,7 +1726,7 @@ export default {
     getPayCode(params) {
       util
         .ajax({
-          url: "product-web/v1/prdDictionary/getFeePays",
+          url: this.frontUrl + "v1/prdDictionary/getFeePays",
           // url: "v1/prdDictionary/getFeePays",
           method: "get",
           params: {
@@ -1740,18 +1741,18 @@ export default {
       this.payCode = s;
     },
     // 查询产品基础信息接口
-    productBaseInfo(params) {
+    productBaseInfo() {
       let getByCodeUrl;
       if (this.copyFlag == 1) {
-        getByCodeUrl = "product-web/v1/product/copyByCode/asset/" + params.row.productCode;
+        getByCodeUrl = this.frontUrl + "v1/product/copyByCode/asset/" + this.productCodeAll;
         // getByCodeUrl = "v1/product/copyByCode/asset/" + params.row.productCode;
       } else {
-        getByCodeUrl = "product-web/v1/product/getByCode/asset/" + params.row.productCode;
+        getByCodeUrl = this.frontUrl + "v1/product/getByCode/asset/" + this.productCodeAll;
         // getByCodeUrl = "v1/product/getByCode/asset/" + params.row.productCode;
       };
       util
         .ajax({
-          // url: "product-web/v1/product/getByCode/asset/" + params.row.productCode,
+          // url: this.frontUrl + "v1/product/getByCode/asset/" + params.row.productCode,
           url: getByCodeUrl,
           method: "get"
         })
@@ -1778,18 +1779,18 @@ export default {
         });
     },
     // 查看保障设置信息接口
-    checkGuaranteeInfo(params) {
+    checkGuaranteeInfo() {
       let getByCodeUrl1;
       if (this.copyFlag == 1) {
-        getByCodeUrl1 = "product-web/v1/prdGuaranteeModel/copyGuaranteeMods/" + params.row.productCode;
+        getByCodeUrl1 = this.frontUrl + "v1/prdGuaranteeModel/copyGuaranteeMods/" + this.productCodeAll;
         // getByCodeUrl1 = "v1/prdGuaranteeModel/copyGuaranteeMods/" + params.row.productCode;
       } else {
-        getByCodeUrl1 = "product-web/v1/prdGuaranteeModel/getGuaranteeMods/" + params.row.productCode;
+        getByCodeUrl1 = this.frontUrl + "v1/prdGuaranteeModel/getGuaranteeMods/" + this.productCodeAll;
         // getByCodeUrl1 = "v1/prdGuaranteeModel/getGuaranteeMods/" + params.row.productCode;
       };
       util
         .ajax({
-          // url: "product-web/v1/prdGuaranteeModel/getGuaranteeMods/" + params.row.productCode,
+          // url: this.frontUrl + "v1/prdGuaranteeModel/getGuaranteeMods/" + params.row.productCode,
           url: getByCodeUrl1,
           method: "get"
         })
@@ -1798,18 +1799,18 @@ export default {
         });
     },
     // 查看产品合同信息接口
-    checkContractInfo(params) {
+    checkContractInfo() {
       let getByCodeUrl2;
       if (this.copyFlag == 1) {
-        getByCodeUrl2 = "product-web/v1/prdContractRelation/copyContractRels/" + this.productCodeAll;
+        getByCodeUrl2 = this.frontUrl + "v1/prdContractRelation/copyContractRels/" + this.productCodeAll;
         // getByCodeUrl2 = "v1/prdContractRelation/copyContractRels/" + this.productCodeAll;
       } else {
-        getByCodeUrl2 = "product-web/v1/prdContractRelation/getContractRels/" + this.productCodeAll;
+        getByCodeUrl2 = this.frontUrl + "v1/prdContractRelation/getContractRels/" + this.productCodeAll;
         // getByCodeUrl2 = "v1/prdContractRelation/getContractRels/" + this.productCodeAll;
       };
       util
         .ajax({
-          // url: "product-web/v1/prdContractRelation/getContractRels/" + params.row.productCode,
+          // url: this.frontUrl + "v1/prdContractRelation/getContractRels/" + params.row.productCode,
           url: getByCodeUrl2,
           method: "get"
         })
@@ -1818,19 +1819,19 @@ export default {
         });
     },
     // 查看产品费用设置信息接口
-    checkFeeInfo(params) {
+    checkFeeInfo() {
       this.feeSetLoading = true;
       let getByCodeUrl3;
       if (this.copyFlag == 1) {
-        getByCodeUrl3 = "product-web/v1/prdFeeRelation/copyFeeRels/" + this.productCodeAll;
+        getByCodeUrl3 = this.frontUrl + "v1/prdFeeRelation/copyFeeRels/" + this.productCodeAll;
         // getByCodeUrl3 = "v1/prdFeeRelation/copyFeeRels/" + this.productCodeAll;
       } else {
-        getByCodeUrl3 = "product-web/v1/prdFeeRelation/copyFeeRels/" + this.productCodeAll;
+        getByCodeUrl3 = this.frontUrl + "v1/prdFeeRelation/getFeeRels/" + this.productCodeAll;
         // getByCodeUrl3 = "v1/prdFeeRelation/getFeeRels/" + this.productCodeAll;
       }
       util
         .ajax({
-          // url: "product-web/v1/prdFeeRelation/getFeeRels/" + params.row.productCode,
+          // url: this.frontUrl + "v1/prdFeeRelation/getFeeRels/" + params.row.productCode,
           url: getByCodeUrl3,
           method: "get"
         })
@@ -1853,8 +1854,8 @@ export default {
             isLading: "",
             guaranteeFeeList: ["0"],
             belongCode: "",
-            recComps: "",
-            guaDay: "",
+            recComp: "",
+            guaDay: 0,
             guaTime: "",
             isBuyBack: "",
             buyBackPeriod: 0
@@ -1877,7 +1878,7 @@ export default {
           if (valid) {
             util
               .ajax({
-                url: "product-web/v1/product/save",
+                url: this.frontUrl + "v1/product/save",
                 // url: "v1/product/save",
                 method: "post",
                 headers: {
@@ -1892,7 +1893,7 @@ export default {
                 if (res.data.code == 20000) {
                   this.$Message.success(res.data.msg);
                   // this.productModel = false;
-                  // this.getProductList(1);
+                  this.getProductList(1);
                 } else {
                   this.$Message.error(res.data.details[0]);
                 }
@@ -1918,7 +1919,7 @@ export default {
           if (valid) {
             util
               .ajax({
-                url: "product-web/v1/product/commit",
+                url: this.frontUrl + "v1/product/commit",
                 // url: "v1/product/commit",
                 method: "put",
                 headers: {
@@ -1966,7 +1967,7 @@ export default {
       this.productInfo.fronInterval = Number(this.productInfo.fronInterval);
       this.productInfo.startInterestDay = Number(this.productInfo.startInterestDay)
       util.ajax({
-          url: "product-web/v1/product/update",
+          url: this.frontUrl + "v1/product/update",
           // url: "v1/product/update",
           method: "put",
           headers: {
@@ -1989,7 +1990,7 @@ export default {
     // 合同保存
     saveContractInfo(params) {
       util.ajax({
-          url: "product-web/v1/prdContractRelation/save",
+          url: this.frontUrl + "v1/prdContractRelation/save",
           // url: "v1/prdContractRelation/save",
           method: "post",
           headers: {
@@ -2016,7 +2017,7 @@ export default {
     // 保存费用信息
     saveFeeInfo(params) {
       util.ajax({
-          url: "product-web/v1/prdFeeRelation/save",
+          url: this.frontUrl + "v1/prdFeeRelation/save",
           // url: "v1/prdFeeRelation/save",
           method: "post",
           headers: {
@@ -2073,7 +2074,7 @@ export default {
       // this.guaranteeModelList[index].orgType = this.guaranteeModelList[index].orgCode.split("$")[2];
       // this.guaranteeModelList[index].orgTypeName = this.guaranteeModelList[index].orgCode.split("$")[3];
       util.ajax({
-          url: "product-web/v1/prdGuaranteeModel/save",
+          url: this.frontUrl + "v1/prdGuaranteeModel/save",
           // url: "v1/prdGuaranteeModel/save",
           method: "post",
           headers: {
@@ -2093,7 +2094,7 @@ export default {
     // 删除保障模型模块
     deleteGuarantee(index) {
       util.ajax({
-          url: "product-web/v1/prdGuaranteeModel/delete/"+ index.id,
+          url: this.frontUrl + "v1/prdGuaranteeModel/delete/"+ index.id,
           // url: "v1/prdGuaranteeModel/delete/"+ index.id,
           method: "delete",
         })
@@ -2102,7 +2103,7 @@ export default {
             this.guaranteeModelList.splice(index,1);
             util
             .ajax({
-              url: "product-web/v1/prdGuaranteeModel/getGuaranteeMods/" + index.productCode,
+              url: this.frontUrl + "v1/prdGuaranteeModel/getGuaranteeMods/" + index.productCode,
               // url: "v1/prdGuaranteeModel/getGuaranteeMods/" + index.productCode,
               method: "get"
             })
@@ -2118,7 +2119,7 @@ export default {
     // 删除合同
     deleteContract(params) {
       util.ajax({
-          url: "product-web/v1/prdContractRelation/deleteByCode",
+          url: this.frontUrl + "v1/prdContractRelation/deleteByCode",
           // url: "v1/prdContractRelation/deleteByCode",
           method: "delete",
           headers: {
@@ -2144,7 +2145,7 @@ export default {
         this.costData.splice(params.index,1);
       } else {
         util.ajax({
-          url: "product-web/v1/prdFeeRelation/deleteByCode",
+          url: this.frontUrl + "v1/prdFeeRelation/deleteByCode",
           // url: "v1/prdFeeRelation/deleteByCode",
           method: "delete",
           params: {
@@ -2165,7 +2166,7 @@ export default {
     // 查询审核记录列表
     checkAuditList() {
       util.ajax({
-         url: "product-web/v1/product/getRecords/asset/"+ this.productCodeAll,
+         url: this.frontUrl + "v1/product/getRecords/asset/"+ this.productCodeAll,
         // url: "v1/product/getRecords/asset/"+ this.productCodeAll,
         method: 'get'
       }).then(res => {
@@ -2181,7 +2182,7 @@ export default {
     // 审核通过
     reviewPass() {
       util.ajax({
-        url: "product-web/v1/product/check/asset/"+ this.productCodeAll +"/" + this.productStatusAll,
+        url: this.frontUrl + "v1/product/check/asset/"+ this.productCodeAll +"/" + this.productStatusAll,
         // url: "v1/product/check/asset/"+ this.productCodeAll +"/" + this.productStatusAll,
         method: "post",
         data: {
@@ -2201,8 +2202,8 @@ export default {
     // 审核拒绝
     reviewRefuse() {
       util.ajax({
-        url: "product-web/v1/product/check/asset/"+ this.productCodeAll +"/" + this.productStatusAll,
-        // url: "v1/product/check/asset/"+ this.productCodeAll +"/" + this.productStatusAll,
+        url: frontUrl+"v1/product/check/asset/"+ this.productCodeAll +"/" + this.productStatusAll,
+        // url:  "v1/product/check/asset/"+ this.productCodeAll +"/" + this.productStatusAll,
         method: "post",
         data: {
           productCode: this.productCodeAll,
