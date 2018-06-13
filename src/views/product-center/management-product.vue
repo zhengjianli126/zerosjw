@@ -1183,7 +1183,7 @@ export default {
             } else if (params.row.productStatus == 6) {
               curArray = [curData[0]];
             } else if (params.row.productStatus == 7) {
-              curArray = [curData[0],curData[6]];
+              curArray = [curData[0]];
             };
             return h("div", curArray);
           }
