@@ -805,30 +805,6 @@ export default {
           width: 160,
           align: "center"
         },
-        // {
-        //   title: "",
-        //   key: "payCode",
-        //   width: 0,
-        //   align: "right"
-        // },
-        // {
-        //   title: "",
-        //   key: "recCode",
-        //   width: 0,
-        //   align: "right"
-        // },
-        // {
-        //   title: "",
-        //   key: "hideRecType",
-        //   width: 0,
-        //   align: "center"
-        // },
-        // {
-        //   title: "",
-        //   key: "hidePayType",
-        //   width: 0,
-        //   align: "center"
-        // },
         {
           title: "操作",
           key: "action",
@@ -883,8 +859,8 @@ export default {
                       this.holdFeeInfo.formula = params.row.formula,
 
                       this.formula = params.row.formula,
-                      this.recCode = params.row.recCode,
-                      this.payCode = params.row.payCode,
+                      this.recCode = params.row.recName + '-' + params.row.recCode,
+                      this.payCode = params.row.payName + '-' + params.row.payCode,
                       this.hideRecType = params.row.hideRecType,
                       this.hidePayType = params.row.hidePayType,
                       this.modal2 = true;
@@ -1193,7 +1169,23 @@ export default {
                 "删除"
               )
             ];
-            return h("div", curData);
+            let curArray = [];
+            if (params.row.productStatus == 1) {
+              curArray = [curData[0], curData[1], curData[6]];
+            } else if (params.row.productStatus == 2) {
+              curArray = [curData[0], curData[2]];
+            } else if (params.row.productStatus == 3) {
+              curArray = [curData[0], curData[3]];
+            } else if (params.row.productStatus == 4) {
+              curArray = [curData[0], curData[1], curData[6]];
+            } else if (params.row.productStatus == 5) {
+              curArray = [curData[0], curData[4], curData[5]];
+            } else if (params.row.productStatus == 6) {
+              curArray = curData[0];
+            } else if (params.row.productStatus == 7) {
+              curArray = curData[0];
+            };
+            return h("div", curArray);
           }
         }
       ],
@@ -1893,7 +1885,7 @@ export default {
               .then(res => {
                 if (res.data.code == 20000) {
                   this.$Message.success(res.data.msg);
-                  // this.productModel = false;
+                  this.productModel = false;
                   this.getProductList(1);
                 } else {
                   this.$Message.error(res.data.details[0]);
@@ -2119,7 +2111,10 @@ export default {
     },
     // 删除合同
     deleteContract(params) {
-      util.ajax({
+      if(!params.row.productCode) {
+        this.contractData.splice(params.index,1);
+      } else {
+        util.ajax({
           url: this.frontUrl + "v1/prdContractRelation/deleteByCode",
           // url: "v1/prdContractRelation/deleteByCode",
           method: "delete",
@@ -2134,11 +2129,13 @@ export default {
         .then(res => {
           if (res.data.code == 20000) {
             this.$Message.success(res.data.msg);
-            // this.checkContractInfo();
+            this.checkContractInfo();
           } else {
             this.$Message.error(res.data.msg);
           }
         });
+      }
+      
     },
     // 删除费用
     deleteFee(params) {
