@@ -190,8 +190,8 @@
                         </Row>
                         <Row>
                           <Col span="8">
-                            <Form-item label="机构名称：" prop="orgCode">
-                              <i-select :disabled="checkGuaranteeFlag" @on-change="changeorgCode(index)" v-model="guaranteeInfo.orgCode" placeholder="请选择" style="width: 200px">
+                            <Form-item label="机构名称：" prop="orgCodeAndType">
+                              <i-select :disabled="checkGuaranteeFlag" @on-change="changeorgCode(index)" v-model="guaranteeInfo.orgCodeAndType" placeholder="请选择" style="width: 200px">
                                   <i-option v-for="item in orgCodeList"  :value="item.CUSTID+'$'+item.CUSTNAME+'$'+item.CUSTTYPE+'$'+item.TYPENAME">{{ item.CUSTNAME }}</i-option>
                               </i-select>
                             </Form-item>
@@ -369,13 +369,13 @@
           <Col span="12">
             <span>收款方：</span>
             <i-select  @on-change="changeRecCode" v-model="recCode" span="6" style="width:150px">
-                <i-option v-for="item in recCodeList" :value="item.label+-+item.value">{{ item.label }}</i-option>
+                <i-option v-for="item in recCodeList" :value="item.label+'-'+item.value">{{ item.label }}</i-option>
             </i-select>
           </Col>
           <Col span="12">
             <span>付款方：</span>
             <i-select  @on-change="changePayCode" v-model="payCode" span="6" style="width:150px">
-                <i-option v-for="item in payCodeList" :value="item.label+-+item.value">{{ item.label }}</i-option>
+                <i-option v-for="item in payCodeList" :value="item.label+'-'+item.value">{{ item.label }}</i-option>
             </i-select>
           </Col>
         </Row>
@@ -430,6 +430,7 @@ export default {
     return {
       // url前缀
       frontUrl: 'product-web/',
+      // frontUrl: '',
       // 拷贝标识
       copyFlag: 0,
       // 页面productCode
@@ -642,6 +643,7 @@ export default {
           interestFlag: false,
           typeCode: "",
           guaOrder: 0,
+          orgCodeAndType: "",
           orgCode: "",
           orgName: "",
           orgType: "",
@@ -662,7 +664,7 @@ export default {
         typeCode: [
           { required: false, message: "类型不能为空", trigger: "change" }
         ],
-        orgCode: [
+        orgCodeAndType: [
           { required: false, message: "机构名称不能为空", trigger: "change" }
         ],
         isLading: [
@@ -866,7 +868,7 @@ export default {
                     marginLeft: "10px"
                   },
                   on: {
-                    click: () => {console.log(params)
+                    click: () => {
                       this.getRecCode(params);
                       this.getPayCode(params);
                       // 暂存数据
@@ -1595,7 +1597,6 @@ export default {
       util
         .ajax({
           url: "fee-master-web/v1/feeInfo/findFeeListByNameAndCategory",
-          // url: 'v1/feeInfo/findAllUsingFeeList',
           // 本地
           // url: 'v1/prdFeeRelation/getFeeList',
           method: "get",
@@ -1618,7 +1619,6 @@ export default {
       util
         .ajax({
           url: "fee-master-web/v1/feeInfo/findFeeListByNameAndCategory",
-          // url: 'v1/feeInfo/findAllUsingFeeList',
           // url: 'v1/prdFeeRelation/getFeeList',
           method: "get",
           params: {
@@ -1668,11 +1668,12 @@ export default {
     },
     changeorgCode(index) {
       // this.orgCode = s;
-      let orgCodeAll = this.guaranteeModelList[index].orgCode.split("$");
+      
+      let orgCodeAll = this.guaranteeModelList[index].orgCodeAndType.split("$");
+      this.guaranteeModelList[index].orgCode = orgCodeAll[0];
       this.guaranteeModelList[index].orgName = orgCodeAll[1];
       this.guaranteeModelList[index].orgType = orgCodeAll[2];
       this.guaranteeModelList[index].orgTypeName = orgCodeAll[3];
-      this.guaranteeModelList[index].orgCode = orgCodeAll[0];
     },
     // 获取代偿后债权归属
     getBelongCode() {
