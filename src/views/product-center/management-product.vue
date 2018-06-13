@@ -1181,9 +1181,9 @@ export default {
             } else if (params.row.productStatus == 5) {
               curArray = [curData[0], curData[4], curData[5]];
             } else if (params.row.productStatus == 6) {
-              curArray = curData[0];
+              curArray = [curData[0],curData[4]];
             } else if (params.row.productStatus == 7) {
-              curArray = curData[0];
+              curArray = [curData[0],curData[6]];
             };
             return h("div", curArray);
           }
