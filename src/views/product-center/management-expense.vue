@@ -75,7 +75,7 @@
              <Col span="12">
                 <FormItem label="费用类型：" prop="feeType">
                   <i-select  :disabled="digFlag" @on-change="digFeeTypeJs"   v-model="FeeInfo.feeType" span="6" style="width:200px">
-                    <i-option v-for="item in findAllFeeTypeList" :value="item.value">{{ item.label }}</i-option>
+                    <i-option v-for="item in findAllFeeTypeList1" :value="item.value">{{ item.label }}</i-option>
                 </i-select>
               </FormItem>
             </Col>
@@ -204,6 +204,7 @@
         //费用类型
         findAllFeeTypeml: '1',
         findAllFeeTypeList: [],
+        findAllFeeTypeList1:[],
         //表单选中项
         selectionData: [],
         // 弹框费用名称
@@ -520,6 +521,7 @@
     mounted() {
       this.findAllFeeList();
       this.findAllFeeType();
+      this.findAllFeeType1();
       this.feeInfoDig();
     },
     created() {
@@ -628,16 +630,27 @@
         this.gsSsList = [];
       },
       // 表格数据
-      findAllFeeList(index) {
+      findAllFeeList(index,flag) {
         index = index || 1;
         this.loading = true;
+        let a = {
+            pageNumber: index,
+            pageSize: 10
+        }
+        if(flag){
+          a = {
+            feeName: this.feeName,
+            feeType: this.findAllFeeTypeml,
+            pageNumber: index,
+            pageSize: 10
+          }
+        }
+
+       
         util.ajax({
             url: this.urlBase+"v1/feeInfo/findAllFeeList",
             method: "get",
-            params: {
-              pageNumber: index,
-              pageSize: 10
-            }
+            params: a
           })
           .then(res => {
             this.data8 = res.data.data.content;
@@ -648,7 +661,7 @@
       // 分页
       pageChange(index) {
         this.pageFIndex = index;
-        this.findAllFeeList(index)
+        this.findAllFeeList(index,true)
       },
       // 搜索
       searchClick() {
@@ -695,6 +708,13 @@
           method: 'get',
         }).then(res => {
           this.findAllFeeTypeList = res.data.data;
+        })
+      },
+       findAllFeeType1() {
+        util.ajax(this.urlBase+'v1/feeInfo/findAddFeeType', {
+          method: 'get',
+        }).then(res => {
+          this.findAllFeeTypeList1 = res.data.data;
         })
       },
       changeFindSec(selection) {
