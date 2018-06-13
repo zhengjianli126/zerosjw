@@ -1382,7 +1382,7 @@ export default {
     // 发布
     publishProduct(params) {
       util.ajax({
-        url: frontUrl+"v1/product/publish/asset/"+ params.row.productCode + "/" + params.row.productStatus,
+        url: this.frontUrl+"v1/product/publish/asset/"+ params.row.productCode + "/" + params.row.productStatus,
         // url: "v1/product/publish/asset/"+ params.row.productCode + "/" + params.row.productStatus,
         method: "put"
       }).then(res => {
@@ -2200,7 +2200,7 @@ export default {
     // 审核拒绝
     reviewRefuse() {
       util.ajax({
-        url: frontUrl+"v1/product/check/asset/"+ this.productCodeAll +"/" + this.productStatusAll,
+        url: this.frontUrl+"v1/product/check/asset/"+ this.productCodeAll +"/" + this.productStatusAll,
         // url:  "v1/product/check/asset/"+ this.productCodeAll +"/" + this.productStatusAll,
         method: "post",
         data: {
