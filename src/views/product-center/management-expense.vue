@@ -570,7 +570,7 @@
           this.gsSsList.forEach(function(item,index){
             curObj[item.b] = item.jsgs;
           })
-          curObj.formula = this.srgs1;
+          curObj.formula = this.srgs;
           console.log(curObj)
           util.ajax({
             url: this.urlBase+"v1/feeFormula/trialCalculation",
@@ -628,11 +628,13 @@
         this.srgs = '';
         this.srgs1 = '';
         this.gsSsList = [];
+        this.gsjg = '';
       },
       // 表格数据
       findAllFeeList(index,flag) {
         index = index || 1;
         this.loading = true;
+        let b = 'findAllFeeList';
         let a = {
             pageNumber: index,
             pageSize: 10
@@ -641,14 +643,15 @@
           a = {
             feeName: this.feeName,
             feeType: this.findAllFeeTypeml,
-            pageNumber: index,
-            pageSize: 10
+            pageNumber: 1,
+            pageSize: 10,
           }
+          b = 'findFeeListByNameAndType'
         }
-
+      
        
         util.ajax({
-            url: this.urlBase+"v1/feeInfo/findAllFeeList",
+            url: this.urlBase+"v1/feeInfo/"+b,
             method: "get",
             params: a
           })
