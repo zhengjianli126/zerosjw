@@ -30,6 +30,13 @@
               </i-select>
             </Form-item>
           </Col>
+          <Col span="8">
+            <Form-item label="提单机构" prop="ladingComp">
+              <i-select :disabled="checkBaseFlag" @on-change="changeLadingComp"  v-model="productInfo.ladingComp" placeholder="请选择" style="width: 180px">
+                  <i-option v-for="item in ladingCompList" :value="item.CUSTID">{{ item.CUSTNAME }}</i-option>
+              </i-select>
+            </Form-item>
+          </Col>
         </Row>
         <Row>
             <Form-item label="资金方：" prop="fundType">
@@ -189,7 +196,7 @@
                           </Form-item>
                         </Row>
                         <Row>
-                          <Col span="8">
+                          <Col span="10">
                             <Form-item label="机构名称：" prop="orgCodeAndType">
                               <Select :disabled="checkGuaranteeFlag" @on-change="changeorgCode(index)" v-model="guaranteeInfo.orgCodeAndType" placeholder="请选择" style="width: 200px">
                                   <Option v-for="item in orgCodeList"  :value="item.CUSTID+'$'+item.CUSTNAME+'$'+item.CUSTTYPE+'$'+item.TYPENAME" :key="item.CUSTID+'$'+item.CUSTNAME+'$'+item.CUSTTYPE+'$'+item.TYPENAME">{{ item.CUSTNAME }}</Option>
@@ -528,6 +535,8 @@ export default {
       productModel: false,
       // 产品类型选择项
       prodTypeList: [],
+      // 产品提单机构
+      ladingCompList: [],
       // 还款方式选择
       payTypeList: [],
       // 费用大类列表
@@ -560,6 +569,7 @@ export default {
       productInfo: {
         productName: "",
         productType: "",
+        ladingComp: "",
         productCode: "",
         id: "",
         fundType: "1",
@@ -597,6 +607,9 @@ export default {
         ],
         productType: [
           { required: true, message: "请选择类型", trigger: "change" }
+        ],
+        ladingComp: [
+          { required: true, message: "请选择", trigger: "change" }
         ],
         fundType: [
           { required: true, message: "请选择资金方", trigger: "change" }
@@ -1507,6 +1520,7 @@ export default {
       this.contractData =[];
       this.costData =[];
       this.getProductType();
+      this.getLadingComp();
       this.getPayType();
       this.getOrgCode();
       this.getBelongCode();
@@ -1521,6 +1535,7 @@ export default {
     // 打开产品信息页面默认请求的列表接口
     productDefaultList() {
       this.getProductType();
+      this.getLadingComp();
       this.getPayType();
       this.getOrgCode();
       this.getBelongCode();
@@ -1554,9 +1569,27 @@ export default {
           this.prodTypeList = res.data.data;
         });
     },
+    // 获取产品基础提单机构
+    getLadingComp() {
+      util
+        .ajax({
+          url: this.frontUrl + "v1/prdDictionary/getDeparts",
+          // url: "v1/prdDictionary/get/productType",
+          method: "get",
+          params: {
+            orgType: 3
+          }
+        })
+        .then(res => {
+          this.ladingCompList = res.data.data.list;
+        });
+    },
     // 保存类型选择项
     changeProdType(s) {
       this.productType = s;
+    },
+    changeLadingComp(s) {
+      this.ladingComp = s;
     },
     // 保存还款方式
     changePayType(s) {
