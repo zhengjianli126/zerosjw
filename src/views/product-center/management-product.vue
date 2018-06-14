@@ -49,14 +49,14 @@
             </Form-item>
           </Col>
           <Col span="6">
-            <Form-item label="" prop="minDeadline">
-              <i-input :disabled="checkBaseFlag" size="small" v-model="productInfo.minDeadline" placeholder="" style="width: 50px;"></i-input> 月/日 --
+            <Form-item label="" prop="productName">
+              <Input :disabled="checkBaseFlag" type="text" size="small" v-model="productInfo.minDeadline" placeholder="" style="width: 50px;"></Input> 月/日 --
               <!-- <Input-number :disabled="checkBaseFlag" size="small"  style="width: 60px" v-model="productInfo.minDeadline" :max="100" :min="1" :stype="1"></Input-number> 月/日 -- -->
             </Form-item>
           </Col>
           <Col span="5">
-            <Form-item label="" prop="maxDeadline">
-              <i-input :disabled="checkBaseFlag" size="small" v-model="productInfo.maxDeadline" placeholder="" style="width: 50px;"></i-input> 月/日 
+            <Form-item label="" prop="productName">
+              <Input :disabled="checkBaseFlag" type="text" size="small" v-model="productInfo.maxDeadline" placeholder="" style="width: 50px;"></Input> 月/日 
               <!-- <Input-number :disabled="checkBaseFlag" size="small"  style="width: 60px" v-model="productInfo.maxDeadline" :max="100" :min="1" :stype="1"></Input-number> 月/日 -->
             </Form-item>
           </Col>
@@ -191,9 +191,10 @@
                         <Row>
                           <Col span="8">
                             <Form-item label="机构名称：" prop="orgCodeAndType">
-                              <i-select :disabled="checkGuaranteeFlag" @on-change="changeorgCode(index)" v-model="guaranteeInfo.orgCodeAndType" placeholder="请选择" style="width: 200px">
-                                  <i-option v-for="item in orgCodeList"  :value="item.CUSTID+'$'+item.CUSTNAME+'$'+item.CUSTTYPE+'$'+item.TYPENAME">{{ item.CUSTNAME }}</i-option>
-                              </i-select>
+                              <Select :disabled="checkGuaranteeFlag" @on-change="changeorgCode(index)" v-model="guaranteeInfo.orgCodeAndType" placeholder="请选择" style="width: 200px">
+                                  <Option v-for="item in orgCodeList"  :value="item.CUSTID+'$'+item.CUSTNAME+'$'+item.CUSTTYPE+'$'+item.TYPENAME" :key="item.CUSTID+'$'+item.CUSTNAME+'$'+item.CUSTTYPE+'$'+item.TYPENAME">{{ item.CUSTNAME }}</Option>
+                              </Select>
+
                             </Form-item>
                           </Col>
                           <Col span="8">
@@ -224,16 +225,16 @@
                         <Row>
                           <Col span="8">
                             <Form-item :label-width="120" label="代偿后债权归属：" prop="belongCode">
-                              <i-select :disabled="checkGuaranteeFlag" v-model="guaranteeInfo.belongCode" placeholder="请选择" style="width: 150px">
-                                  <i-option v-for="item in belongCodeList" :value="item.value">{{ item.label }}</i-option>
-                              </i-select>
+                              <Select :disabled="checkGuaranteeFlag" v-model="guaranteeInfo.belongCode" placeholder="请选择" style="width: 150px">
+                                  <Option v-for="item in belongCodeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                              </Select>
                             </Form-item>
                           </Col>
                           <Col span="8">
                             <Form-item label="代偿收款方：" prop="recComp">
-                              <i-select :disabled="checkGuaranteeFlag" v-model="guaranteeInfo.recComp" placeholder="请选择" style="width: 150px">
-                                  <i-option v-for="item in recCompsList" :value="item.value">{{ item.label }}</i-option>
-                              </i-select>
+                              <Select :disabled="checkGuaranteeFlag" v-model="guaranteeInfo.recComp" placeholder="请选择" style="width: 150px">
+                                  <Option v-for="item in recCompsList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                              </Select>
                             </Form-item>
                           </Col>
                         </Row>
@@ -579,12 +580,20 @@ export default {
         productStatus: "",
         prdDesc: "",
         productPrice: 0,
-        prdCondition: 0
+        prdCondition: 0,
+        wwwwe: 0,
+        wwwrr:0
       },
       // 表单验证规则
       prodRuleValidate: {
+        // productName: [
+        //   { required: true, message: "期限不能为空", trigger: "blur" }
+        // ],
+        // productName: [
+        //   { required: false, message: '期限不能为空', trigger: 'blur' }
+        // ],
         productName: [
-          { required: true, message: "名称不能为空", trigger: "blur" }
+          { required: true, message: "不能为空", trigger: "blur" }
         ],
         productType: [
           { required: true, message: "请选择类型", trigger: "change" }
@@ -595,12 +604,7 @@ export default {
         deadlineType: [
           { required: true, message: "请选择期限", trigger: "change" }
         ],
-        minDeadline: [
-          { required: true, message: "期限不能为空", trigger: "blur" }
-        ],
-        maxDeadline: [
-          { required: true, message: "期限不能为空", trigger: "blur" }
-        ],
+        
         fronInterval: [
           // { required: false, message: "请选择期限间隔", trigger: "change" }
         ],
