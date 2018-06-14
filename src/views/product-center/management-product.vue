@@ -167,7 +167,7 @@
         <!-- 费用设置 -->
         <Row style="padding-top:20px; margin-top:20px; border-top: 1px solid #C2C2C2;">
             <span style="font-size: 20px;">费用设置：</span>
-            <i-button :disabled="checkBaseFlag" style="float:right;" @click="addFeeBtn" type="primary">添加</i-button>
+            <i-button :disabled="checkBaseFlag" style="float:right;" @click="addFeeBtn(1)" type="primary">添加</i-button>
             <Table style="margin-top: 30px;" border :columns="costColumns" :data="costData" size="small" ref="table" :loading="feeSetLoading"></Table>
         </Row>
         <!-- <Row type="flex" v-show="modifyShow" justify="end"  style="margin-top:20px;">
@@ -232,16 +232,16 @@
                         <Row>
                           <Col span="8">
                             <Form-item :label-width="120" label="代偿后债权归属：" prop="belongCode">
-                              <Select :disabled="checkGuaranteeFlag" v-model="guaranteeInfo.belongCode" placeholder="请选择" style="width: 150px">
+                              <Select :disabled="checkGuaranteeFlag" @on-change="changeBelongCode" v-model="guaranteeInfo.belongCode" placeholder="请选择" style="width: 150px">
                                   <Option v-for="item in belongCodeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                               </Select>
                             </Form-item>
                           </Col>
                           <Col span="8">
                             <Form-item label="代偿收款方：" prop="recComp">
-                              <Select :disabled="checkGuaranteeFlag" v-model="guaranteeInfo.recComp" placeholder="请选择" style="width: 150px">
-                                  <Option v-for="item in recCompsList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                              </Select>
+                              <i-select :disabled="checkGuaranteeFlag" @on-change="changeRecComp"  v-model="guaranteeInfo.recComp" placeholder="请选择" style="width: 150px">
+                                  <i-option v-for="item in recCompsList" :value="item.value">{{ item.label }}</i-option>
+                              </i-select>
                             </Form-item>
                           </Col>
                         </Row>
@@ -351,7 +351,7 @@
             </i-select>
         </Col>
         <Col span="8">
-            <i-button style="float:right;" @click="searchFeeList(1)" type="primary">查询</i-button>
+            <i-button style="float:right;" @click="addFeeBtn(1)" type="primary">查询</i-button>
         </Col>
       </Row>
       <Row>
@@ -519,6 +519,7 @@ export default {
       // 分页总数
       pageTotal: 0,
       pageTotal1: 0,
+      pageTotal2: 0,
       // 加载
       prodLoading: true,
       // 弹窗加载
@@ -1068,8 +1069,6 @@ export default {
                   },
                   on: {
                     click: () => {
-                      
-
                       this.clearHistory();
                       this.productDefaultList();
                       this.copyFlag = 0;
@@ -1400,7 +1399,6 @@ export default {
     publishProduct(params) {
       util.ajax({
         url: this.frontUrl+"v1/product/publish/asset/"+ params.row.productCode + "/" + params.row.productStatus,
-        // url: "v1/product/publish/asset/"+ params.row.productCode + "/" + params.row.productStatus,
         method: "put"
       }).then(res => {
         if (res.data.code == 20000) {
@@ -1415,7 +1413,6 @@ export default {
     soldOutProduct(params) {
       util.ajax({
         url: this.frontUrl + "v1/product/down/asset/"+ params.row.productCode + "/" + params.row.productStatus,
-        // url: "v1/product/down/asset/"+ params.row.productCode + "/" + params.row.productStatus,
         method: "put"
       }).then(res => {
         if (res.data.code == 20000) {
@@ -1433,7 +1430,6 @@ export default {
       util
         .ajax({
           url: this.frontUrl + "v1/prdContractRelation/getContractList",
-          // url: "v1/prdContractRelation/getContractList",
           method: "post",
           headers: {
             "Content-Type": "application/json"
@@ -1447,7 +1443,7 @@ export default {
         })
         .then(res => {
           this.contractListData = res.data.data.content;
-          this.pageTotal = res.data.data.totalElements;
+          this.pageTotal2 = res.data.data.totalElements;
         });
     },
     // 合同列表里的添加按钮
@@ -1466,11 +1462,11 @@ export default {
       },
       // 分页
       pageChange1(index) {
-        this.addFeeBtn()
+        this.addFeeBtn(index)
       },
       // 分页
       pageChange2(index) {
-        this.addContract()
+        this.addContract(index)
       },
     // 获取产品管理列表
     getProductList(index) {
@@ -1479,7 +1475,6 @@ export default {
       util
         .ajax({
           url: this.frontUrl + "v1/product/getPageQuery",
-          // url: "v1/product/getPageQuery",
           method: "post",
           headers: {
             "Content-Type": "application/json"
@@ -1507,7 +1502,6 @@ export default {
       util
         .ajax({
           url: this.frontUrl + "v1/prdDictionary/get/productStatus",
-          // url: "v1/prdDictionary/get/productStatus",
           method: "get"
         })
         .then(res => {
@@ -1546,7 +1540,6 @@ export default {
 
       util.ajax({
         url: this.frontUrl + "v1/product/delete/asset/"+ params.row.productCode + "/" + params.row.productStatus,
-        // url: "v1/product/delete/asset/"+ params.row.productCode + "/" + params.row.productStatus,
         method: "delete"
       }).then(res => {
         if (res.data.code == 20000) {
@@ -1562,7 +1555,6 @@ export default {
       util
         .ajax({
           url: this.frontUrl + "v1/prdDictionary/get/productType",
-          // url: "v1/prdDictionary/get/productType",
           method: "get"
         })
         .then(res => {
@@ -1574,7 +1566,6 @@ export default {
       util
         .ajax({
           url: this.frontUrl + "v1/prdDictionary/getDeparts",
-          // url: "v1/prdDictionary/get/productType",
           method: "get",
           params: {
             orgType: 3
@@ -1595,12 +1586,18 @@ export default {
     changePayType(s) {
       this.payType = s;
     },
+
+    changeRecComp(s) {
+      this.recComp = s;
+    },
+    changeBelongCode(s) {
+      this.belongCode = s;
+    },
     // 获取还款方式
     getPayType() {
       util
         .ajax({
           url: this.frontUrl + "v1/prdDictionary/get/payType",
-          // url: "v1/prdDictionary/get/payType",
           method: "get"
         })
         .then(res => {
@@ -1622,32 +1619,14 @@ export default {
         });
     },
     // 费用设置添加按钮 获取费用表格
-    addFeeBtn() {
+    addFeeBtn(index) {
+      this.getFeeCategory();
+      this.feeListModal = true;
+      index = index || 1;
       util
         .ajax({
           url: "fee-master-web/v1/feeInfo/findFeeListByNameAndCategory",
           // 本地
-          // url: 'v1/prdFeeRelation/getFeeList',
-          method: "get",
-          params: {
-            pageNumber: 1,
-            pageSize: 10,
-            feeName: "",
-            feeCategory: ""
-          }
-        })
-        .then(res => {
-          this.feeData = res.data.data.content;
-          this.pageTotal1 = res.data.data.totalElements;
-        });
-      this.getFeeCategory();
-      this.feeListModal = true;
-    },
-    // 查询费用表格按钮
-    searchFeeList(index) {
-      util
-        .ajax({
-          url: "fee-master-web/v1/feeInfo/findFeeListByNameAndCategory",
           // url: 'v1/prdFeeRelation/getFeeList',
           method: "get",
           params: {
@@ -1662,6 +1641,26 @@ export default {
           this.pageTotal1 = res.data.data.totalElements;
         });
     },
+    // // 查询费用表格按钮
+    // searchFeeList(index) {
+    //   index = index || 1;
+    //   util
+    //     .ajax({
+    //       // url: "fee-master-web/v1/feeInfo/findFeeListByNameAndCategory",
+    //       url: 'v1/prdFeeRelation/getFeeList',
+    //       method: "get",
+    //       params: {
+    //         pageNumber: index,
+    //         pageSize: 5,
+    //         feeName: (this.feeName = this.feeName || ""),
+    //         feeCategory: (this.feeCategory = this.feeCategory || "")
+    //       }
+    //     })
+    //     .then(res => {
+    //       this.feeData = res.data.data.content;
+    //       this.pageTotal1 = res.data.data.totalElements;
+    //     });
+    // },
     // 费用列表里的添加
     addFeeInfo(params) {
       this.costData.push({
@@ -1684,7 +1683,6 @@ export default {
       util
         .ajax({
           url: this.frontUrl + "v1/prdDictionary/getDeparts",
-          // url: "v1/prdDictionary/getDeparts",
           method: "get",
           params: {
             // 查询担保机构
@@ -1709,7 +1707,6 @@ export default {
       util
         .ajax({
           url: this.frontUrl + "v1/prdDictionary/get/belongCode",
-          // url: "v1/prdDictionary/get/belongCode",
           method: "get"
         })
         .then(res => {
@@ -1724,7 +1721,6 @@ export default {
       util
         .ajax({
           url: this.frontUrl + "v1/prdDictionary/get/recComp",
-          // url: "v1/prdDictionary/get/recComp",
           method: "get"
         })
         .then(res => {
@@ -1739,7 +1735,6 @@ export default {
       util
         .ajax({
           url: this.frontUrl + "v1/prdDictionary/getFeeRecs",
-          // url: "v1/prdDictionary/getFeeRecs",
           method: "get",
           params: {
             feeCode: params.row.hideRecType
@@ -1757,7 +1752,6 @@ export default {
       util
         .ajax({
           url: this.frontUrl + "v1/prdDictionary/getFeePays",
-          // url: "v1/prdDictionary/getFeePays",
           method: "get",
           params: {
             feeCode: params.row.hidePayType
@@ -1775,14 +1769,11 @@ export default {
       let getByCodeUrl;
       if (this.copyFlag == 1) {
         getByCodeUrl = this.frontUrl + "v1/product/copyByCode/asset/" + this.productCodeAll;
-        // getByCodeUrl = "v1/product/copyByCode/asset/" + params.row.productCode;
       } else {
         getByCodeUrl = this.frontUrl + "v1/product/getByCode/asset/" + this.productCodeAll;
-        // getByCodeUrl = "v1/product/getByCode/asset/" + params.row.productCode;
       };
       util
         .ajax({
-          // url: this.frontUrl + "v1/product/getByCode/asset/" + params.row.productCode,
           url: getByCodeUrl,
           method: "get"
         })
@@ -1813,14 +1804,11 @@ export default {
       let getByCodeUrl1;
       if (this.copyFlag == 1) {
         getByCodeUrl1 = this.frontUrl + "v1/prdGuaranteeModel/copyGuaranteeMods/" + this.productCodeAll;
-        // getByCodeUrl1 = "v1/prdGuaranteeModel/copyGuaranteeMods/" + params.row.productCode;
       } else {
         getByCodeUrl1 = this.frontUrl + "v1/prdGuaranteeModel/getGuaranteeMods/" + this.productCodeAll;
-        // getByCodeUrl1 = "v1/prdGuaranteeModel/getGuaranteeMods/" + params.row.productCode;
       };
       util
         .ajax({
-          // url: this.frontUrl + "v1/prdGuaranteeModel/getGuaranteeMods/" + params.row.productCode,
           url: getByCodeUrl1,
           method: "get"
         })
@@ -1833,14 +1821,11 @@ export default {
       let getByCodeUrl2;
       if (this.copyFlag == 1) {
         getByCodeUrl2 = this.frontUrl + "v1/prdContractRelation/copyContractRels/" + this.productCodeAll;
-        // getByCodeUrl2 = "v1/prdContractRelation/copyContractRels/" + this.productCodeAll;
       } else {
         getByCodeUrl2 = this.frontUrl + "v1/prdContractRelation/getContractRels/" + this.productCodeAll;
-        // getByCodeUrl2 = "v1/prdContractRelation/getContractRels/" + this.productCodeAll;
       };
       util
         .ajax({
-          // url: this.frontUrl + "v1/prdContractRelation/getContractRels/" + params.row.productCode,
           url: getByCodeUrl2,
           method: "get"
         })
@@ -1854,14 +1839,11 @@ export default {
       let getByCodeUrl3;
       if (this.copyFlag == 1) {
         getByCodeUrl3 = this.frontUrl + "v1/prdFeeRelation/copyFeeRels/" + this.productCodeAll;
-        // getByCodeUrl3 = "v1/prdFeeRelation/copyFeeRels/" + this.productCodeAll;
       } else {
         getByCodeUrl3 = this.frontUrl + "v1/prdFeeRelation/getFeeRels/" + this.productCodeAll;
-        // getByCodeUrl3 = "v1/prdFeeRelation/getFeeRels/" + this.productCodeAll;
       }
       util
         .ajax({
-          // url: this.frontUrl + "v1/prdFeeRelation/getFeeRels/" + params.row.productCode,
           url: getByCodeUrl3,
           method: "get"
         })
@@ -1909,7 +1891,6 @@ export default {
             util
               .ajax({
                 url: this.frontUrl + "v1/product/save",
-                // url: "v1/product/save",
                 method: "post",
                 headers: {
                   "Content-Type": "application/json"
@@ -1950,7 +1931,6 @@ export default {
             util
               .ajax({
                 url: this.frontUrl + "v1/product/commit",
-                // url: "v1/product/commit",
                 method: "put",
                 headers: {
                   "Content-Type": "application/json"
@@ -1998,7 +1978,6 @@ export default {
       this.productInfo.startInterestDay = Number(this.productInfo.startInterestDay)
       util.ajax({
           url: this.frontUrl + "v1/product/update",
-          // url: "v1/product/update",
           method: "put",
           headers: {
             "Content-Type": "application/json"
@@ -2021,7 +2000,6 @@ export default {
     saveContractInfo(params) {
       util.ajax({
           url: this.frontUrl + "v1/prdContractRelation/save",
-          // url: "v1/prdContractRelation/save",
           method: "post",
           headers: {
             "Content-Type": "application/json"
@@ -2048,7 +2026,6 @@ export default {
     saveFeeInfo(params) {
       util.ajax({
           url: this.frontUrl + "v1/prdFeeRelation/save",
-          // url: "v1/prdFeeRelation/save",
           method: "post",
           headers: {
             "Content-Type": "application/json"
@@ -2105,7 +2082,6 @@ export default {
       // this.guaranteeModelList[index].orgTypeName = this.guaranteeModelList[index].orgCode.split("$")[3];
       util.ajax({
           url: this.frontUrl + "v1/prdGuaranteeModel/save",
-          // url: "v1/prdGuaranteeModel/save",
           method: "post",
           headers: {
             "Content-Type": "application/json"
@@ -2125,7 +2101,6 @@ export default {
     deleteGuarantee(index) {
       util.ajax({
           url: this.frontUrl + "v1/prdGuaranteeModel/delete/"+ index.id,
-          // url: "v1/prdGuaranteeModel/delete/"+ index.id,
           method: "delete",
         })
         .then(res => {
@@ -2134,7 +2109,6 @@ export default {
             util
             .ajax({
               url: this.frontUrl + "v1/prdGuaranteeModel/getGuaranteeMods/" + index.productCode,
-              // url: "v1/prdGuaranteeModel/getGuaranteeMods/" + index.productCode,
               method: "get"
             })
             .then(res => {
@@ -2153,7 +2127,6 @@ export default {
       } else {
         util.ajax({
           url: this.frontUrl + "v1/prdContractRelation/deleteByCode",
-          // url: "v1/prdContractRelation/deleteByCode",
           method: "delete",
           headers: {
             "Content-Type": "application/json"
@@ -2181,7 +2154,6 @@ export default {
       } else {
         util.ajax({
           url: this.frontUrl + "v1/prdFeeRelation/deleteByCode",
-          // url: "v1/prdFeeRelation/deleteByCode",
           method: "delete",
           params: {
             productCode: params.row.productCode,
@@ -2202,7 +2174,6 @@ export default {
     checkAuditList() {
       util.ajax({
          url: this.frontUrl + "v1/product/getRecords/asset/"+ this.productCodeAll,
-        // url: "v1/product/getRecords/asset/"+ this.productCodeAll,
         method: 'get'
       }).then(res => {
         if (res.data.code == 20000) {
@@ -2218,7 +2189,6 @@ export default {
     reviewPass() {
       util.ajax({
         url: this.frontUrl + "v1/product/check/asset/"+ this.productCodeAll +"/" + this.productStatusAll,
-        // url: "v1/product/check/asset/"+ this.productCodeAll +"/" + this.productStatusAll,
         method: "post",
         data: {
           productCode: this.productCodeAll,
@@ -2238,7 +2208,6 @@ export default {
     reviewRefuse() {
       util.ajax({
         url: this.frontUrl+"v1/product/check/asset/"+ this.productCodeAll +"/" + this.productStatusAll,
-        // url:  "v1/product/check/asset/"+ this.productCodeAll +"/" + this.productStatusAll,
         method: "post",
         data: {
           productCode: this.productCodeAll,
