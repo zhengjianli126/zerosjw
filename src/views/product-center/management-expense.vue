@@ -171,9 +171,9 @@
     data() {
       return {
         // 开发
-      urlBase:'',
+      //urlBase:'',
       // 生产
-     //  urlBase:'fee-master-web/',
+       urlBase:'fee-master-web/',
         // 系统函数
         findAllSystemFunction: [],
         // 系统变量
