@@ -74,7 +74,7 @@
              
              <Col span="12">
                 <FormItem label="费用类型：" prop="feeType">
-                  <i-select  :disabled="digFlag" @on-change="digFeeTypeJs"   v-model="FeeInfo.feeType" span="6" style="width:200px">
+                  <i-select :disabled="digFlag" @on-change="digFeeTypeJs"   v-model="FeeInfo.feeType" span="6" style="width:200px">
                     <i-option v-for="item in findAllFeeTypeList1" :value="item.value">{{ item.label }}</i-option>
                 </i-select>
               </FormItem>
@@ -160,7 +160,7 @@
     </div>
     <!-- 分页 -->
     <div style="margin-top:10px;float:right">
-      <Page :total="pageTotal"  show-elevator @on-change="pageChange"></Page>
+      <Page ref="pager"  :total="pageTotal"  show-elevator @on-change="pageChange"></Page>
     </div>
   </div>
 </template>
@@ -171,15 +171,16 @@
     data() {
       return {
         // 开发
-      // urlBase:'',
+      urlBase:'',
       // 生产
-       urlBase:'fee-master-web/',
+     //  urlBase:'fee-master-web/',
         // 系统函数
         findAllSystemFunction: [],
         // 系统变量
         findAllSystemVariables: [],
         // 线上线下
         sqxs: '1',
+       
         // 收款方
         skf: '1',
         // 付款方
@@ -202,7 +203,7 @@
         feeName: '',
         feeType: '',
         //费用类型
-        findAllFeeTypeml: '1',
+        findAllFeeTypeml: '-1',
         findAllFeeTypeList: [],
         findAllFeeTypeList1:[],
         //表单选中项
@@ -643,7 +644,7 @@
           a = {
             feeName: this.feeName,
             feeType: this.findAllFeeTypeml,
-            pageNumber: 1,
+            pageNumber: index,
             pageSize: 10,
           }
           b = 'findFeeListByNameAndType'
@@ -669,6 +670,7 @@
       // 搜索
       searchClick() {
         this.loading = true;
+        this.$refs.pager.currentPage = 1;
         util.ajax(this.urlBase+'v1/feeInfo/findFeeListByNameAndType', {
           method: 'get',
           params: {
