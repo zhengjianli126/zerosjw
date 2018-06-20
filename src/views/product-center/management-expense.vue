@@ -47,7 +47,7 @@
                         </li> 
                      </ul>
                      <div>
-                        结果：<span>{{gsjg}}</span></br>
+                        结果：<span style="word-break:break-all">{{gsjg}}</span></br>
                          <Button size='small' type="primary" @click="operationJs()">运算</Button>
                      </div>
                </Col>
