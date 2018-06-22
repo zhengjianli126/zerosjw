@@ -879,10 +879,11 @@ export default {
                       this.holdFeeInfo.formula = params.row.formula,
 
                       this.formula = params.row.formula,
+                      this.feeOrder = params.row.feeOrder,
                       // this.recCode = params.row.recName + '-' + params.row.recCode,
                       // this.payCode = params.row.payName + '-' + params.row.payCode,
-                      this.hideRecType = params.row.hideRecType,
-                      this.hidePayType = params.row.hidePayType,
+                      // this.hideRecType = params.row.hideRecType,
+                      // this.hidePayType = params.row.hidePayType,
                       this.modal2 = true;
                       this.indexFlag = params.index;
                     }
@@ -1230,13 +1231,13 @@ export default {
         },
         {
           title: "付方",
-          key: "payCode",
+          key: "payName",
           width: 100,
           align: "center"
         },
         {
           title: "收方",
-          key: "recCode",
+          key: "recName",
           width: 100,
           align: "center"
         },
@@ -1670,8 +1671,8 @@ export default {
         feeName: params.row.feeName,
         feeCategory: params.row.feeCategory,
         feeTag: params.row.feeTag,
-        payCode: params.row.payCode,
-        recCode: params.row.recCode,
+        // payCode: params.row.payCode,
+        // recCode: params.row.recCode,
         formula: params.row.formula,
         feeOrder: params.row.feeOrder,
         feeDesc: params.row.feeDesc,
@@ -1734,18 +1735,18 @@ export default {
     },
     // 获取参数配置收款方
     getRecCode(params) {
-      let paraRecCode;
-      if(!params.row.recCode && !params.row.payCode) {
-        paraRecCode = params.row.recName;
-      } else {
-        paraRecCode = params.row.hideRecType;
-      };
+      // let paraRecCode;
+      // if(!params.row.recCode && !params.row.payCode) {
+      //   paraRecCode = params.row.recName;
+      // } else {
+      //   paraRecCode = params.row.hideRecType;
+      // };
       util
         .ajax({
           url: this.frontUrl + "v1/prdDictionary/getFeeRecs",
           method: "get",
           params: {
-            feeCode: paraRecCode
+            feeCode: params.row.hideRecType
           }
         })
         .then(res => {
@@ -1757,18 +1758,18 @@ export default {
     },
     // 获取参数配置付款方
     getPayCode(params) {
-      let paraPayCode;
-      if(!params.row.recCode && !params.row.payCode) {
-        paraPayCode = params.row.payName;
-      } else {
-        paraPayCode = params.row.hidePayType;
-      };
+      // let paraPayCode;
+      // if(!params.row.recCode && !params.row.payCode) {
+      //   paraPayCode = params.row.payName;
+      // } else {
+      //   paraPayCode = params.row.hidePayType;
+      // };
       util
         .ajax({
           url: this.frontUrl + "v1/prdDictionary/getFeePays",
           method: "get",
           params: {
-            feeCode: paraPayCode
+            feeCode: params.row.hidePayType
           }
         })
         .then(res => {
@@ -2073,8 +2074,8 @@ export default {
     },
     // 费用编辑确定按钮
     updateFeeInfo() {
-      this.costData[this.indexFlag].payCode = this.payCode.split('-')[2];
-      this.costData[this.indexFlag].recCode = this.recCode.split('-')[2];
+      this.costData[this.indexFlag].payCode = this.payCode.split('-')[1];
+      this.costData[this.indexFlag].recCode = this.recCode.split('-')[1];
       this.costData[this.indexFlag].feeOrder = this.feeOrder;
       this.costData[this.indexFlag].payName = this.payCode.split('-')[0];
       this.costData[this.indexFlag].recName = this.recCode.split('-')[0];
