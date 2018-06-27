@@ -39,12 +39,21 @@
           </Col>
         </Row>
         <Row>
+          <Col span="8">
             <Form-item label="资金方：" prop="fundType">
               <Radio-group :disabled="checkBaseFlag" v-model="productInfo.fundType">
                   <Radio :disabled="checkBaseFlag" label="1">首金</Radio>
                   <Radio :disabled="checkBaseFlag" label="2">银行</Radio>
               </Radio-group>
             </Form-item>
+          </Col>
+          <Col span="8">
+            <Form-item label="预授信流程:" prop="preCredit">
+              <i-select :disabled="checkBaseFlag" @on-change="changePreCredit"  v-model="productInfo.preCredit" placeholder="请选择" style="width: 180px">
+                  <i-option v-for="item in preCreditList" :value="item.value">{{ item.label }}</i-option>
+              </i-select>
+            </Form-item>
+          </Col>
         </Row>
         <Row>
           <Col span="5">
@@ -540,6 +549,8 @@ export default {
       prodTypeList: [],
       // 产品提单机构
       ladingCompList: [],
+      // 预授信流程
+      preCreditList: [],
       // 还款方式选择
       payTypeList: [],
       // 费用大类列表
@@ -573,6 +584,7 @@ export default {
         productName: "",
         productType: "",
         ladingComp: "",
+        preCredit: "",
         productCode: "",
         id: "",
         fundType: "1",
@@ -612,6 +624,9 @@ export default {
           { required: true, message: "请选择类型", trigger: "change" }
         ],
         ladingComp: [
+          { required: true, message: "请选择", trigger: "change" }
+        ],
+        preCredit: [
           { required: true, message: "请选择", trigger: "change" }
         ],
         fundType: [
@@ -1518,6 +1533,7 @@ export default {
       this.costData =[];
       this.getProductType();
       this.getLadingComp();
+      this.getPreCredit();
       this.getPayType();
       this.getOrgCode();
       this.getBelongCode();
@@ -1533,6 +1549,7 @@ export default {
     productDefaultList() {
       this.getProductType();
       this.getLadingComp();
+      this.getPreCredit();
       this.getPayType();
       this.getOrgCode();
       this.getBelongCode();
@@ -1578,12 +1595,26 @@ export default {
           this.ladingCompList = res.data.data.list;
         });
     },
+    // 获取预授信流程
+    getPreCredit() {
+      util
+        .ajax({
+          url: this.frontUrl + "v1/prdDictionary/get/preCreditType",
+          method: "get"
+        })
+        .then(res => {
+          this.preCreditList = res.data.data;
+        });
+    },
     // 保存类型选择项
     changeProdType(s) {
       this.productType = s;
     },
     changeLadingComp(s) {
       this.ladingComp = s;
+    },
+    changePreCredit(s) {
+      this.preCredit = s;
     },
     // 保存还款方式
     changePayType(s) {
