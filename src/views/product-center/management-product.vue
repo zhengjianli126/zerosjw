@@ -210,7 +210,6 @@
                               <Select :disabled="checkGuaranteeFlag" @on-change="changeorgCode(index)" v-model="guaranteeInfo.orgCodeAndType" placeholder="请选择" style="width: 200px">
                                   <Option v-for="item in orgCodeList"  :value="item.CUSTID+'$'+item.CUSTNAME+'$'+item.CUSTTYPE+'$'+item.TYPENAME" :key="item.CUSTID+'$'+item.CUSTNAME+'$'+item.CUSTTYPE+'$'+item.TYPENAME">{{ item.CUSTNAME }}</Option>
                               </Select>
-
                             </Form-item>
                           </Col>
                           <Col span="8">
@@ -573,6 +572,10 @@ export default {
       // 代偿后债权归属
       belongCodeList: [],
       belongCode1List: [],
+
+      orgCodeList: [],
+      belongCodeList: [],
+      recCompsList: [],
       // 产品基础信息禁用标识
       checkBaseFlag: false,
       // 产品保障模型金庸标识
@@ -1901,6 +1904,9 @@ export default {
     },
     // 添加保障模型
     addGuarantee() {
+        // this.getOrgCode();
+        // this.getBelongCode();
+        // this.getRecComps();
         this.guaranteeModelList.push({
           // 利息是否默认
             interestFlag: false,
@@ -1918,7 +1924,7 @@ export default {
             guaTime: "",
             isBuyBack: "",
             buyBackPeriod: 0
-        })
+        });
     },
 
     // 暂存按钮
