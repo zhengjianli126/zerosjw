@@ -171,7 +171,7 @@
     data() {
       return {
         // 开发
-        //urlBase:'',
+      //  urlBase:'',
       // 生产
        urlBase:'fee-master-web/',
         // 系统函数
@@ -553,19 +553,22 @@
     methods: {
       //计算公式
       route(name) {
-        this.srgs += name.split('&')[0];
+        this.srgs += name.split('&')[0]
         this.srgs1 += name.split('&')[1];
         if(name.split('&')[2]==1){
           if(this.gsSsList.length>0){
-          this.gsSsList.forEach(function(item,index){
-              if(item.b!=name.split('&')[1]){
-                  this.gsSsList.push({
+            let tempArr = [];
+            let tempNameB = name.split('&')[1];
+            for(let i=0;i<this.gsSsList.length;i++) {
+              tempArr.push(this.gsSsList[i].b)
+            }
+            if(!tempArr.includes(tempNameB)){
+              this.gsSsList.push({
                     a:name.split('&')[0],
                     b:name.split('&')[1],
                     jsgs:''
                   })
-              }
-          });
+            }
           }else{
              this.gsSsList.push({
                     a:name.split('&')[0],
@@ -575,7 +578,7 @@
           }
         }
         // 去重
-        console.log(this.gsSsList)
+        //console.log(this.gsSsList)
       },
       operationJs(){
           let curObj= {};
