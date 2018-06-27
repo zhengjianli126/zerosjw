@@ -171,7 +171,7 @@
     data() {
       return {
         // 开发
-      //urlBase:'',
+        //urlBase:'',
       // 生产
        urlBase:'fee-master-web/',
         // 系统函数
@@ -556,15 +556,26 @@
         this.srgs += name.split('&')[0];
         this.srgs1 += name.split('&')[1];
         if(name.split('&')[2]==1){
-         
-          this.gsSsList.push({
-            a:name.split('&')[0],
-            b:name.split('&')[1],
-            jsgs:''
-          })
-           console.log(this.gsSsList)
+          if(this.gsSsList.length>0){
+          this.gsSsList.forEach(function(item,index){
+              if(item.b!=name.split('&')[1]){
+                  this.gsSsList.push({
+                    a:name.split('&')[0],
+                    b:name.split('&')[1],
+                    jsgs:''
+                  })
+              }
+          });
+          }else{
+             this.gsSsList.push({
+                    a:name.split('&')[0],
+                    b:name.split('&')[1],
+                    jsgs:''
+                  })
+          }
         }
-       
+        // 去重
+        console.log(this.gsSsList)
       },
       operationJs(){
           let curObj= {};
@@ -572,7 +583,6 @@
             curObj[item.b] = item.jsgs;
           })
           curObj.formula = this.srgs;
-          console.log(curObj)
           util.ajax({
             url: this.urlBase+"v1/feeFormula/trialCalculation",
             method: "post",
@@ -822,7 +832,7 @@
       },
       // 计算公式弹框
       feeFormuJs() {
-  
+        this.srgs = this.showFormula1;
         this.modal2 = true;
         this.modal1 = false;
         util.ajax(this.urlBase+'v1/feeInfo/findAllSystemVariables', {
@@ -841,7 +851,24 @@
         }).then(res => {
           this.ysfhJs = res.data.data;
         })
-  
+      util.ajax(this.urlBase+'v1/feeFormula/findFactorMapByCFormula', {
+          method: 'get',
+          params:{
+            cFormula:this.showFormula1
+          }
+        }).then(res => {
+          console.log(res.data.data)
+          if(res.data.data){
+            let curObj = res.data.data;
+            for(let k in curObj){
+              this.gsSsList.push({
+                a:k,
+                b:curObj[k],
+                jsgs:''
+              })
+            }
+          }
+        })
   
       },
       // 查看弹框
