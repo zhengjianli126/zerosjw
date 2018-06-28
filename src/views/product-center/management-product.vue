@@ -576,6 +576,9 @@ export default {
       orgCodeList: [],
       belongCodeList: [],
       recCompsList: [],
+      orgCodeList1: [],
+      belongCodeList1: [],
+      recCompsList1: [],
       // 产品基础信息禁用标识
       checkBaseFlag: false,
       // 产品保障模型金庸标识
@@ -1727,7 +1730,7 @@ export default {
           }
         })
         .then(res => {
-          this.orgCodeList = res.data.data.list;
+          this.orgCodeList1 = res.data.data.list;
         });
     },
     changeorgCode(index) {
@@ -1747,7 +1750,7 @@ export default {
           method: "get"
         })
         .then(res => {
-          this.belongCodeList = res.data.data;
+          this.belongCodeList1 = res.data.data;
         });
     },
     changeBelongCode(s) {
@@ -1761,7 +1764,7 @@ export default {
           method: "get"
         })
         .then(res => {
-          this.recCompsList = res.data.data;
+          this.recCompsList1 = res.data.data;
         });
     },
     changeRecComps(s) {
@@ -1904,6 +1907,9 @@ export default {
     },
     // 添加保障模型
     addGuarantee() {
+      this.orgCodeList = this.orgCodeList1;
+      this.belongCodeList = this.belongCodeList1;
+      this.recCompsList = this.recCompsList1;
         // this.getOrgCode();
         // this.getBelongCode();
         // this.getRecComps();
