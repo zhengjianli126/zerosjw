@@ -102,8 +102,8 @@
             </Form-item>
           </Col>
           <Col span="16">
-            <Form-item label="利息费用公式："  :label-width="120" prop="costFormula">
-              <i-input @on-focus="feeFormuJs" :disabled="true" v-model="productInfo.costFormula" placeholder="请输入公式" style="width: 400px;"></i-input>
+            <Form-item label="利息费用公式："  :label-width="120" prop="rateFormual">
+              <i-input @on-focus="feeFormuJs" :disabled="checkBaseFlag" v-model="productInfo.rateFormual" placeholder="请输入公式" style="width: 400px;"></i-input>
             </Form-item>
           </Col>
         </Row>
@@ -317,6 +317,56 @@
       </div>
     </Modal>
 
+    <Modal  @on-cancel="jsgsCancel" :mask-closable="false" styles="z-index:1000;" width="800px" v-model="modal2" title="公式编辑" :loading="loading">
+      <Row>
+        <Col span="8">
+          <Menu @on-select="route" :theme="theme2" accordion="true" style="min-height:100px;">
+            <Submenu name="1">
+              <template slot="title">系统变量</template>
+              <MenuItem v-for="item in findAllSystemVariables" :name="item.label+'&'+item.value+'&1'">{{item.label}}</MenuItem>
+            </Submenu>
+            <Submenu name="2">
+              <template slot="title">
+                系统函数
+              </template>
+              <MenuItem v-for="item in findAllSystemFunction" :name="item.label+'&'+item.value">{{item.label}}</MenuItem>
+            </Submenu>
+            <Submenu name="3">
+              <template slot="title">
+                运算符号
+              </template>
+              <MenuItem v-for="item in ysfhJs" :name="item.label+'&'+item.value">{{item.label}}</MenuItem>
+            </Submenu>
+          </Menu>
+        </Col>        .
+        <Col span="12">
+          <span>输入公式：</span>
+          <Input style="margin-top:10px;" v-model="srgs" type="textarea" placeholder="Enter something..."></Input>
+          <Button style="margin-top:20px;" type="primary" size='small' @click='resetVarJs()'>重置</Button>
+          <Card style="margin-top:10px;background:#f1f1f1" dis-hover="true">
+            <div style="text-align:center;">
+                <h5>变量和函数的说明</h5>
+            </div>
+          </Card>
+          <span style="margin-top:20px;display:block;">公式试算：</span>
+          <ul>
+            <li style="margin-top:10px;" v-for="item in gsSsList">
+              <span>{{item.a}}:</span>
+              <Input v-model="item.jsgs"  placeholder="请输入..." style="width: 200px"/>
+            </li> 
+          </ul>
+          <div>
+            结果：<span style="word-break:break-all">{{gsjg}}</span></br>
+              <Button size='small' type="primary" @click="operationJs()">运算</Button>
+          </div>
+        </Col>
+      </Row>
+      <div slot="footer">
+          <Button type="primary" @click="vildGs()">验证</Button>
+          <Button type="primary"@click="submitGs()">保存</Button>
+      </div>
+    </Modal>
+
     <!-- 合同列表 -->
     <Modal width="1200px" :mask-closable="false"  v-model="contractListModal" title="合同列表" :loading="loading">
       <Row>
@@ -376,7 +426,7 @@
     </Modal>
 
     <!-- 参数配置 -->
-    <Modal width="800px" :mask-closable="false" v-model="modal2" title="参数配置" :loading="loading">
+    <Modal width="800px" :mask-closable="false" v-model="paraModal" title="参数配置" :loading="loading">
         <Row>
           <span>公式：</span>
           <i-input type="textarea" disabled v-model="formula" :rows="4" placeholder="" style="width: 600px; margin-left: 20px;"></i-input>
@@ -446,7 +496,25 @@ export default {
     return {
       // url前缀
       frontUrl: 'product-web/',
+      urlBase:'fee-master-web/',
       // frontUrl: '',
+      // urlBase: '',
+
+      modal2: false,
+      // 系统函数
+      findAllSystemFunction: [],
+      // 系统变量
+      findAllSystemVariables: [],
+      srgs: '',
+      srgs1: '',
+      //公式试算列表
+      gsSsList:[],
+      // 运算保存 标识，
+      ysBcFlag: false,
+      // 运算符号
+      ysfhJs: [],
+      gsjg:'',
+
       // 拷贝标识
       copyFlag: 0,
       // 页面productCode
@@ -521,7 +589,7 @@ export default {
       // 收款方列表
       recCodeList: [],
       // 参数配置模板
-      modal2: false,
+      paraModal: false,
       // 费用列表模板
       feeListModal: false,
       // 拷贝时的保存按钮
@@ -600,7 +668,7 @@ export default {
         fronInterval: 0,
         intervalTime: "",
         payType: "",
-        costFormula: "",
+        rateFormual: "",
         startInterestType: "",
         specificRepayDate: 0,
         // 起息日增加日期
@@ -651,9 +719,9 @@ export default {
         payType: [
           { required: true, message: "请选择还款方式", trigger: "change" }
         ],
-        // costFormula: [
-        //   { required: true, message: "利息费用公式不能为空", trigger: "blur" }
-        // ],
+        rateFormual: [
+          { required: true, message: "利息费用公式不能为空", trigger: "blur" }
+        ],
         startInterestType: [
           // { required: true, message: "起息日不能为空", trigger: "change" }
         ],
@@ -905,7 +973,7 @@ export default {
                       // this.payCode = params.row.payName + '-' + params.row.payCode,
                       // this.hideRecType = params.row.hideRecType,
                       // this.hidePayType = params.row.hidePayType,
-                      this.modal2 = true;
+                      this.paraModal = true;
                       this.indexFlag = params.index;
                     }
                   }
@@ -1400,7 +1468,7 @@ export default {
   watch: {
     productModel(val) {
       if (!val) {
-        if (!this.modal2) {
+        if (!this.paraModal) {
           this.clearHistory();
           this.saveClick = 0;
           this.saveGuaranteeClick = 0;
@@ -1410,7 +1478,7 @@ export default {
         }
       }
     },
-    modal2(val) {
+    paraModal(val) {
       if(!val) {
         this.recCode = '',
         this.payCode = '',
@@ -1447,6 +1515,113 @@ export default {
           }
       })
     },
+
+
+    //计算公式
+      route(name) {
+        this.srgs += name.split('&')[0];
+        this.srgs1 += name.split('&')[1];
+        if(name.split('&')[2]==1){
+         
+          this.gsSsList.push({
+            a:name.split('&')[0],
+            b:name.split('&')[1],
+            jsgs:''
+          })
+           console.log(this.gsSsList)
+        }
+       
+      },
+      operationJs(){
+          let curObj= {};
+          this.gsSsList.forEach(function(item,index){
+            curObj[item.b] = item.jsgs;
+          })
+          curObj.formula = this.srgs;
+          console.log(curObj)
+          util.ajax({
+            url: this.urlBase+"v1/feeFormula/trialCalculation",
+            method: "post",
+            data: curObj
+            
+          })
+          .then(res => {
+              if(res.data.code==20000){
+                this.gsjg = res.data.data
+              }else{
+                this.$Message.error(res.data.msg)
+              }
+          })
+      },
+      // 验证公式
+      vildGs() {
+        util.ajax({
+            url: this.urlBase+"v1/feeFormula/formulaBudget",
+            method: "get",
+            params: {
+              formula: this.srgs
+            }
+          })
+          .then(res => {
+            console.log(res)
+            if (res.data.code == 20000) {
+              this.$Message.success(res.data.msg)
+              this.ysBcFlag = true;
+            } else {
+              this.$Message.error(res.data.msg)
+              this.ysBcFlag = false;
+            }
+          })
+      },
+      // 关闭公式弹框
+      jsgsCancel(){
+          this.modal2 = false;
+          // this.modal1 = true;
+      },
+      // 保存公式
+      submitGs() {
+        if (this.ysBcFlag == true) {
+          this.productInfo.rateFormual = this.srgs;
+          
+          this.modal2 = false;
+          // this.modal1 = true;
+          // this.FeeInfo.eformula = this.srgs1;
+          // this.FeeInfo.cformula = this.srgs;
+
+        } else {
+          this.$Message.error('请验证！')
+        }
+      },
+      resetVarJs(){
+        this.srgs = '';
+        this.srgs1 = '';
+        this.gsSsList = [];
+        this.gsjg = '';
+      },
+
+    // 计算公式弹框
+    feeFormuJs() {
+      this.modal2 = true;
+      this.prodRuleValidate.rateFormual[0].required = false;
+      // this.modal1 = false;
+      util.ajax(this.urlBase+'v1/feeInfo/findAllSystemVariables', {
+        method: 'get'
+
+      }).then(res => {
+        this.findAllSystemVariables = res.data.data;
+      })
+      util.ajax(this.urlBase+'v1/feeInfo/findAllSystemFunction', {
+        method: 'get'
+      }).then(res => {
+        this.findAllSystemFunction = res.data.data;
+      })
+      util.ajax(this.urlBase+'v1/feeInfo/findAllOperation', {
+        method: 'get'
+      }).then(res => {
+        this.ysfhJs = res.data.data;
+      })
+    },
+
     // 合同模板添加按钮
     addContract(index) {
       this.contractListModal = true;
@@ -1841,7 +2016,7 @@ export default {
           this.productInfo.fronInterval = res.data.data.deadlineType;
           this.productInfo.intervalTime = res.data.data.intervalTime;
           this.productInfo.payType = res.data.data.payType;
-          this.productInfo.costFormula = res.data.data.costFormula;
+          this.productInfo.rateFormual = res.data.data.rateFormual;
           this.productInfo.startInterestType = res.data.data.startInterestType;
           this.productInfo.specificRepayDate = res.data.data.specificRepayDate;
           this.productInfo.toInt = res.data.data.toInt;
@@ -2122,11 +2297,11 @@ export default {
       this.costData[this.indexFlag].feeOrder = this.feeOrder;
       this.costData[this.indexFlag].payName = this.payCode.split('-')[0];
       this.costData[this.indexFlag].recName = this.recCode.split('-')[0];
-      this.modal2 = false;
+      this.paraModal = false;
     },
     // 费用编辑取消按钮
     cancelFeeInfo() {
-      this.modal2 = false;
+      this.paraModal = false;
     },
     // 保存保障模型信息
     saveSafeModel(index) {
