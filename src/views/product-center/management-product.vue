@@ -1889,7 +1889,8 @@ export default {
         feeOrder: params.row.feeOrder,
         feeDesc: params.row.feeDesc,
         hideRecType: params.row.recCode,
-        hidePayType: params.row.payCode
+        hidePayType: params.row.payCode,
+        feeType: params.row.feeType
        });
        this.feeListModal = false;
     },
