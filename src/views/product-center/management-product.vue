@@ -2009,6 +2009,8 @@ export default {
         .then(res => {
           this.productInfo.productName = res.data.data.productName;
           this.productInfo.productType = res.data.data.productType;
+          this.productInfo.preCredit = res.data.data.preCredit;
+          this.productInfo.ladingComp = res.data.data.ladingComp;
           this.productInfo.id = res.data.data.id;
           this.productInfo.fundType = res.data.data.fundType;
           this.productInfo.deadlineType = res.data.data.deadlineType;
