@@ -31,10 +31,11 @@
             </Form-item>
           </Col>
           <Col span="8">
-            <Form-item label="提单机构" prop="ladingComp">
-              <i-select :disabled="checkBaseFlag" @on-change="changeLadingComp"  v-model="productInfo.ladingComp" placeholder="请选择" style="width: 180px">
+            <Form-item label="提单机构" prop="ladingCompName">
+              <!-- <i-select :disabled="checkBaseFlag" @on-change="changeLadingComp"  v-model="productInfo.ladingComp" placeholder="请选择" style="width: 180px">
                   <i-option v-for="item in ladingCompList" :value="item.CUSTID">{{ item.CUSTNAME }}</i-option>
-              </i-select>
+              </i-select> -->
+              <i-input @on-focus="orderProduct" :disabled="checkBaseFlag" v-model="productInfo.ladingCompName" placeholder="请输入" style="width: 230px;"></i-input>
             </Form-item>
           </Col>
         </Row>
@@ -102,7 +103,7 @@
             </Form-item>
           </Col>
           <Col span="16">
-            <Form-item label="利息费用公式："  :label-width="120" prop="rateFormual">
+            <Form-item label="年利率配置公式："  :label-width="120" prop="rateFormual">
               <i-input @on-focus="feeFormuJs" :disabled="checkBaseFlag" v-model="productInfo.rateFormual" placeholder="请输入公式" style="width: 400px;"></i-input>
             </Form-item>
           </Col>
@@ -207,9 +208,10 @@
                         <Row>
                           <Col span="10">
                             <Form-item label="机构名称：" prop="orgCodeAndType">
-                              <Select :disabled="checkGuaranteeFlag" @on-change="changeorgCode(index)" v-model="guaranteeInfo.orgCodeAndType" placeholder="请选择" style="width: 200px">
+                              <!-- <Select :disabled="checkGuaranteeFlag" @on-change="changeorgCode(index)" v-model="guaranteeInfo.orgCodeAndType" placeholder="请选择" style="width: 200px">
                                   <Option v-for="item in orgCodeList"  :value="item.CUSTID+'$'+item.CUSTNAME+'$'+item.CUSTTYPE+'$'+item.TYPENAME" :key="item.CUSTID+'$'+item.CUSTNAME+'$'+item.CUSTTYPE+'$'+item.TYPENAME">{{ item.CUSTNAME }}</Option>
-                              </Select>
+                              </Select> -->
+                              <i-input @on-focus="orderProductChange(index)" :disabled="checkGuaranteeFlag" v-model="guaranteeInfo.orgCodeAndType" placeholder="请选择" style="width: 230px;"></i-input>
                             </Form-item>
                           </Col>
                           <Col span="8">
@@ -238,20 +240,31 @@
                           </Form-item>
                         </Row>
                         <Row>
-                          <Col span="8">
-                            <Form-item :label-width="120" label="代偿后债权归属：" prop="belongCode">
+                            <!-- <Form-item :label-width="120" label="代偿后债权归属：" prop="belongCode">
                               <Select :disabled="checkGuaranteeFlag" @on-change="changeBelongCode" v-model="guaranteeInfo.belongCode" placeholder="请选择" style="width: 150px">
                                   <Option v-for="item in belongCodeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                               </Select>
+                            </Form-item> -->
+                            <Form-item :label-width="120" label="代偿后债权归属：" prop="belongCode">
+                              <Radio-group :disabled="checkGuaranteeFlag" v-model="guaranteeInfo.belongCode">
+                                <Radio :disabled="checkGuaranteeFlag" label="1">债权人</Radio>
+                                <Radio :disabled="checkGuaranteeFlag" label="2">代偿机构</Radio>
+                                <Radio :disabled="checkGuaranteeFlag" label="3">首金</Radio>
+                              </Radio-group>
                             </Form-item>
-                          </Col>
-                          <Col span="8">
-                            <Form-item label="代偿收款方：" prop="recComp">
-                              <i-select :disabled="checkGuaranteeFlag" @on-change="changeRecComp"  v-model="guaranteeInfo.recComp" placeholder="请选择" style="width: 150px">
-                                  <i-option v-for="item in recCompsList" :value="item.value">{{ item.label }}</i-option>
-                              </i-select>
-                            </Form-item>
-                          </Col>
+                        </Row>
+                        <Row>
+                          <!-- <Form-item label="代偿收款方：" prop="recComp">
+                            <i-select :disabled="checkGuaranteeFlag" @on-change="changeRecComp"  v-model="guaranteeInfo.recComp" placeholder="请选择" style="width: 150px">
+                                <i-option v-for="item in recCompsList" :value="item.value">{{ item.label }}</i-option>
+                            </i-select>
+                          </Form-item> -->
+                          <Form-item :label-width="120" label="代偿后债权归属：" prop="recComp">
+                            <Radio-group :disabled="checkGuaranteeFlag" v-model="guaranteeInfo.recComp">
+                              <Radio :disabled="checkGuaranteeFlag" label="1">债权人</Radio>
+                              <Radio :disabled="checkGuaranteeFlag" label="2">首金</Radio>
+                            </Radio-group>
+                          </Form-item>
                         </Row>
                         <Row>
                           <Col span="6">
@@ -285,6 +298,24 @@
                     <Row type="flex" v-show="modifyShow" justify="end"  style="margin-top:10px;">
                       <i-button  type="success" @click="saveSafeModel(index)">保存</i-button>
                     </Row>
+                     <!-- 机构名称 -->
+                    <Modal width="1000px" :mask-closable="false"  v-model="organizeModal" title="机构名称" :loading="loading">
+                      <Row>
+                          <Radio-group v-model="orgCodeAndTypeName">
+                            <Row>
+                              <Radio v-for="item in orgCodeAndTypeList" :label="item.custid+'$'+item.custname+'$'+item.custtype+'$'+item.typename" :key="item.custid+'$'+item.custname+'$'+item.custtype+'$'+item.typename">{{ item.custname }}</Radio>
+                            </Row>
+                          </Radio-group>
+                      </Row>
+                      <Row>
+                        <div style="margin-top:10px;float:right">
+                          <Page :total="pageTotal5"  show-elevator @on-change="pageChange5"></Page>
+                        </div>
+                      </Row>
+                      <div slot="footer">
+                        <Button  type="success" @click="concernBtn1()">确定</Button>
+                      </div>
+                    </Modal>
                   </li>
                 </ul>
               </i-form> 
@@ -316,6 +347,28 @@
           <Button v-show="true" @click="reviewCancel">取消</Button>
       </div>
     </Modal>
+
+        <!-- 提单机构 -->
+    <Modal width="1000px" :mask-closable="false"  v-model="orderModal" title="提单机构" :loading="loading">
+      <Row>
+          <Radio-group v-model="radioOrder">
+            <Row>
+              <Radio v-for="item in radioOrderList" :label="item.custid+'-'+item.custname">{{ item.custname }}</Radio>
+            </Row>
+          </Radio-group>
+      </Row>
+      <Row>
+        <div style="margin-top:10px;float:right">
+          <Page :total="pageTotal4"  show-elevator @on-change="pageChange4"></Page>
+        </div>
+      </Row>
+      <div slot="footer">
+        <Button  type="success" @click="concernBtn">确定</Button>
+      </div>
+    </Modal>
+
+        <!-- 机构名称 -->
+    
 
     <Modal  @on-cancel="jsgsCancel" :mask-closable="false" styles="z-index:1000;" width="800px" v-model="modal2" title="公式编辑" :loading="loading">
       <Row>
@@ -499,7 +552,17 @@ export default {
       urlBase:'fee-master-web/',
       // frontUrl: '',
       // urlBase: '',
+      flagIndex: '',
 
+      // 提单机构弹窗
+      orderModal: false,
+      // 机构名称弹窗
+      organizeModal: false,
+      // 弹窗自定义名称
+      radioOrder: '',
+      orgCodeAndTypeName: '',
+      radioOrderList: [],
+      orgCodeAndTypeList: [],
       modal2: false,
       // 系统函数
       findAllSystemFunction: [],
@@ -598,6 +661,8 @@ export default {
       pageTotal: 0,
       pageTotal1: 0,
       pageTotal2: 0,
+      pageTotal4: 0,
+      pageTotal5: 0,
       // 加载
       prodLoading: true,
       // 弹窗加载
@@ -658,6 +723,7 @@ export default {
         productName: "",
         productType: "",
         ladingComp: "",
+        ladingCompName: "",
         preCredit: "",
         productCode: "",
         id: "",
@@ -697,9 +763,10 @@ export default {
         productType: [
           { required: true, message: "请选择类型", trigger: "change" }
         ],
-        ladingComp: [
+        ladingCompName: [
           { required: true, message: "请选择", trigger: "change" }
         ],
+        
         preCredit: [
           { required: true, message: "请选择", trigger: "change" }
         ],
@@ -1487,6 +1554,53 @@ export default {
     }
   },
   methods: {
+    concernBtn() {
+     this.productInfo.ladingCompName = this.radioOrder.split('-')[1];
+     this.productInfo.ladingComp = this.radioOrder.split('-')[0];
+     this.orderModal = false;
+    },
+    // 点击机构名称框
+    orderProductChange(d) {
+      this.flagIndex = d;
+      this.organizeModal = true;
+      this.getOrgCode(1);
+      // let orgCodeAll = this.guaranteeModelList[index].orgCodeAndType.split("$");
+      // this.guaranteeModelList[index].orgCode = orgCodeAll[0];
+      // this.guaranteeModelList[index].orgName = orgCodeAll[1];
+      // this.guaranteeModelList[index].orgType = orgCodeAll[2];
+      // this.guaranteeModelList[index].orgTypeName = orgCodeAll[3];
+    },
+    getOrgCode(index) {
+      index = index || 1;
+       util
+        .ajax({
+          // url: this.frontUrl + "v1/prdDictionary/getDeparts",
+          url: this.frontUrl + "v1/prdDictionary/getNewDeparts",
+          method: "post",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          data: {
+            pageNum: index,
+            pageSize: 10
+          }
+        })
+        .then(res => {
+          this.orgCodeAndTypeList = res.data.data.content;
+          this.pageTotal5 = res.data.data.totalElements;
+        });
+    },
+    concernBtn1() {
+      let trueIndex = this.flagIndex;
+     let orgCodeAll= this.orgCodeAndTypeName.split("$");
+      this.guaranteeModelList[trueIndex].orgCode = orgCodeAll[0];
+      this.guaranteeModelList[trueIndex].orgName = orgCodeAll[1];
+      this.guaranteeModelList[trueIndex].orgType = orgCodeAll[2];
+      this.guaranteeModelList[trueIndex].orgTypeName = orgCodeAll[3];
+      this.guaranteeModelList[trueIndex].orgCodeAndType = orgCodeAll[1];
+     this.organizeModal = false;
+
+    },
     // 发布
     publishProduct(params) {
       util.ajax({
@@ -1587,7 +1701,6 @@ export default {
           // this.modal1 = true;
           // this.FeeInfo.eformula = this.srgs1;
           // this.FeeInfo.cformula = this.srgs;
-
         } else {
           this.$Message.error('请验证！')
         }
@@ -1599,6 +1712,16 @@ export default {
         this.gsjg = '';
       },
 
+    // 提单机构弹窗
+    orderProduct() {
+      this.orderModal = true;
+      this.getOrderList(1);
+    },
+    
+    changeorgCode(index) {
+      // this.orgCode = s;
+      
+    },
     // 计算公式弹框
     feeFormuJs() {
       this.modal2 = true;
@@ -1667,6 +1790,34 @@ export default {
       pageChange2(index) {
         this.addContract(index)
       },
+      // 分页
+      pageChange4(index) {
+        this.getOrderList(index);
+      },
+      pageChange5(index) {
+        this.getOrgCode(index);
+      },
+      getOrderList(index) {
+      index = index || 1;
+       util
+        .ajax({
+          // url: this.frontUrl + "v1/prdDictionary/getDeparts",
+          url: this.frontUrl + "v1/prdDictionary/getNewDeparts",
+          method: "post",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          data: {
+            pageNum: index,
+            pageSize: 10
+          }
+        })
+        .then(res => {
+          this.radioOrderList = res.data.data.content;
+          this.pageTotal4 = res.data.data.totalElements;
+        });
+    },
+
     // 获取产品管理列表
     getProductList(index) {
       index = index || 1;
@@ -1713,7 +1864,7 @@ export default {
       this.contractData =[];
       this.costData =[];
       this.getProductType();
-      this.getLadingComp();
+      // this.getLadingComp();
       this.getPreCredit();
       this.getPayType();
       this.getOrgCode();
@@ -1729,7 +1880,7 @@ export default {
     // 打开产品信息页面默认请求的列表接口
     productDefaultList() {
       this.getProductType();
-      this.getLadingComp();
+      // this.getLadingComp();
       this.getPreCredit();
       this.getPayType();
       this.getOrgCode();
@@ -1763,19 +1914,20 @@ export default {
         });
     },
     // 获取产品基础提单机构
-    getLadingComp() {
-      util
-        .ajax({
-          url: this.frontUrl + "v1/prdDictionary/getDeparts",
-          method: "get",
-          params: {
-            orgType: 3
-          }
-        })
-        .then(res => {
-          this.ladingCompList = res.data.data.list;
-        });
-    },
+    // getLadingComp() {
+    //   util
+    //     .ajax({
+    //       // url: this.frontUrl + "v1/prdDictionary/getDeparts",
+    //       url: this.frontUrl + "v1/prdDictionary/getNewDeparts",
+    //       method: "get",
+    //       params: {
+    //         orgType: 3
+    //       }
+    //     })
+    //     .then(res => {
+    //       this.ladingCompList = res.data.data.list;
+    //     });
+    // },
     // 获取预授信流程
     getPreCredit() {
       util
@@ -1791,9 +1943,9 @@ export default {
     changeProdType(s) {
       this.productType = s;
     },
-    changeLadingComp(s) {
-      this.ladingComp = s;
-    },
+    // changeLadingComp(s) {
+    //   this.ladingComp = s;
+    // },
     changePreCredit(s) {
       this.preCredit = s;
     },
@@ -1895,29 +2047,23 @@ export default {
        this.feeListModal = false;
     },
     // 获取保障模型机构名称
-    getOrgCode() {
-      util
-        .ajax({
-          url: this.frontUrl + "v1/prdDictionary/getDeparts",
-          method: "get",
-          params: {
-            // 查询担保机构
-            orgType: 3
-          }
-        })
-        .then(res => {
-          this.orgCodeList1 = res.data.data.list;
-        });
-    },
-    changeorgCode(index) {
-      // this.orgCode = s;
-      
-      let orgCodeAll = this.guaranteeModelList[index].orgCodeAndType.split("$");
-      this.guaranteeModelList[index].orgCode = orgCodeAll[0];
-      this.guaranteeModelList[index].orgName = orgCodeAll[1];
-      this.guaranteeModelList[index].orgType = orgCodeAll[2];
-      this.guaranteeModelList[index].orgTypeName = orgCodeAll[3];
-    },
+    // getOrgCode() {
+    //   util
+    //     .ajax({
+    //       url: this.frontUrl + "v1/prdDictionary/getDeparts",
+    //       method: "get",
+    //       params: {
+    //         // 查询担保机构
+    //         orgType: 3
+    //       }
+    //     })
+    //     .then(res => {
+    //       this.orgCodeList1 = res.data.data.list;
+    //     });
+    // },
+
+    
+
     // 获取代偿后债权归属
     getBelongCode() {
       util
@@ -1928,9 +2074,6 @@ export default {
         .then(res => {
           this.belongCodeList1 = res.data.data;
         });
-    },
-    changeBelongCode(s) {
-      this.belongCode = s;
     },
     // 获取代偿收款方
     getRecComps() {
@@ -2011,6 +2154,7 @@ export default {
           this.productInfo.productType = res.data.data.productType;
           this.productInfo.preCredit = res.data.data.preCredit;
           this.productInfo.ladingComp = res.data.data.ladingComp;
+          this.productInfo.ladingCompName = res.data.data.ladingCompName;
           this.productInfo.id = res.data.data.id;
           this.productInfo.fundType = res.data.data.fundType;
           this.productInfo.deadlineType = res.data.data.deadlineType;
