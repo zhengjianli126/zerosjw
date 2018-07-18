@@ -735,7 +735,7 @@ export default {
         intervalTime: "",
         payType: "",
         rateFormual: "",
-        startInterestType: "",
+        startInterestType: "1",
         specificRepayDate: 0,
         // 起息日增加日期
         startInterestDay: 0,
@@ -2579,6 +2579,7 @@ export default {
       }).then(res => {
         if (res.data.code == 20000) {
             this.$Message.success(res.data.msg);
+            this.productModel = false;
             this.getProductList(1);
           } else {
             this.$Message.error(res.data.msg);
