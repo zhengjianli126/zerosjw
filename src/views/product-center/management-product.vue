@@ -528,7 +528,7 @@
             <i-option v-for="item in prodStatusList" :value="item.value">{{ item.label }}</i-option>
           </i-select>
           <div class="handleBtn">
-            <i-button @click="getProductList(1)" type="primary">查询</i-button>
+            <i-button @click="getProductList()" type="primary">查询</i-button>
             <i-button @click="increaseProduct" type="primary">新增</i-button>
           </div>
         </row>
@@ -536,7 +536,7 @@
           <Table border :columns="productList" :data="productData" size="small" ref="table" :loading="prodLoading"></Table>
         </div>
         <div style="margin-top:10px;float:right">
-          <Page :total="pageTotal"  show-elevator @on-change="pageChange"></Page>
+          <Page :current="pageNum" :total="pageTotal"  show-elevator @on-change="pageChange"></Page>
         </div>
     </Row>
   </div>
@@ -553,7 +553,7 @@ export default {
       // frontUrl: '',
       // urlBase: '',
       flagIndex: '',
-
+      pageNum: 1,
       // 提单机构弹窗
       orderModal: false,
       // 机构名称弹窗
@@ -1530,7 +1530,7 @@ export default {
     // this.getPayCode();
 
     this.getProdStatus();
-    this.getProductList();
+    this.getProductList1();
   },
   watch: {
     productModel(val) {
@@ -1609,7 +1609,7 @@ export default {
       }).then(res => {
         if (res.data.code == 20000) {
             this.$Message.success(res.data.msg);
-            this.getProductList(1);
+            this.getProductList1();
           } else {
             this.$Message.error(res.data.msg);
           }
@@ -1623,7 +1623,7 @@ export default {
       }).then(res => {
         if (res.data.code == 20000) {
             this.$Message.success(res.data.msg);
-            this.getProductList(1);
+            this.getProductList1();
           } else {
             this.$Message.error(res.data.msg);
           }
@@ -1840,9 +1840,35 @@ export default {
         .then(res => {
           this.productData = res.data.data.content;
           this.pageTotal = res.data.data.totalElements;
+          this.pageNum = res.data.data.number;
           this.prodLoading = false;
         });
     },
+    // 产品管理列表初始
+    getProductList1() {
+      this.prodLoading = true;
+      util
+        .ajax({
+          url: this.frontUrl + "v1/product/getPageQuery",
+          method: "post",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          data: {
+            pageNum: 1,
+            pageSize: 10,
+            productStyle: "asset",
+            name: (this.productName = this.productName || ""),
+            status: (this.prodStatusChange = this.prodStatusChange || "")
+          }
+        })
+        .then(res => {
+          this.productData = res.data.data.content;
+          this.pageTotal = res.data.data.totalElements;
+          this.prodLoading = false;
+        });
+    },
+
     // 产品状态切换
     changeStatus(s) {
       this.prodStatusChange = s;
@@ -1896,7 +1922,7 @@ export default {
       }).then(res => {
         if (res.data.code == 20000) {
             this.$Message.success(res.data.msg);
-            this.getProductList(1);
+            this.getProductList1();
           } else {
             this.$Message.error(res.data.msg);
           }
@@ -2285,7 +2311,7 @@ export default {
                 if (res.data.code == 20000) {
                   this.$Message.success(res.data.msg);
                   this.productModel = false;
-                  this.getProductList(1);
+                  this.getProductList1();
                 } else {
                   this.$Message.error(res.data.details[0]);
                 }
@@ -2325,7 +2351,7 @@ export default {
                 if (res.data.code == 20000) {
                   this.$Message.success(res.data.msg);
                   this.productModel = false;
-                  this.getProductList(1);
+                  this.getProductList1();
                 } else {
                   this.$Message.error(res.data.details[0] ? res.data.details[0] : res.data.msg);
                   // this.$Message.error(res.data.details[0]);
@@ -2580,7 +2606,7 @@ export default {
         if (res.data.code == 20000) {
             this.$Message.success(res.data.msg);
             this.productModel = false;
-            this.getProductList(1);
+            this.getProductList1();
           } else {
             this.$Message.error(res.data.msg);
           }
