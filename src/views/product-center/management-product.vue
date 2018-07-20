@@ -548,10 +548,10 @@ export default {
   data() {
     return {
       // url前缀
-      // frontUrl: 'product-web/',
-      // urlBase:'fee-master-web/',
-      frontUrl: '',
-      urlBase: '',
+      frontUrl: 'product-web/',
+      urlBase:'fee-master-web/',
+      // frontUrl: '',
+      // urlBase: '',
       flagIndex: '',
       pageNum: 1,
       pageNum1: 1,
