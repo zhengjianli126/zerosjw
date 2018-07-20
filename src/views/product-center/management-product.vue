@@ -309,7 +309,7 @@
                       </Row>
                       <Row>
                         <div style="margin-top:10px;float:right">
-                          <Page :total="pageTotal5"  show-elevator @on-change="pageChange5"></Page>
+                          <Page :current="pageNum5" :total="pageTotal5"  show-elevator @on-change="pageChange5"></Page>
                         </div>
                       </Row>
                       <div slot="footer">
@@ -359,7 +359,7 @@
       </Row>
       <Row>
         <div style="margin-top:10px;float:right">
-          <Page :total="pageTotal4"  show-elevator @on-change="pageChange4"></Page>
+          <Page :current="pageNum4" :total="pageTotal4"  show-elevator @on-change="pageChange4"></Page>
         </div>
       </Row>
       <div slot="footer">
@@ -440,7 +440,7 @@
       </Row>
       <Row>
         <div style="margin-top:10px;float:right">
-          <Page :total="pageTotal2"  show-elevator @on-change="pageChange2"></Page>
+          <Page :current="pageNum2" :total="pageTotal2"  show-elevator @on-change="pageChange2"></Page>
         </div>
       </Row>
       
@@ -470,7 +470,7 @@
       </Row>
       <Row>
         <div style="margin-top:10px;float:right">
-          <Page :total="pageTotal1"  show-elevator @on-change="pageChange1"></Page>
+          <Page :current="pageNum1" :total="pageTotal1"  show-elevator @on-change="pageChange1"></Page>
         </div>
       </Row>
       
@@ -548,12 +548,17 @@ export default {
   data() {
     return {
       // url前缀
-      frontUrl: 'product-web/',
-      urlBase:'fee-master-web/',
-      // frontUrl: '',
-      // urlBase: '',
+      // frontUrl: 'product-web/',
+      // urlBase:'fee-master-web/',
+      frontUrl: '',
+      urlBase: '',
       flagIndex: '',
       pageNum: 1,
+      pageNum1: 1,
+      pageNum2: 1,
+      pageNum3: 1,
+      pageNum4: 1,
+      pageNum5: 1,
       // 提单机构弹窗
       orderModal: false,
       // 机构名称弹窗
@@ -1588,6 +1593,7 @@ export default {
         .then(res => {
           this.orgCodeAndTypeList = res.data.data.content;
           this.pageTotal5 = res.data.data.totalElements;
+          this.pageNum5 = res.data.data.number;
         });
     },
     concernBtn1() {
@@ -1766,6 +1772,7 @@ export default {
         .then(res => {
           this.contractListData = res.data.data.content;
           this.pageTotal2 = res.data.data.totalElements;
+          this.pageNum2 = res.data.data.number;
         });
     },
     // 合同列表里的添加按钮
@@ -1815,6 +1822,7 @@ export default {
         .then(res => {
           this.radioOrderList = res.data.data.content;
           this.pageTotal4 = res.data.data.totalElements;
+          this.pageNum4 = res.data.data.number;
         });
     },
 
@@ -1865,6 +1873,7 @@ export default {
         .then(res => {
           this.productData = res.data.data.content;
           this.pageTotal = res.data.data.totalElements;
+          this.pageNum = res.data.data.number;
           this.prodLoading = false;
         });
     },
@@ -2032,6 +2041,7 @@ export default {
         .then(res => {
           this.feeData = res.data.data.content;
           this.pageTotal1 = res.data.data.totalElements;
+          this.pageNum1 = res.data.data.number;
         });
     },
     // // 查询费用表格按钮
