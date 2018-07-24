@@ -20,7 +20,7 @@
           <i-input v-model="productInfo.id" type="hidden"></i-input>
           <Col span="8">
             <Form-item label="名称：" prop="productName">
-              <i-input  :disabled="checkBaseFlag" v-model="productInfo.productName" placeholder="请输入名称" style="width: 200px"></i-input>
+              <i-input maxlength="100" :disabled="checkBaseFlag" v-model="productInfo.productName" placeholder="请输入名称" style="width: 200px"></i-input>
             </Form-item>
           </Col>
           <Col span="8">
@@ -60,20 +60,20 @@
           <Col span="5">
             <Form-item label="期限：" prop="deadlineType">
               <Radio-group :disabled="checkBaseFlag" v-model="productInfo.deadlineType">
-                  <Radio :disabled="checkBaseFlag" label="1">月</Radio>
-                  <Radio :disabled="checkBaseFlag" label="0">日</Radio>
+                  <Radio :disabled="checkBaseFlag" label="2">月</Radio>
+                  <Radio :disabled="checkBaseFlag" label="1">日</Radio>
               </Radio-group>
             </Form-item>
           </Col>
           <Col span="6">
-            <Form-item label="" prop="productName">
-              <Input :disabled="checkBaseFlag" type="text" size="small" v-model="productInfo.minDeadline" placeholder="" style="width: 50px;"></Input> 月/日 --
+            <Form-item label="" prop="minDeadline">
+              <i-input :disabled="checkBaseFlag" @on-keyup="NumCheck" type="number" size="small" v-model="productInfo.minDeadline" placeholder="" style="width: 80px;"></i-input> 月/日
               <!-- <Input-number :disabled="checkBaseFlag" size="small"  style="width: 60px" v-model="productInfo.minDeadline" :max="100" :min="1" :stype="1"></Input-number> 月/日 -- -->
             </Form-item>
           </Col>
           <Col span="5">
-            <Form-item label="" prop="productName">
-              <Input :disabled="checkBaseFlag" type="text" size="small" v-model="productInfo.maxDeadline" placeholder="" style="width: 50px;"></Input> 月/日 
+            <Form-item label="" prop="maxDeadline">
+              <i-input :disabled="checkBaseFlag" @on-keyup="NumCheck2" type="number" size="small" v-model="productInfo.maxDeadline" placeholder="" style="width: 80px;"></i-input> 月/日 
               <!-- <Input-number :disabled="checkBaseFlag" size="small"  style="width: 60px" v-model="productInfo.maxDeadline" :max="100" :min="1" :stype="1"></Input-number> 月/日 -->
             </Form-item>
           </Col>
@@ -82,8 +82,8 @@
           <Col span="5">
             <Form-item label="期限间隔："  prop="fronInterval">
               <Radio-group :disabled="true" v-model="productInfo.deadlineType">
-                  <Radio :disabled="true" label="1">月</Radio>
-                  <Radio :disabled="true" label="0">日</Radio>
+                  <Radio :disabled="true" label="2">月</Radio>
+                  <Radio :disabled="true" label="1">日</Radio>
               </Radio-group>
             </Form-item>
           </Col>
@@ -274,7 +274,8 @@
                           </Col>
                           <Col span="8">
                             <Form-item :label-width="120" label="" prop="guaTime">
-                              <TimePicker :disabled="checkGuaranteeFlag" format="HH:mm" placeholder="选择时间" v-model="guaranteeInfo.guaTime" style="width: 112px"></TimePicker>
+                              选择时间<input :disabled="checkGuaranteeFlag" type="time" v-model="guaranteeInfo.guaTime" style="width:70px;"/>
+                              <!-- <TimePicker :disabled="checkGuaranteeFlag" format="HH:mm" placeholder="选择时间" v-model="guaranteeInfo.guaTime" style="width: 112px"></TimePicker> -->
                             </Form-item>
                           </Col>
                         </Row>
@@ -756,12 +757,12 @@ export default {
       },
       // 表单验证规则
       prodRuleValidate: {
-        // productName: [
-        //   { required: true, message: "期限不能为空", trigger: "blur" }
-        // ],
-        // productName: [
-        //   { required: false, message: '期限不能为空', trigger: 'blur' }
-        // ],
+        minDeadline: [
+          { required: true, message: "期限不能为空", trigger: "blur" }
+        ],
+        maxDeadline: [
+          { required: false, message: '期限不能为空', trigger: 'blur' }
+        ],
         productName: [
           { required: true, message: "不能为空", trigger: "blur" }
         ],
@@ -840,6 +841,7 @@ export default {
           buyBackPeriod: 0
         }
       ],
+      
       // 保障模型设置验证
       guaRuleValidate: {
         typeCode: [
@@ -1559,6 +1561,20 @@ export default {
     }
   },
   methods: {
+    NumCheck() {
+      var num = this.productInfo.minDeadline;
+				var re = /^\d*$/;
+				if(!re.test(num)){
+					this.productInfo.minDeadline = 0;
+				}
+    },
+    NumCheck2() {
+      var num2 = this.productInfo.maxDeadline;
+				var re = /^\d*$/;
+				if(!re.test(num2)){
+					this.productInfo.maxDeadline = 0;
+				}
+    },
     concernBtn() {
      this.productInfo.ladingCompName = this.radioOrder.split('-')[1];
      this.productInfo.ladingComp = this.radioOrder.split('-')[0];
@@ -2562,7 +2578,6 @@ export default {
           }
         });
       }
-      
     },
     // 删除费用
     deleteFee(params) {
