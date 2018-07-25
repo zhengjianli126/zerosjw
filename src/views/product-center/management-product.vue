@@ -540,6 +540,36 @@
           <Page :current="pageNum" :total="pageTotal"  show-elevator @on-change="pageChange"></Page>
         </div>
     </Row>
+    <!-- 删除确认弹窗 -->
+    <Modal v-model="deleteFlagShow" width="360">
+        <p slot="header" style="color:#f60;text-align:center">
+            <Icon type="information-circled"></Icon>
+            <span>提示</span>
+        </p>
+        <div style="text-align:center">
+            <p>是否确定删除该行信息？</p>
+        </div>
+        <div slot="footer">
+            <Button  type="primary" @click="modalCancel">取消</Button>
+            <Button style="margin-right: 100px;" type="error" @click="delBtn">删除</Button>
+        </div>
+    </Modal>
+
+    <!-- 下架确认弹窗 -->
+    <Modal v-model="soldOutShow" width="360">
+        <p slot="header" style="color:#f60;text-align:center">
+            <Icon type="information-circled"></Icon>
+            <span>提示</span>
+        </p>
+        <div style="text-align:center">
+            <p>是否确定删除该行信息？</p>
+        </div>
+        <div slot="footer">
+            <Button  type="primary" @click="modalCancel1">取消</Button>
+            <Button style="margin-right: 100px;" type="error" @click="soldOutBtn">下架</Button>
+        </div>
+    </Modal>
+
   </div>
  
 </template>
@@ -564,6 +594,14 @@ export default {
       orderModal: false,
       // 机构名称弹窗
       organizeModal: false,
+      // 删除弹窗
+      deleteFlagShow: false,
+      // 删除的参数
+      deleteParams: {},
+      // 下架弹窗
+      soldOutShow: false,
+      // 下架的参数
+      soldOutParams: {},
       // 弹窗自定义名称
       radioOrder: '',
       orgCodeAndTypeName: '',
@@ -1639,10 +1677,16 @@ export default {
     },
     // 下架
     soldOutProduct(params) {
+      this.soldOutShow = true;
+      this.soldOutParams = params;
+    },
+    // 下架确认
+    soldOutBtn() {
       util.ajax({
-        url: this.frontUrl + "v1/product/down/asset/"+ params.row.productCode + "/" + params.row.productStatus,
+        url: this.frontUrl + "v1/product/down/asset/"+ this.soldOutParams.row.productCode + "/" + this.soldOutParams.row.productStatus,
         method: "put"
       }).then(res => {
+        this.soldOutShow = false;
         if (res.data.code == 20000) {
             this.$Message.success(res.data.msg);
             this.getProductList1();
@@ -1651,8 +1695,6 @@ export default {
           }
       })
     },
-
-
     //计算公式
       route(name) {
         this.srgs += name.split('&')[0];
@@ -1941,10 +1983,15 @@ export default {
     // 产品管理删除按钮
     deleteProduct(params) {
 
+      this.deleteFlagShow = true;
+      this.deleteParams = params;
+    },
+    delBtn() {
       util.ajax({
-        url: this.frontUrl + "v1/product/delete/asset/"+ params.row.productCode + "/" + params.row.productStatus,
+        url: this.frontUrl + "v1/product/delete/asset/"+ this.deleteParams.row.productCode + "/" + this.deleteParams.row.productStatus,
         method: "delete"
       }).then(res => {
+        this.deleteFlagShow = false;
         if (res.data.code == 20000) {
             this.$Message.success(res.data.msg);
             this.getProductList1();
@@ -2675,6 +2722,12 @@ export default {
       if($event == 1) {
         // this.prodRuleValidate.prdDesc
       }
+    },
+    modalCancel () {
+        this.deleteFlagShow = false;
+    },
+    modalCancel1 () {
+        this.soldOutShow = false;
     }
   }
 };
