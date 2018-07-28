@@ -81,7 +81,7 @@
         <Row>
           <Col span="5">
             <Form-item label="期限间隔："  prop="fronInterval">
-              <Radio-group :disabled="true" v-model="productInfo.deadlineType">
+              <Radio-group :disabled="true" v-model="productInfo.fronInterval">
                   <Radio :disabled="true" label="2">月</Radio>
                   <Radio :disabled="true" label="1">日</Radio>
               </Radio-group>
@@ -795,12 +795,12 @@ export default {
       },
       // 表单验证规则
       prodRuleValidate: {
-        minDeadline: [
-          { required: true, message: "期限不能为空", trigger: "blur" }
-        ],
-        maxDeadline: [
-          { required: false, message: '期限不能为空', trigger: 'blur' }
-        ],
+        // minDeadline: [
+        //   { required: true, message: "期限不能为空", trigger: "blur" }
+        // ],
+        // maxDeadline: [
+        //   { required: false, message: '期限不能为空', trigger: 'blur' }
+        // ],
         productName: [
           { required: true, message: "不能为空", trigger: "blur" }
         ],
@@ -1068,6 +1068,8 @@ export default {
                   },
                   on: {
                     click: () => {
+                      this.recCodeList = [];
+                      this.payCodeList = [];
                       this.getRecCode(params);
                       this.getPayCode(params);
                       // 暂存数据
@@ -2543,11 +2545,27 @@ export default {
     },
     // 费用编辑确定按钮
     updateFeeInfo() {
-      this.costData[this.indexFlag].payCode = this.payCode.split('-')[1];
-      this.costData[this.indexFlag].recCode = this.recCode.split('-')[1];
-      this.costData[this.indexFlag].feeOrder = this.feeOrder;
-      this.costData[this.indexFlag].payName = this.payCode.split('-')[0];
-      this.costData[this.indexFlag].recName = this.recCode.split('-')[0];
+      if(this.payCode == '' || this.payCode == null) {
+        this.costData[this.indexFlag].payCode = '';
+        this.costData[this.indexFlag].payName = '';
+      } else {
+        this.costData[this.indexFlag].payCode = this.payCode.split('-')[1];
+        this.costData[this.indexFlag].payName = this.payCode.split('-')[0];
+      }
+
+      if(this.recCode == '' || this.recCode == null) {
+        this.costData[this.indexFlag].recCode = '';
+        this.costData[this.indexFlag].recName = '';
+      } else {
+        this.costData[this.indexFlag].recCode = this.recCode.split('-')[1];
+        this.costData[this.indexFlag].recName = this.recCode.split('-')[0];
+      }
+
+      if(this.feeOrder == '' || this.feeOrder == null) {
+        this.costData[this.indexFlag].feeOrder = '';
+      } else {
+        this.costData[this.indexFlag].feeOrder = this.feeOrder;
+      }
       this.paraModal = false;
     },
     // 费用编辑取消按钮
