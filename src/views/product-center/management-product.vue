@@ -259,7 +259,7 @@
                                 <i-option v-for="item in recCompsList" :value="item.value">{{ item.label }}</i-option>
                             </i-select>
                           </Form-item> -->
-                          <Form-item :label-width="120" label="代偿后债权归属：" prop="recComp">
+                          <Form-item :label-width="120" label="代偿收款方：" prop="recComp">
                             <Radio-group :disabled="checkGuaranteeFlag" v-model="guaranteeInfo.recComp">
                               <Radio :disabled="checkGuaranteeFlag" label="1">债权人</Radio>
                               <Radio :disabled="checkGuaranteeFlag" label="2">首金</Radio>
@@ -289,9 +289,9 @@
                             </Form-item>
                           </Col>
                           
-                          <Col span="8">
+                          <Col v-if="isBuyFlag" span="8">
                             <Form-item :label-width="120" label="条件：连续逾期" prop="buyBackPeriod">
-                              <Input-number :disabled="checkGuaranteeFlag" size="small"  style="width: 50px" v-model="guaranteeInfo.buyBackPeriod" :max="100" :min="1" :stype="1"></Input-number> 期
+                              <Input-number :disabled="checkGuaranteeFlag" size="small"  style="width: 50px" v-model="guaranteeInfo.buyBackPeriod" :max="100" :min="0" :stype="1"></Input-number> 期
                             </Form-item>
                           </Col>
                         </Row>
@@ -525,7 +525,7 @@
           <span>产品名称：</span>
           <i-input v-model="productName"  placeholder="请输入..." style="width: 200px"></i-input>
           <span style="margin-left:20px;">状态：</span>
-          <i-select  @on-change="changeStatus" v-model="prodStatusChange" span="6" style="width:200px">
+          <i-select placeholder="全部"  @on-change="changeStatus" v-model="prodStatusChange" span="6" style="width:200px">
             <i-option v-for="item in prodStatusList" :value="item.value">{{ item.label }}</i-option>
           </i-select>
           <div class="handleBtn">
@@ -562,7 +562,7 @@
             <span>提示</span>
         </p>
         <div style="text-align:center">
-            <p>是否确定删除该行信息？</p>
+            <p>是否确定下架该行信息？</p>
         </div>
         <div slot="footer">
             <Button  type="primary" @click="modalCancel1">取消</Button>
@@ -621,7 +621,6 @@ export default {
       // 运算符号
       ysfhJs: [],
       gsjg:'',
-
       // 拷贝标识
       copyFlag: 0,
       // 页面productCode
@@ -717,6 +716,7 @@ export default {
       feeListLoading: false,
       // 产品管理字段
       productName: "",
+      prodStatusChange: "",
       // 产品状态
       prodStatusList: [],
       // 产品信息页模板显示
@@ -732,7 +732,7 @@ export default {
       // 费用大类列表
       feeTypeList: [],
       // 费用大类
-      feeCategory: "",
+      feeCategory: "-1",
       // 费用名称
       feeName: "",
       // 点击费用列表里添加时保存隐藏的的收方
@@ -861,6 +861,8 @@ export default {
          {
            // 利息是否默认
           interestFlag: false,
+          // 逾期天数
+          isBuyFlag: true,
           typeCode: "",
           guaOrder: 0,
           orgCodeAndType: "",
@@ -1953,6 +1955,8 @@ export default {
     },
     // 新增产品
     increaseProduct() {
+      this.productCodeAll = '';
+      this.productInfo.id = '';
       this.clearHistory();
       this.contractData =[];
       this.costData =[];
@@ -2337,6 +2341,7 @@ export default {
         this.guaranteeModelList.push({
           // 利息是否默认
             interestFlag: false,
+            isBuyFlag: true,
             typeCode: "",
             guaOrder: 0,
             orgCode: "",
@@ -2719,8 +2724,10 @@ export default {
     },
     // 改变回购
     changeIsBuyBack(index, $event) {
-      if($event == 1) {
-        // this.prodRuleValidate.prdDesc
+      if($event == 0) {
+        this.guaranteeModelList[index].isBuyFlag = false;
+      } else if($event == 1) {
+        this.guaranteeModelList[index].isBuyFlag = true;
       }
     },
     modalCancel () {
