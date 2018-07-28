@@ -487,15 +487,15 @@
         </Row>
         <Row style="margin-top: 20px;">
           <Col span="12">
-            <span>收款方：</span>
-            <i-select  @on-change="changeRecCode" v-model="recCode" span="6" style="width:150px">
-                <i-option v-for="item in recCodeList" :value="item.label+'-'+item.value">{{ item.label }}</i-option>
-            </i-select>
-          </Col>
-          <Col span="12">
             <span>付款方：</span>
             <i-select  @on-change="changePayCode" v-model="payCode" span="6" style="width:150px">
                 <i-option v-for="item in payCodeList" :value="item.label+'-'+item.value">{{ item.label }}</i-option>
+            </i-select>
+          </Col>
+          <Col span="12">
+            <span>收款方：</span>
+            <i-select  @on-change="changeRecCode" v-model="recCode" span="6" style="width:150px">
+                <i-option v-for="item in recCodeList" :value="item.label+'-'+item.value">{{ item.label }}</i-option>
             </i-select>
           </Col>
         </Row>
@@ -1070,6 +1070,7 @@ export default {
                     click: () => {
                       this.recCodeList = [];
                       this.payCodeList = [];
+                      this.feeOrder = '',
                       this.getRecCode(params);
                       this.getPayCode(params);
                       // 暂存数据
@@ -1084,7 +1085,7 @@ export default {
                       this.holdFeeInfo.formula = params.row.formula,
 
                       this.formula = params.row.formula,
-                      this.feeOrder = params.row.feeOrder,
+                      // this.feeOrder = params.row.feeOrder,
                       // this.recCode = params.row.recName + '-' + params.row.recCode,
                       // this.payCode = params.row.payName + '-' + params.row.payCode,
                       // this.hideRecType = params.row.hideRecType,
@@ -2545,28 +2546,24 @@ export default {
     },
     // 费用编辑确定按钮
     updateFeeInfo() {
-      if(this.payCode == '' || this.payCode == null) {
-        this.costData[this.indexFlag].payCode = '';
-        this.costData[this.indexFlag].payName = '';
-      } else {
-        this.costData[this.indexFlag].payCode = this.payCode.split('-')[1];
-        this.costData[this.indexFlag].payName = this.payCode.split('-')[0];
-      }
-
-      if(this.recCode == '' || this.recCode == null) {
-        this.costData[this.indexFlag].recCode = '';
-        this.costData[this.indexFlag].recName = '';
-      } else {
-        this.costData[this.indexFlag].recCode = this.recCode.split('-')[1];
-        this.costData[this.indexFlag].recName = this.recCode.split('-')[0];
-      }
-
-      if(this.feeOrder == '' || this.feeOrder == null) {
-        this.costData[this.indexFlag].feeOrder = '';
-      } else {
-        this.costData[this.indexFlag].feeOrder = this.feeOrder;
-      }
-      this.paraModal = false;
+        if(this.payCode == '' || this.payCode == 'undefined') {
+          this.$Message.error('付款方不能为空');
+        }else {
+          if(this.recCode == '' || this.recCode == 'undefined') {
+            this.$Message.error('收款方不能为空');
+          } else {
+              if(this.feeOrder == '' || this.feeOrder == 'undefined' || this.feeOrder == null) {
+                this.$Message.error('费用顺序不能为空');
+              } else {
+                this.costData[this.indexFlag].payCode = this.payCode.split('-')[1];
+                this.costData[this.indexFlag].payName = this.payCode.split('-')[0];
+                this.costData[this.indexFlag].recCode = this.recCode.split('-')[1];
+                this.costData[this.indexFlag].recName = this.recCode.split('-')[0];
+                this.costData[this.indexFlag].feeOrder = this.feeOrder;
+                this.paraModal = false;
+              }
+          }
+        }
     },
     // 费用编辑取消按钮
     cancelFeeInfo() {
