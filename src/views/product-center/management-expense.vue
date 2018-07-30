@@ -95,7 +95,7 @@
             </Col>
           </Row>
           <Row style="margin-top:10px;">
-                <FormItem label="计算公式：" prop="showFormula1">
+                <FormItem label="计算公式：">
                   <i-input :disabled="digFlag" @on-focus="feeFormuJs" v-model="showFormula1" placeholder="请输入..." style="width: 400px"></i-input>
                 </FormItem> 
           </Row>
@@ -253,12 +253,8 @@
         tableStatus:'',
         // 校验
         digValidate: {
-          showFormula1: [
-              {
-              required: true,
-              message: '不能为空',
-              trigger: 'blur'
-            },
+          feeName: [
+  
             {
               required: true,
               message: '不能为空',
