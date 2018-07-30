@@ -536,8 +536,8 @@
             this.srgs = '';
             this.srgs1 = '';
             this.showFormula1 = '';
-            this.eformula = null;
-            this.cformula = null;
+            this.FeeInfo.eformula = null;
+            this.FeeInfo.cformula = null;
           }
         }
       },
