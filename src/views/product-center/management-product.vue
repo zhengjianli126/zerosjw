@@ -2717,8 +2717,7 @@ export default {
       }).then(res => {
         if (res.data.code == 20000) {
             this.$Message.success(res.data.msg);
-            this.productModel = false;
-            this.getProductList1();
+
           } else {
             this.$Message.error(res.data.msg);
           }
