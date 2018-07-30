@@ -227,7 +227,7 @@
                           <Form-item label="担保费用项：" prop="guaranteeFeeList">
                             <Checkbox-group :disabled="checkGuaranteeFlag" v-model="guaranteeInfo.guaranteeFeeList">
                               <Checkbox  disabled label="0">本金</Checkbox>
-                              <Checkbox :disabled="interestFlag" label="1">利息</Checkbox>
+                              <Checkbox :disabled="guaranteeInfo.interestFlag" label="1">利息</Checkbox>
                               <Checkbox :disabled="checkGuaranteeFlag" label="2">首金服务费</Checkbox>
                               <Checkbox :disabled="checkGuaranteeFlag" label="3">引流费</Checkbox>
                               <Checkbox :disabled="checkGuaranteeFlag" label="4">保险费</Checkbox>
@@ -289,9 +289,9 @@
                             </Form-item>
                           </Col>
                           
-                          <Col v-if="isBuyFlag" span="8">
+                          <Col span="8">
                             <Form-item :label-width="120" label="条件：连续逾期" prop="buyBackPeriod">
-                              <Input-number :disabled="checkGuaranteeFlag" size="small"  style="width: 50px" v-model="guaranteeInfo.buyBackPeriod" :max="100" :min="0" :stype="1"></Input-number> 期
+                              <Input-number :disabled="checkGuaranteeFlag" size="small" v-show="guaranteeInfo.isBuyFlag"  style="width: 50px" v-model="guaranteeInfo.buyBackPeriod" :max="100" :min="0" :stype="1"></Input-number> 期
                             </Form-item>
                           </Col>
                         </Row>
@@ -2742,6 +2742,7 @@ export default {
     changeIsBuyBack(index, $event) {
       if($event == 0) {
         this.guaranteeModelList[index].isBuyFlag = false;
+        this.guaranteeModelList[index].buyBackPeriod = 0;
       } else if($event == 1) {
         this.guaranteeModelList[index].isBuyFlag = true;
       }
