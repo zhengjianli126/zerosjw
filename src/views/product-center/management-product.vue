@@ -1796,7 +1796,7 @@ export default {
       this.modal2 = true;
       this.prodRuleValidate.rateFormual[0].required = false;
       // this.modal1 = false;
-      util.ajax(this.urlBase+'v1/feeInfo/findAllSystemVariables', {
+      util.ajax(this.urlBase+'v1/feeInfo/findAllPrdSystemVariables', {
         method: 'get'
 
       }).then(res => {
