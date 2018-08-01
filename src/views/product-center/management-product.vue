@@ -291,7 +291,7 @@
                           
                           <Col span="8">
                             <Form-item :label-width="120" label="条件：连续逾期" prop="buyBackPeriod">
-                              <Input-number :disabled="checkGuaranteeFlag" size="small" v-show="guaranteeInfo.isBuyFlag"  style="width: 50px" v-model="guaranteeInfo.buyBackPeriod" :max="100" :min="0" :stype="1"></Input-number> 期
+                              <Input-number :disabled="checkGuaranteeFlag" size="small" :readonly="guaranteeInfo.isBuyFlag"  style="width: 50px" v-model="guaranteeInfo.buyBackPeriod" :max="100" :min="0" :stype="1"></Input-number> 期
                             </Form-item>
                           </Col>
                         </Row>
@@ -862,7 +862,7 @@ export default {
            // 利息是否默认
           interestFlag: false,
           // 逾期天数
-          isBuyFlag: true,
+          isBuyFlag: false,
           typeCode: "",
           guaOrder: 0,
           orgCodeAndType: "",
@@ -2295,6 +2295,13 @@ export default {
         })
         .then(res => {
           this.guaranteeModelList = res.data.data;
+          for(var i=0;i<res.data.data.length;i++) {
+            if(res.data.data[i].isBuyBack == 0) {
+              this.guaranteeModelList[i].isBuyFlag = true;
+            } else if(res.data.data[i].isBuyBack == 1) {
+              this.guaranteeModelList[i].isBuyFlag = false;
+            }
+          }
         });
     },
     // 查看产品合同信息接口
@@ -2344,7 +2351,7 @@ export default {
         this.guaranteeModelList.push({
           // 利息是否默认
             interestFlag: false,
-            isBuyFlag: true,
+            isBuyFlag: false,
             typeCode: "",
             guaOrder: 0,
             orgCode: "",
@@ -2741,10 +2748,10 @@ export default {
     // 改变回购
     changeIsBuyBack(index, $event) {
       if($event == 0) {
-        this.guaranteeModelList[index].isBuyFlag = false;
+        this.guaranteeModelList[index].isBuyFlag = true;
         this.guaranteeModelList[index].buyBackPeriod = 0;
       } else if($event == 1) {
-        this.guaranteeModelList[index].isBuyFlag = true;
+        this.guaranteeModelList[index].isBuyFlag = false;
       }
     },
     modalCancel () {
