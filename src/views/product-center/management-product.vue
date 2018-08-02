@@ -55,6 +55,13 @@
               </i-select>
             </Form-item>
           </Col>
+          <Col span="8">
+            <Form-item label="渠道:" prop="channelNameAndCode">
+              <i-select :disabled="checkBaseFlag" @on-change="changeChannel"  v-model="productInfo.channelNameAndCode" placeholder="请选择" style="width: 180px">
+                  <i-option v-for="item in preChannelList" :value="item.label+'-'+item.value">{{ item.label }}</i-option>
+              </i-select>
+            </Form-item>
+          </Col>
         </Row>
         <Row>
           <Col span="5">
@@ -147,12 +154,22 @@
           </Form-item>
         </Row>
         <Row>
-          <Form-item label="支持债转：" prop="isTransfer">
-              <Radio-group :disabled="checkBaseFlag" v-model="productInfo.isTransfer">
+          <Col span="8">
+            <Form-item label="支持债转：" prop="isTransfer">
+                <Radio-group :disabled="checkBaseFlag" v-model="productInfo.isTransfer">
+                  <Radio :disabled="checkBaseFlag" label="1">支持</Radio>
+                  <Radio :disabled="checkBaseFlag" style="margin-left: 28px" label="0">不支持</Radio>
+                </Radio-group>
+            </Form-item>
+          </Col>
+          <Col span="8">
+            <Form-item label="是否手动放款：" :label-width="120" prop="isAutoLoan">
+              <Radio-group :disabled="checkBaseFlag" v-model="productInfo.isAutoLoan">
                 <Radio :disabled="checkBaseFlag" label="1">支持</Radio>
                 <Radio :disabled="checkBaseFlag" style="margin-left: 28px" label="0">不支持</Radio>
               </Radio-group>
-          </Form-item>
+            </Form-item>
+          </Col>
         </Row>
         <Row>
           <Form-item label="产品描述：" prop="prdDesc">
@@ -727,6 +744,7 @@ export default {
       ladingCompList: [],
       // 预授信流程
       preCreditList: [],
+      preChannelList: [],
       // 还款方式选择
       payTypeList: [],
       // 费用大类列表
@@ -769,6 +787,9 @@ export default {
         ladingComp: "",
         ladingCompName: "",
         preCredit: "",
+        channelNameAndCode: "",
+        channelCode: "",
+        channelName: "",
         productCode: "",
         id: "",
         fundType: "1",
@@ -786,6 +807,7 @@ export default {
         toInt: "",
         allocationOrder: "",
         isTransfer: "",
+        isAutoLoan: "",
         productStatus: "",
         prdDesc: "",
         productPrice: 0,
@@ -812,6 +834,9 @@ export default {
         ],
         
         preCredit: [
+          { required: true, message: "请选择", trigger: "change" }
+        ],
+        channelNameAndCode: [
           { required: true, message: "请选择", trigger: "change" }
         ],
         fundType: [
@@ -850,6 +875,9 @@ export default {
         ],
         isTransfer: [
           { required: true, message: "支持债转不能为空", trigger: "change" }
+        ],
+        isAutoLoan: [
+          { required: true, message: "不能为空", trigger: "change" }
         ],
         productStatus: [
           { required: true, message: "不能为空", trigger: "change" }
@@ -1621,7 +1649,15 @@ export default {
     concernBtn() {
      this.productInfo.ladingCompName = this.radioOrder.split('-')[1];
      this.productInfo.ladingComp = this.radioOrder.split('-')[0];
-     this.orderModal = false;
+      util
+        .ajax({
+          url: this.frontUrl + "v1/prdDictionary/getChannel/"+ this.productInfo.ladingComp,
+          method: "get"
+        })
+        .then(res => {
+          this.preChannelList = res.data.data;
+        });
+      this.orderModal = false;
     },
     // 点击机构名称框
     orderProductChange(d) {
@@ -2054,6 +2090,9 @@ export default {
     changePreCredit(s) {
       this.preCredit = s;
     },
+    changeChannel(s) {
+      this.channelNameAndCode = s;
+    },
     // 保存还款方式
     changePayType(s) {
       this.payType = s;
@@ -2275,9 +2314,21 @@ export default {
           this.productInfo.toInt = res.data.data.toInt;
           this.productInfo.allocationOrder = res.data.data.allocationOrder;
           this.productInfo.isTransfer = res.data.data.isTransfer;
+          this.productInfo.isAutoLoan = res.data.data.isAutoLoan;
           this.productInfo.productStatus = res.data.data.productStatus;
           this.productInfo.prdDesc = res.data.data.prdDesc;
           this.productInfo.productCode = res.data.data.productCode;
+          this.productInfo.channelNameAndCode = res.data.data.channelNameAndCode;
+          util
+            .ajax({
+              url: this.frontUrl + "v1/prdDictionary/getChannel/"+ this.productInfo.ladingComp,
+              method: "get"
+            })
+            .then(res => {
+              this.preChannelList = res.data.data;
+          });
+          // this.productInfo.channelCode = res.data.data.channelNameAndCode.split('-')[1];
+          // this.productInfo.channelName = res.data.data.channelNameAndCode.split('-')[0];
         });
     },
     // 查看保障设置信息接口
@@ -2371,6 +2422,8 @@ export default {
 
     // 暂存按钮
     holdBtn(productInfo) {
+      this.productInfo.channelCode = this.productInfo.channelNameAndCode.split('-')[1];
+      this.productInfo.channelName = this.productInfo.channelNameAndCode.split('-')[0];
       var collectData = {
                   asset: this.productInfo,
                   contractRelList: this.contractData,
@@ -2411,6 +2464,8 @@ export default {
     },
     // 提交按钮
     submitBtn(productInfo) {
+      this.productInfo.channelCode = this.productInfo.channelNameAndCode.split('-')[1];
+      this.productInfo.channelName = this.productInfo.channelNameAndCode.split('-')[0];
       var collectData = {
                   asset: this.productInfo,
                   contractRelList: this.contractData,
