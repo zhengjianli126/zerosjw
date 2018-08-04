@@ -53,7 +53,7 @@ export const locking = {
 export const otherRouter = {
     path: '/',
     name: 'otherRouter',
-    redirect: '/home',
+    redirect: '/product-center',
     component: Main,
     children: [
         { path: 'home', title: {i18n: 'home'}, name: 'home_index', component: resolve => { require(['@/views/home/home.vue'], resolve); } },
@@ -89,80 +89,80 @@ export const appRouter = [
             }
         ]
     },
-    {
-        path: '/order-details',
-        icon: 'document-text',
-        title: '订单详情',
-        name: 'orderdetails',
-        component: Main,
-        children: [
-            { path: 'order-details', title:'订单详情', name: 'order-details_index', component: resolve => { require(['@/views/order/order-details.vue'], resolve); } }
-        ]
-    },
-    {
-        path: '/turnover',
-        icon: 'arrow-graph-up-right',
-        title: '交易额统计',
-        name: ' turnover',
-        component: Main,
-        children: [
-            { path: 'turnover', title:'交易额统计', name: 'turnover_index', component: resolve => { require(['@/views/turnover/turnover.vue'], resolve); } }
-        ]
-    },
-    {
-        path: '/monthly-bill',
-        icon: 'compose',
-        title: '每月对账',
-        name: 'monthly-bill',
-        component: Main,
-        children: [
-            { path: 'monthly-bill', title:'每月对账', name: 'monthly-bill_index', component: resolve => { require(['@/views/bill/monthly-bill.vue'], resolve); } }
-        ]
-    },
-    {
-        path: '/orgons',
-        icon: 'map',
-        title: '机构管理',
-        name: 'orgons',
-        component: Main,
-        children: [
-            { path: 'orgons', title:'机构管理', name: 'orgons-manerment_index', component: resolve => { require(['@/views/orgons/orgons-manerment.vue'], resolve); } },
-            { path: 'orgons-branch', title:'分部管理', name: 'orgons-branch_index', component: resolve => { require(['@/views/orgons/orgons-branch.vue'], resolve); } }            
-        ]
-    },
-    {
-        path: '/managing',
-        icon: 'calculator',
-        title: '理财师信息',
-        name: 'managing',
-        component: Main,
-        children: [
-            { path: 'managing', title:'理财师信息', name: 'managing_index', component: resolve => { require(['@/views/managing/managing.vue'], resolve); } }
-        ]
-    },
-    {
-        path: '/access',
-        icon: 'key',
-        title: '系统管理',
-        name: 'access',
-        component: Main,
-        children: [
-            { path: 'access-sheet', title:'权限表', name: 'access-sheet_index', component: resolve => { require(['@/views/access/access-sheet.vue'], resolve); } },
-            { path: 'role-manerment', title:'角色管理', name: 'role-manerment_index', component: resolve => { require(['@/views/access/role-manerment.vue'], resolve); } },            
-            { path: 'system-user', title:'系统用户', name: 'system-user_index', component: resolve => { require(['@/views/access/system-user.vue'], resolve); } }            
+    // {
+    //     path: '/order-details',
+    //     icon: 'document-text',
+    //     title: '订单详情',
+    //     name: 'orderdetails',
+    //     component: Main,
+    //     children: [
+    //         { path: 'order-details', title:'订单详情', name: 'order-details_index', component: resolve => { require(['@/views/order/order-details.vue'], resolve); } }
+    //     ]
+    // },
+    // {
+    //     path: '/turnover',
+    //     icon: 'arrow-graph-up-right',
+    //     title: '交易额统计',
+    //     name: ' turnover',
+    //     component: Main,
+    //     children: [
+    //         { path: 'turnover', title:'交易额统计', name: 'turnover_index', component: resolve => { require(['@/views/turnover/turnover.vue'], resolve); } }
+    //     ]
+    // },
+    // {
+    //     path: '/monthly-bill',
+    //     icon: 'compose',
+    //     title: '每月对账',
+    //     name: 'monthly-bill',
+    //     component: Main,
+    //     children: [
+    //         { path: 'monthly-bill', title:'每月对账', name: 'monthly-bill_index', component: resolve => { require(['@/views/bill/monthly-bill.vue'], resolve); } }
+    //     ]
+    // },
+    // {
+    //     path: '/orgons',
+    //     icon: 'map',
+    //     title: '机构管理',
+    //     name: 'orgons',
+    //     component: Main,
+    //     children: [
+    //         { path: 'orgons', title:'机构管理', name: 'orgons-manerment_index', component: resolve => { require(['@/views/orgons/orgons-manerment.vue'], resolve); } },
+    //         { path: 'orgons-branch', title:'分部管理', name: 'orgons-branch_index', component: resolve => { require(['@/views/orgons/orgons-branch.vue'], resolve); } }            
+    //     ]
+    // },
+    // {
+    //     path: '/managing',
+    //     icon: 'calculator',
+    //     title: '理财师信息',
+    //     name: 'managing',
+    //     component: Main,
+    //     children: [
+    //         { path: 'managing', title:'理财师信息', name: 'managing_index', component: resolve => { require(['@/views/managing/managing.vue'], resolve); } }
+    //     ]
+    // },
+    // {
+    //     path: '/access',
+    //     icon: 'key',
+    //     title: '系统管理',
+    //     name: 'access',
+    //     component: Main,
+    //     children: [
+    //         { path: 'access-sheet', title:'权限表', name: 'access-sheet_index', component: resolve => { require(['@/views/access/access-sheet.vue'], resolve); } },
+    //         { path: 'role-manerment', title:'角色管理', name: 'role-manerment_index', component: resolve => { require(['@/views/access/role-manerment.vue'], resolve); } },            
+    //         { path: 'system-user', title:'系统用户', name: 'system-user_index', component: resolve => { require(['@/views/access/system-user.vue'], resolve); } }            
             
-        ]
-    },
-    {
-        path: '/error-page',
-        icon: 'android-sad',
-        title: '错误页面',
-        name: 'errorpage',
-        component: Main,
-        children: [
-            { path: 'index', title: '错误页面', name: 'errorpage_index', component: resolve => { require(['@/views/error-page/error-page.vue'], resolve); } }
-        ]
-    }
+    //     ]
+    // },
+    // {
+    //     path: '/error-page',
+    //     icon: 'android-sad',
+    //     title: '错误页面',
+    //     name: 'errorpage',
+    //     component: Main,
+    //     children: [
+    //         { path: 'index', title: '错误页面', name: 'errorpage_index', component: resolve => { require(['@/views/error-page/error-page.vue'], resolve); } }
+    //     ]
+    // }
 ];
 
 // 所有上面定义的路由都要写在下面的routers里
