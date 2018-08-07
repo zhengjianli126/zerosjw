@@ -40,7 +40,7 @@ module.exports = merge(webpackBaseConfig, {
         new webpack.DefinePlugin({
             'process.env': {
                 NODE_ENV: '"production"',
-                API_ROOT: '"http://10.253.125.121/api"'
+                API_ROOT: '"http://10.253.125.121:81/api"'
             }
         }),
 
