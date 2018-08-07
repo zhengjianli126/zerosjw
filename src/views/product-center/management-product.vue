@@ -291,7 +291,7 @@
                           </Col>
                           <Col span="8">
                             <Form-item :label-width="120" label="" prop="guaTime">
-                              选择时间<input :disabled="checkGuaranteeFlag" type="time" v-model="guaranteeInfo.guaTime" style="width:70px;"/>
+                              选择时间<input :disabled="checkGuaranteeFlag" type="time" v-model="guaranteeInfo.guaTime" style="width:100px;"/>
                               <!-- <TimePicker :disabled="checkGuaranteeFlag" format="HH:mm" placeholder="选择时间" v-model="guaranteeInfo.guaTime" style="width: 112px"></TimePicker> -->
                             </Form-item>
                           </Col>
@@ -2638,6 +2638,7 @@ export default {
         return false;
       }
       this.guaranteeModelList[index].guaOrder = index+1;
+      this.guaranteeModelList[index].productCode = this.productCodeAll;
       // this.guaranteeModelList[index].orgCode = this.guaranteeModelList[index].orgCode.split("$")[0];
       // this.guaranteeModelList[index].orgName = this.guaranteeModelList[index].orgCode.split("$")[1];
       // this.guaranteeModelList[index].orgType = this.guaranteeModelList[index].orgCode.split("$")[2];
