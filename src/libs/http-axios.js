@@ -1,8 +1,10 @@
 import axios from 'axios'
 import {router} from '../router/index'
 import Cookies from 'js-cookie';
+
+let root = process.env.API_ROOT||'';
 let axiosAjax =  axios.create({
-    baseURL:'http://10.253.125.121:81/api',
+    baseURL:root,
     headers: {
         'Content-Type': 'application/json;charset=UTF-8',
     },
