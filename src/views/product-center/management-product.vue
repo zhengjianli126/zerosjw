@@ -2244,7 +2244,7 @@ export default {
       // };
       util
         .ajax({
-          url: this.frontUrl + "v1/prdDictionary/getFeeRecs",
+          url: this.frontUrl + "v1/prdDictionary/getNewFeeRecs",
           method: "get",
           params: {
             feeCode: params.row.hideRecType
@@ -2267,7 +2267,7 @@ export default {
       // };
       util
         .ajax({
-          url: this.frontUrl + "v1/prdDictionary/getFeePays",
+          url: this.frontUrl + "v1/prdDictionary/getNewFeePays",
           method: "get",
           params: {
             feeCode: params.row.hidePayType
