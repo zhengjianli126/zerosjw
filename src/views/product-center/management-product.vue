@@ -386,8 +386,6 @@
     </Modal>
 
         <!-- 机构名称 -->
-    
-
     <Modal  @on-cancel="jsgsCancel" :mask-closable="false" styles="z-index:1000;" width="800px" v-model="modal2" title="公式编辑" :loading="loading">
       <Row>
         <Col span="8">
@@ -505,15 +503,17 @@
         <Row style="margin-top: 20px;">
           <Col span="12">
             <span>付款方：</span>
-            <i-select  @on-change="changePayCode" v-model="payCode" span="6" style="width:150px">
+      <!--  <i-select  @on-change="changePayCode" v-model="payCode" span="6" style="width:150px">
                 <i-option v-for="item in payCodeList" :value="item.label+'-'+item.value">{{ item.label }}</i-option>
-            </i-select>
+            </i-select> -->
+            <i-input @on-focus="changePayCode" v-model="payCode" placeholder="请选择" style="width: 230px;"></i-input>
           </Col>
           <Col span="12">
             <span>收款方：</span>
-            <i-select  @on-change="changeRecCode" v-model="recCode" span="6" style="width:150px">
+            <!-- <i-select  @on-change="changeRecCode" v-model="recCode" span="6" style="width:150px">
                 <i-option v-for="item in recCodeList" :value="item.label+'-'+item.value">{{ item.label }}</i-option>
-            </i-select>
+            </i-select> -->
+            <i-input @on-focus="changeRecCode" v-model="recCode" placeholder="请选择" style="width: 230px;"></i-input>
           </Col>
         </Row>
         <Row style="margin-top: 20px;">
@@ -534,6 +534,44 @@
             <Button @click="updateFeeInfo" type="primary">确定</Button>
             <Button default @click="cancelFeeInfo">取消</Button>
         </div>
+    </Modal>
+
+    <!-- 付款方 -->
+    <Modal width="1000px" :mask-closable="false"  v-model="payModal" title="付款方" :loading="loading">
+      <Row>
+          <Radio-group v-model="paySet">
+            <Row>
+              <Radio v-for="item in payCodeList" :label="item.label+'-'+item.value">{{ item.label }}</Radio>
+            </Row>
+          </Radio-group>
+      </Row>
+      <Row>
+        <div style="margin-top:10px;float:right">
+          <Page :current="pageNumPay" :total="pageTotalPay"  show-elevator @on-change="pageChangePay"></Page>
+        </div>
+      </Row>
+      <div slot="footer">
+        <Button  type="success" @click="concernBtnPay">确定</Button>
+      </div>
+    </Modal>
+
+    <!-- 收款方 -->
+    <Modal width="1000px" :mask-closable="false"  v-model="recModal" title="收款方" :loading="loading">
+      <Row>
+          <Radio-group v-model="recSet">
+            <Row>
+              <Radio v-for="item in recCodeList" :label="item.label+'-'+item.value">{{ item.label }}</Radio>
+            </Row>
+          </Radio-group>
+      </Row>
+      <Row>
+        <div style="margin-top:10px;float:right">
+          <Page :current="pageNumRec" :total="pageTotalRec"  show-elevator @on-change="pageChangeRec"></Page>
+        </div>
+      </Row>
+      <div slot="footer">
+        <Button  type="success" @click="concernBtnRec">确定</Button>
+      </div>
     </Modal>
     
     <!-- 产品管理 -->
@@ -601,14 +639,20 @@ export default {
       // frontUrl: '',
       // urlBase: '',
       flagIndex: '',
+      codeParams: {},
       pageNum: 1,
       pageNum1: 1,
       pageNum2: 1,
       pageNum3: 1,
       pageNum4: 1,
       pageNum5: 1,
+      pageNumPay: 1,
+      pageNumRec: 1,
       // 提单机构弹窗
       orderModal: false,
+      // 付款方弹窗
+      payModal: false,
+      recModal: false,
       // 机构名称弹窗
       organizeModal: false,
       // 删除弹窗
@@ -621,8 +665,13 @@ export default {
       soldOutParams: {},
       // 弹窗自定义名称
       radioOrder: '',
+      // 付款自定义名称
+      paySet: '',
+      recSet: '',
       orgCodeAndTypeName: '',
       radioOrderList: [],
+      paySetList: [],
+      recSetList: [],
       orgCodeAndTypeList: [],
       modal2: false,
       // 系统函数
@@ -723,6 +772,9 @@ export default {
       pageTotal2: 0,
       pageTotal4: 0,
       pageTotal5: 0,
+      pageTotalPay: 0,
+      pageTotalRec: 0,
+
       // 加载
       prodLoading: true,
       // 弹窗加载
@@ -1099,8 +1151,9 @@ export default {
                       this.recCodeList = [];
                       this.payCodeList = [];
                       this.feeOrder = '',
-                      this.getRecCode(params);
-                      this.getPayCode(params);
+                      this.codeParams = params,
+                      this.getRecCode();
+                      this.getPayCode();
                       // 暂存数据
                       this.holdFeeInfo.feeName = params.row.feeName,
                       this.holdFeeInfo.feeCategory = params.row.feeCategory,
@@ -1659,6 +1712,22 @@ export default {
         });
       this.orderModal = false;
     },
+    concernBtnPay() {
+      this.payCode = this.paySet.split('-')[0];
+      this.payName = this.paySet.split('-')[1];
+    //  this.productInfo.ladingCompName = this.radioOrder.split('-')[1];
+    //  this.productInfo.ladingComp = this.radioOrder.split('-')[0];
+
+      this.payModal = false;
+    },
+    concernBtnRec() {
+      this.recCode = this.recSet.split('-')[0];
+      this.recName = this.recSet.split('-')[1];
+    //  this.productInfo.ladingCompName = this.radioOrder.split('-')[1];
+    //  this.productInfo.ladingComp = this.radioOrder.split('-')[0];
+
+      this.recModal = false;
+    },
     // 点击机构名称框
     orderProductChange(d) {
       this.flagIndex = d;
@@ -1822,6 +1891,17 @@ export default {
       this.orderModal = true;
       this.getOrderList(1);
     },
+
+    // 付款方弹窗
+    changePayCode() {
+      this.payModal = true;
+      // this.getPayCode(1);
+    },
+
+    // 收款方弹窗
+    changeRecCode() {
+      this.recModal = true;
+    },
     
     changeorgCode(index) {
       // this.orgCode = s;
@@ -1902,6 +1982,12 @@ export default {
       },
       pageChange5(index) {
         this.getOrgCode(index);
+      },
+      pageChangePay(index) {
+        this.getPayCode(index);
+      },
+      pageChangeRec(index) {
+        this.getRecCode(index);
       },
       getOrderList(index) {
       index = index || 1;
@@ -2235,52 +2321,59 @@ export default {
       this.recComp = s;
     },
     // 获取参数配置收款方
-    getRecCode(params) {
+    getRecCode(index) {
       // let paraRecCode;
       // if(!params.row.recCode && !params.row.payCode) {
       //   paraRecCode = params.row.recName;
       // } else {
       //   paraRecCode = params.row.hideRecType;
       // };
+      index = index || 1;
       util
         .ajax({
-          url: this.frontUrl + "v1/prdDictionary/getNewFeeRecs",
-          method: "get",
-          params: {
-            feeCode: params.row.hideRecType
+          url: this.frontUrl + "v1/prdDictionary/getNewFeeRecs?feeCode=" + this.codeParams.row.hideRecType,
+          method: "post",
+          data: {
+            pageNum: index,
+            pageSize: 10
           }
         })
         .then(res => {
-          this.recCodeList = res.data.data;
+          this.recCodeList = res.data.data.content;
+          this.pageTotalRec = res.data.data.totalElements;
+          this.pageNumRec = res.data.data.number;
         });
     },
-    changeRecCode(s) {
-      this.recCode = s;
-    },
     // 获取参数配置付款方
-    getPayCode(params) {
+    getPayCode(index) {
       // let paraPayCode;
       // if(!params.row.recCode && !params.row.payCode) {
       //   paraPayCode = params.row.payName;
       // } else {
       //   paraPayCode = params.row.hidePayType;
       // };
+      index = index || 1;
       util
         .ajax({
-          url: this.frontUrl + "v1/prdDictionary/getNewFeePays",
-          method: "get",
-          params: {
-            feeCode: params.row.hidePayType
+          url: this.frontUrl + "v1/prdDictionary/getNewFeePays?feeCode="+ this.codeParams.row.hidePayType,
+          method: "post",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          data: {
+            pageNum: index,
+            pageSize: 10
           }
         })
         .then(res => {
-          this.payCodeList = res.data.data;
-
+          this.payCodeList = res.data.data.content;
+          this.pageTotalPay = res.data.data.totalElements;
+          this.pageNumPay = res.data.data.number;
         });
     },
-    changePayCode(s) {
-      this.payCode = s;
-    },
+    // changePayCode(s) {
+    //   this.payCode = s;
+    // },
     // 查询产品基础信息接口
     productBaseInfo() {
       let getByCodeUrl;
@@ -2617,10 +2710,14 @@ export default {
               if(this.feeOrder == '' || this.feeOrder == 'undefined' || this.feeOrder == null) {
                 this.$Message.error('费用顺序不能为空');
               } else {
-                this.costData[this.indexFlag].payCode = this.payCode.split('-')[1];
-                this.costData[this.indexFlag].payName = this.payCode.split('-')[0];
-                this.costData[this.indexFlag].recCode = this.recCode.split('-')[1];
-                this.costData[this.indexFlag].recName = this.recCode.split('-')[0];
+                // this.costData[this.indexFlag].payCode = this.payCode.split('-')[1];
+                // this.costData[this.indexFlag].payName = this.payCode.split('-')[0];
+                // this.costData[this.indexFlag].recCode = this.recCode.split('-')[1];
+                // this.costData[this.indexFlag].recName = this.recCode.split('-')[0];
+                this.costData[this.indexFlag].payCode = this.payName;
+                this.costData[this.indexFlag].payName = this.payCode;
+                this.costData[this.indexFlag].recCode = this.recName;
+                this.costData[this.indexFlag].recName = this.recCode;
                 this.costData[this.indexFlag].feeOrder = this.feeOrder;
                 this.paraModal = false;
               }
