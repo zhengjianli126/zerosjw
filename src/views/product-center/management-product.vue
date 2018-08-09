@@ -286,7 +286,7 @@
                         <Row>
                           <Col span="6">
                             <Form-item :label-width="120" label="代偿触发时间：" prop="guaDay">
-                              T + <Input-number :disabled="checkGuaranteeFlag" size="small"  style="width: 50px" v-model="guaranteeInfo.guaDay" :max="100" :min="1" :stype="1"></Input-number> 天
+                              T + <Input-number :disabled="checkGuaranteeFlag" size="small"  style="width: 50px" v-model="guaranteeInfo.guaDay" :max="100" :min="0" :stype="1"></Input-number> 天
                             </Form-item>
                           </Col>
                           <Col span="8">
