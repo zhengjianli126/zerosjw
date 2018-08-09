@@ -320,6 +320,12 @@
             align: 'center'
           },
           {
+            title: "费用编码",
+            key: "feeCode",
+            width: 150,
+            align: 'center'
+          },
+          {
             title: "类型",
             key: "feeType",
             width: 150,
