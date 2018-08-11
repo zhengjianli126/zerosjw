@@ -825,6 +825,8 @@
           }).then(res => {
             console.log(res)
             if(res.data.code==20000){
+                this.feeName = '';
+                this.findAllFeeTypeml = '';
                 this.$Message.success(res.data.msg)
                 this.modal1 = false;
                 this.findAllFeeList();
