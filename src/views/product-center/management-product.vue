@@ -1811,12 +1811,26 @@ export default {
         this.srgs1 += name.split('&')[1];
         if(name.split('&')[2]==1){
          
-          this.gsSsList.push({
-            a:name.split('&')[0],
-            b:name.split('&')[1],
-            jsgs:''
-          })
-           console.log(this.gsSsList)
+          if(this.gsSsList.length>0){
+            let tempArr = [];
+            let tempNameB = name.split('&')[1];
+            for(let i=0;i<this.gsSsList.length;i++) {
+              tempArr.push(this.gsSsList[i].b)
+            }
+            if(!tempArr.includes(tempNameB)){
+              this.gsSsList.push({
+                    a:name.split('&')[0],
+                    b:name.split('&')[1],
+                    jsgs:''
+                  })
+            }
+          }else{
+             this.gsSsList.push({
+                    a:name.split('&')[0],
+                    b:name.split('&')[1],
+                    jsgs:''
+                  })
+          }
         }
        
       },
