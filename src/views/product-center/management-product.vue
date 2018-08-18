@@ -243,16 +243,19 @@
                         <Row>
                           <Form-item label="担保费用项：" prop="guaranteeFeeList">
                             <Checkbox-group :disabled="checkGuaranteeFlag" v-model="guaranteeInfo.guaranteeFeeList">
-                              <Checkbox  disabled label="0">本金</Checkbox>
-                              <Checkbox :disabled="guaranteeInfo.interestFlag" label="1">利息</Checkbox>
+                              <Checkbox  disabled label="1">本金</Checkbox>
                               <Checkbox :disabled="checkGuaranteeFlag" label="2">首金服务费</Checkbox>
                               <Checkbox :disabled="checkGuaranteeFlag" label="3">引流费</Checkbox>
                               <Checkbox :disabled="checkGuaranteeFlag" label="4">保险费</Checkbox>
                               <Checkbox :disabled="checkGuaranteeFlag" label="5">担保费</Checkbox>
                               <Checkbox :disabled="checkGuaranteeFlag" label="6">资管费</Checkbox>
                               <Checkbox :disabled="checkGuaranteeFlag" label="7">返佣</Checkbox>
-                              <Checkbox :disabled="checkGuaranteeFlag" label="8">贴息</Checkbox>
-                              <Checkbox :disabled="checkGuaranteeFlag" label="9">罚滞</Checkbox>
+                              <Checkbox :disabled="guaranteeInfo.interestFlag" label="8">利息</Checkbox>
+                              <Checkbox :disabled="checkGuaranteeFlag" label="9">贴息</Checkbox>
+                              <Checkbox :disabled="checkGuaranteeFlag" label="10">首金违约金</Checkbox>
+                              <Checkbox :disabled="checkGuaranteeFlag" label="11">机构违约金</Checkbox>
+                              <Checkbox :disabled="checkGuaranteeFlag" label="12">罚息</Checkbox>
+                              <Checkbox :disabled="checkGuaranteeFlag" label="13">补偿金</Checkbox>
                             </Checkbox-group>
                           </Form-item>
                         </Row>
@@ -951,7 +954,7 @@ export default {
           orgType: "",
           orgTypeName: "",
           isLading: "",
-          guaranteeFeeList: ["0"],
+          guaranteeFeeList: ["1"],
           belongCode: "",
           recComp: "",
           guaDay: 0,
@@ -2517,7 +2520,7 @@ export default {
             orgType: "",
             orgTypeName: "",
             isLading: "",
-            guaranteeFeeList: ["0"],
+            guaranteeFeeList: ["1"],
             belongCode: "",
             recComp: "",
             guaDay: 0,
@@ -2905,7 +2908,7 @@ export default {
     // 改变类型
     changeTypeCode(index, $event) {
       if($event == 0 || $event == 2) {
-        this.guaranteeModelList[index].guaranteeFeeList.push("1");
+        this.guaranteeModelList[index].guaranteeFeeList.push("8");
         this.guaranteeModelList[index].interestFlag = true;
       } else if ($event == 1){
         this.guaranteeModelList[index].interestFlag = false;
