@@ -8,7 +8,7 @@ let util = {
 };
 
 util.title = function (title) {
-    title = title || '首金网CRM管理系统';
+    title = title || '首金网Zero管理系统';
     window.document.title = title;
 };
 
