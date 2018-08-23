@@ -6,7 +6,7 @@ let root = process.env.API_ROOT||'';
 let axiosAjax =  axios.create({
     baseURL:root,
     headers: {
-        'Content-Type': 'application/json;charset=UTF-8',
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
     },
     timeout: 30000
 });
