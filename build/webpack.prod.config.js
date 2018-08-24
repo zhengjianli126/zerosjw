@@ -41,7 +41,7 @@ module.exports = merge(webpackBaseConfig, {
             'process.env': {
                 NODE_ENV: '"production"',
                 // API_ROOT: '"http://100.112.44.170:81/api"'
-                API_ROOT: '"http://product.shoujinwang.com:6081/api"'
+                API_ROOT: '"http://product.shoujinwang.com/api"'
             }
         }),
 
