@@ -111,7 +111,7 @@
           </Col>
           <Col span="16">
             <Form-item label="年利率配置公式："  :label-width="120" prop="rateFormual">
-              <i-input @on-focus="feeFormuJs" :disabled="checkBaseFlag" v-model="productInfo.rateFormual" placeholder="请输入公式" style="width: 400px;"></i-input>
+              <i-input type="textarea" @on-focus="feeFormuJs" :disabled="checkBaseFlag" v-model="productInfo.rateFormual" placeholder="请输入公式" style="width: 400px;"></i-input>
             </Form-item>
           </Col>
         </Row>
