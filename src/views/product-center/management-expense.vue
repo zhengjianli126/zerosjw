@@ -96,7 +96,7 @@
           </Row>
           <Row style="margin-top:10px;">
                 <FormItem label="计算公式：">
-                  <i-input :disabled="digFlag" @on-focus="feeFormuJs" v-model="showFormula1" placeholder="请输入..." style="width: 400px"></i-input>
+                  <i-input type="textarea" :disabled="digFlag" @on-focus="feeFormuJs" v-model="showFormula1" placeholder="请输入..." style="width: 400px"></i-input>
                 </FormItem> 
           </Row>
           <Row style="margin-top:10px;">
