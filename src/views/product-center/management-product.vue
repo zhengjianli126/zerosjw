@@ -2109,6 +2109,8 @@ export default {
       this.getOrgCode();
       this.getBelongCode();
       this.getRecComps();
+      this.preChannelList = [];
+      this.productInfo.channelNameAndCode = '';
       this.modifyShow = false;
       this.seeFlag = true;
       this.commitShow = true;
