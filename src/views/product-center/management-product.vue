@@ -2536,6 +2536,9 @@ export default {
     holdBtn(productInfo) {
       this.productInfo.channelCode = this.productInfo.channelNameAndCode.split('-')[1];
       this.productInfo.channelName = this.productInfo.channelNameAndCode.split('-')[0];
+      this.guaranteeModelList.forEach((t,i)=>{
+          t.guaOrder=i+1;
+      });
       var collectData = {
                   asset: this.productInfo,
                   contractRelList: this.contractData,
@@ -2578,6 +2581,9 @@ export default {
     submitBtn(productInfo) {
       this.productInfo.channelCode = this.productInfo.channelNameAndCode.split('-')[1];
       this.productInfo.channelName = this.productInfo.channelNameAndCode.split('-')[0];
+      this.guaranteeModelList.forEach((t,i)=>{
+          t.guaOrder=i+1;
+      });
       var collectData = {
                   asset: this.productInfo,
                   contractRelList: this.contractData,
