@@ -10,6 +10,7 @@
     "build-C":"webpack --progress --hide-modules --config build/webpack.prod.config-C.js",
     "build-B":"webpack --progress --hide-modules --config build/webpack.prod.config-B.js",
     "build-A":"webpack --progress --hide-modules --config build/webpack.prod.config-A.js",
+    "build-pc":"webpack --progress --hide-modules --config build/webpack.prod.config-pc.js",
     "lint": "eslint --fix --ext .js,.vue src",
     "test": "npm run lint"
   },
