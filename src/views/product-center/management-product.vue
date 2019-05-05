@@ -243,7 +243,7 @@
                         <Row>
                           <Form-item label="担保费用项：" prop="guaranteeFeeList">
                             <Checkbox-group :disabled="checkGuaranteeFlag" v-model="guaranteeInfo.guaranteeFeeList">
-                              <Checkbox  disabled label="1">本金</Checkbox>
+                              <!-- <Checkbox  disabled label="1">本金</Checkbox>
                               <Checkbox :disabled="checkGuaranteeFlag" label="2">首金服务费</Checkbox>
                               <Checkbox :disabled="checkGuaranteeFlag" label="3">引流费</Checkbox>
                               <Checkbox :disabled="checkGuaranteeFlag" label="4">保险费</Checkbox>
@@ -255,7 +255,20 @@
                               <Checkbox :disabled="checkGuaranteeFlag" label="10">首金违约金</Checkbox>
                               <Checkbox :disabled="checkGuaranteeFlag" label="11">机构违约金</Checkbox>
                               <Checkbox :disabled="checkGuaranteeFlag" label="12">罚息</Checkbox>
-                              <Checkbox :disabled="checkGuaranteeFlag" label="13">补偿金</Checkbox>
+                              <Checkbox :disabled="checkGuaranteeFlag" label="13">补偿金</Checkbox> -->
+                              <Checkbox  disabled label="1">本金</Checkbox>
+                              <Checkbox disabled label="2">首金服务费</Checkbox>
+                              <Checkbox disabled label="3">引流费</Checkbox>
+                              <Checkbox disabled label="4">保险费</Checkbox>
+                              <Checkbox disabled label="5">担保费</Checkbox>
+                              <Checkbox disabled label="6">资管费</Checkbox>
+                              <Checkbox disabled label="7">返佣</Checkbox>
+                              <Checkbox disabled label="8">利息</Checkbox>
+                              <Checkbox disabled label="9">贴息</Checkbox>
+                              <Checkbox disabled label="10">首金违约金</Checkbox>
+                              <Checkbox disabled label="11">机构违约金</Checkbox>
+                              <Checkbox disabled label="12">罚息</Checkbox>
+                              <Checkbox disabled label="13">补偿金</Checkbox>
                             </Checkbox-group>
                           </Form-item>
                         </Row>
